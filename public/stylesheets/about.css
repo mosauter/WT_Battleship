@@ -1,0 +1,22 @@
+footer {
+    font-family: 'Helvetica';
+    font-weight: bold;
+    font-size: 20px;
+    color: blue;
+    text-align: center;
+    border: 2px solid blue;
+    border-radius: 5px;
+    width: 500px;
+    position: fixed;
+    bottom: 10px;
+    left: calc(50% - 252px);
+    padding: 10px 0px;
+}
+
+header p {
+    font-family: 'Helvetica';
+    font-weight: bold;
+    font-size: 40px;
+    color: blue;
+    text-align: center;
+}
