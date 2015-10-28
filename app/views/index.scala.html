@@ -2,6 +2,60 @@
 
 @main("Battleship") {
 
-   @message
+<style>
+   .sliding_ship{
+   position: absolute;
+   top: 100px;
+   width: 250px;
+   height: 90px;
+   transition: left 2s ease-out, right 2s ease-out;
+   }
+
+   #ship_left{
+   left: -260px;
+   }
+
+   #ship_right{
+   right: -260px;
+   }
+
+   #main {
+   width: 900px;
+   text-align: center;
+   margin: 0px auto;
+   }
+
+   #main h1{
+   font-family: 'Helvetica';
+   font-weight: bold;
+   font-size: 40px;
+   color: blue;
+   }
+</style>
+
+<section id="main">
+
+   <h1>Battleship</h1>
+
+   <a class="button" href="/battleship" title="Let's get ready to fight!">Play</a>
+
+</section>
+
+<img id="ship_left" class="sliding_ship" src="@routes.Assets.versioned("images/ship_left.png")" alt="ship"/>
+<img id="ship_right" class="sliding_ship" src="@routes.Assets.versioned("images/ship_right.png")" alt="ship"/>
+
+<script>
+      console.log('test');
+      window.addEventListener("load", function(event) {
+         console.log('test1');
+         setTimeout(function(){
+            console.log('move');
+            var ship_left = document.getElementById('ship_left');
+            var ship_right = document.getElementById('ship_right');
+            ship_left.style.left = '-20px';
+            ship_right.style.right = '-20px';
+         }, 5000);
+      });
+   </script>
 
 }
