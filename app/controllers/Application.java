@@ -19,7 +19,12 @@ public class Application extends Controller {
     public Result wui(String command) {
         TUI tui = bs.getTui();
         tui.processInputLine(command);
-        return ok(views.html.battleship.render(tui.printTUI()));
+        String s = tui.printTUI();
+        String b = s.replaceAll("\n","<br>" );
+        b = b.replaceAll(" ","&nbsp;" );
+
+        return ok(views.html.battleship.render(b));
+        //return ok(views.html.battleship.render(tui.printTUI()));
     }
 
     //public static Result commandline(String command) {

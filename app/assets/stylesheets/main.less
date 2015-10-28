@@ -1,9 +1,13 @@
-@font: 'Helvetica';
+@fontFam: 'Helvetica';
 
-footer {
-    font-family: @font;
+.fontstyle {
+    font-family: @fontFam;
     font-weight: bold;
     font-size: 20px;
+}
+
+footer {
+    .fontstyle;
     color: blue;
     text-align: center;
     border: 2px solid blue;
@@ -16,8 +20,7 @@ footer {
 }
 
 header p {
-    font-family: @font;
-    font-weight: bold;
+    .fontstyle;
     font-size: 40px;
     color: blue;
     text-align: center;
