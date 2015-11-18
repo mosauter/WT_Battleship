@@ -1,27 +1,221 @@
-@fontFam: 'Helvetica';
+@fontFam: 'Open Sans';
+@headerFont: 'Oswald';
+@ship1: '/assets/images/shipImage.jpg';
+@ship2: '/assets/images/shipImage2.jpg';
+@ship3: '/assets/images/shipImage3.jpg';
+
+@navcolor: #FFF;
+@navhover: #18BC9C;
+@bgcolor: #2C3E50;
+
+@whitetext: #FFF; // fuck debuggers....
 
 .fontstyle {
-    font-family: @fontFam;
-    font-weight: bold;
-    font-size: 20px;
+  font-family: @fontFam;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 footer {
-    .fontstyle;
-    color: blue;
-    text-align: center;
-    border: 2px solid blue;
-    border-radius: 5px;
-    width: 500px;
-    position: fixed;
-    bottom: 10px;
-    left: calc(50% - 252px);
-    padding: 10px 0px;
+  .fontstyle;
+  color: blue;
+  text-align: center;
+  border: 2px solid blue;
+  border-radius: 5px;
+  width: 500px;
+  position: fixed;
+  bottom: 10px;
+  left: calc(50% - 252px);
+  padding: 10px 0px;
 }
 
-header p {
+header {
+  p {
     .fontstyle;
     font-size: 40px;
     color: blue;
     text-align: center;
+  }
+}
+
+body {
+  padding: 45px 0px 800px 0px;
+  font-family: @fontFam, sans-serif;
+  background-color: @bgcolor;
+}
+
+.top-buffer {
+  margin-top: 40px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: @headerFont, sans-serif;
+}
+
+.navbar {
+  background-color: @bgcolor;
+  border-color: @navcolor;
+}
+
+.navbar-brand {
+  color: @navcolor !important;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: @navhover;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: @navcolor;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: @navcolor;
+  background-color: #1A242F;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: @navhover;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: @navcolor;
+  background-color: #1A242F;
+}
+
+.btn-main {
+  background-color: @bgcolor;
+  border: @bgcolor;
+  color: @navcolor;
+}
+
+.btn-main:hover,
+.btn-main:focus,
+.btn-main:active,
+.btn-main.active,
+.open .dropdown-toggle.btn-main {
+  color: @navcolor;
+  background-color: #1E2A36;
+  border-color: #161F29;
+}
+
+.btn-play {
+  background-color: #18BC9C;
+  border-color: #18BC9C;
+  color: @navcolor;
+}
+
+.btn-play:hover,
+.btn-play:focus,
+.btn-play:active,
+.btn-play.active,
+.open .dropdown-toggle.btn-play {
+  color: @navcolor;
+  background-color: #13987E;
+  border-color: #13987E;
+}
+
+.thumbnail {
+  overflow: hidden;
+  img:hover {
+    transform: scale(1.1);
+    transition: all 0.3s ease 0s;
+    width: 100%;
+  }
+}
+
+/*
+TODO: check use again
+.bg_grey {
+  background-color: #F9F9F9;
+}
+
+#owna {
+    background-image: url(@ship1) !important;
+    background-attachment:fixed;
+    background-size:cover;
+}
+
+#owna1 {
+    background-image: url(@ship2) !important;
+    background-attachment:fixed;
+    background-size:cover;
+}
+
+#owna2 {
+    background-image: url(@ship1) !important;
+    background-attachment:fixed;
+}
+*/
+
+#thumbnails {
+  color: #FFF;
+}
+
+.carousel {
+  z-index: -1;
+  height: 100%;
+}
+
+.carousel .item {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel .active.left {
+  left: 0;
+  opacity: 0;
+  z-index: 2;
+}
+
+.slide1, .slide2, .slide3 {
+  min-height: 560px;
+  background-size: cover;
+  height: 100%;
+}
+
+.slide1 {
+  background-image: url(@ship1);
+}
+
+.slide2 {
+  background-image: url(@ship2);
+}
+
+.slide3 {
+  background-image: url(@ship3);
+}
+
+.carousel.carousel-fade .item {
+  transition: opacity 1s linear;
+  opacity: 0;
+}
+
+.carousel.carousel-fade .active.item {
+  opacity: 1;
+}
+
+.carousel.carousel-fade .active.left,
+.carousel.carousel-fade .active.right {
+  left: 0;
+  z-index: 2;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+.carousel-overlay {
+  position: absolute;
+  bottom: 100px;
+  right: 0;
+  left: 0;
+  height: 100%;
 }
