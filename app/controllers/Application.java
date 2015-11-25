@@ -32,4 +32,7 @@ public class Application extends Controller {
         //return ok(views.html.index.render("Got your command "+ command, controller));
     //}
 
+    public Result home() {
+        return ok(main.render("Battleship", home.render()));
+    }
 }
