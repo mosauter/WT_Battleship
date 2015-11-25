@@ -28,13 +28,7 @@ public class Application extends Controller {
         b = b.replaceAll(" ","&nbsp;" );
 
         return ok(views.html.battleship.render(b));
-        //return ok(views.html.battleship.render(tui.printTUI()));
     }
-
-    //public static Result commandline(String command) {
-      //  battleship.getTui().processInputLine(command);
-        //return ok(views.html.index.render("Got your command "+ command, controller));
-    //}
 
     public Result home() {
         return ok(home.render());
