@@ -4,44 +4,26 @@
 @ship2: '/assets/images/shipImage2.jpg';
 @ship3: '/assets/images/shipImage3.jpg';
 
-@navcolor: #FFF;
-@navhover: #18BC9C;
+@navTextColor: #FFF;
+@navhover: @playButtoon;
 @bgcolor: #2C3E50;
 
-@whitetext: #FFF; // fuck debuggers....
+@playButtoon: #18BC9C;
 
-.fontstyle {
-  font-family: @fontFam;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-footer {
-  .fontstyle;
-  color: blue;
-  text-align: center;
-  border: 2px solid blue;
-  border-radius: 5px;
-  width: 500px;
-  position: fixed;
-  bottom: 10px;
-  left: calc(50% - 252px);
-  padding: 10px 0px;
-}
-
-header {
-  p {
-    .fontstyle;
-    font-size: 40px;
-    color: blue;
-    text-align: center;
-  }
-}
+@darkenRate: 10%;
 
 body {
-  padding: 45px 0px 800px 0px;
+  padding: 0px 0px 50px 0px;
   font-family: @fontFam, sans-serif;
-  //background-color: @bgcolor;
+  background-color: @bgcolor;
+}
+
+#game-body {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background-color: #FFF;
+  height: 100%;
+  width: 100%;
 }
 
 .top-buffer {
@@ -54,11 +36,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar {
   background-color: @bgcolor;
-  border-color: @navcolor;
+  border-color: @navTextColor;
 }
 
 .navbar-brand {
-  color: @navcolor !important;
+  color: @navTextColor !important;
 }
 
 .navbar-default .navbar-brand:hover,
@@ -68,14 +50,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-default .navbar-nav > li > a {
-  color: @navcolor;
+  color: @navTextColor;
 }
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: @navcolor;
-  background-color: #1A242F;
+  color: @navTextColor;
+  background-color: darken(@bgcolor, @darkenRate);
 }
 
 .navbar-default .navbar-nav > li > a:hover,
@@ -87,14 +69,13 @@ h1, h2, h3, h4, h5, h6 {
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
-  color: @navcolor;
-  background-color: #1A242F;
+  color: @navTextColor;
+  background-color: darken(@bgcolor, @darkenRate);
 }
 
 .btn-main {
   background-color: @bgcolor;
-  border: @bgcolor;
-  color: @navcolor;
+  color: @navTextColor;
 }
 
 .btn-main:hover,
@@ -102,15 +83,13 @@ h1, h2, h3, h4, h5, h6 {
 .btn-main:active,
 .btn-main.active,
 .open .dropdown-toggle.btn-main {
-  color: @navcolor;
-  background-color: #1E2A36;
-  border-color: #161F29;
+  color: @navTextColor;
+  background-color: darken(@bgcolor, @darkenRate);
 }
 
 .btn-play {
-  background-color: #18BC9C;
-  border-color: #18BC9C;
-  color: @navcolor;
+  background-color: @playButtoon;
+  color: @navTextColor;
 }
 
 .btn-play:hover,
@@ -118,9 +97,9 @@ h1, h2, h3, h4, h5, h6 {
 .btn-play:active,
 .btn-play.active,
 .open .dropdown-toggle.btn-play {
-  color: @navcolor;
-  background-color: #13987E;
-  border-color: #13987E;
+  color: @navTextColor;
+  background-color: darken(@playButtoon, @darkenRate);
+  border-color: darken(@playButtoon, @darkenRate);
 }
 
 .thumbnail {
@@ -131,30 +110,6 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
   }
 }
-
-/*
-TODO: check use again
-.bg_grey {
-  background-color: #F9F9F9;
-}
-
-#owna {
-    background-image: url(@ship1) !important;
-    background-attachment:fixed;
-    background-size:cover;
-}
-
-#owna1 {
-    background-image: url(@ship2) !important;
-    background-attachment:fixed;
-    background-size:cover;
-}
-
-#owna2 {
-    background-image: url(@ship1) !important;
-    background-attachment:fixed;
-}
-*/
 
 #thumbnails {
   color: #FFF;
