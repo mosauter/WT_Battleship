@@ -33,6 +33,10 @@ public class Application extends Controller {
     //}
 
     public Result home() {
-        return ok(main.render("Battleship", home.render()));
+        return ok(home.render());
+    }
+
+    public Result game() {
+        return ok(game.render());
     }
 }

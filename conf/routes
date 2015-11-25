@@ -6,7 +6,10 @@
 GET     /                           @controllers.Application.index()
 GET     /battleship                 @controllers.Application.wui(command:String = "1")
 GET     /battleship/:command        @controllers.Application.wui(command:String)
+
+
 GET     /home                       @controllers.Application.home()
+GET     /game                       @controllers.Application.game()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

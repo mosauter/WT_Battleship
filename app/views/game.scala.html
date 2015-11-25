@@ -1,0 +1,90 @@
+@main("Battleship") {
+    <div class="container">
+        <div class="page-header">
+            <h1> The site for the Game. </h1>
+        </div>
+        <div class="col-sm-8">
+            <p>
+                Instead of the following picture, you should see the Game Gui here later or at least a form for typing in
+                the name of the two players. and buttons to enter.
+            </p>
+
+            <div class="thumbnail">
+                <img src="/assets/images/shipImage2.jpg" alt="here should be the game gui"></img>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+
+            <div class="panel panel-default bg_grey">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title">Battleship instructions</h3>
+                </div>
+                <div class="panel-body text-center">
+                    <a href="#instructions-pop-up" class="btn btn-default" role="button"
+                    data-toggle="modal">Instructions</a>
+                </div>
+            </div>
+
+            <div class="panel panel-default bg_grey">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title">Visit our school!</h3>
+                </div>
+                <div class="panel-body text-center">
+                    <a href="http://www.htwg-konstanz.de" target="blank" class="thumbnail">
+                        <img src="/assets/images/htwg-logo.png" alt="htwg"></img>
+                    </a>
+                    <a href="http://www.htwg-konstanz.de" target="blank" class="btn btn-success" role="button"> HTWG
+                        Konstanz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="instructions-pop-up" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Game instructions for battlefield</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Here is how you play the game:</p>
+                    <ul>
+                        <li>first type in the names</li>
+                        <li>place ship</li>
+                        <li>chose fields to shoot etc.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6">
+                <h2 Basic form: Player 1:></h2>
+
+                <form action="#" method="">
+                    <div class="form-group">
+                        <label for="player1name">Player 1 Name</label>
+                        <input type="text" class="form-control" id="player1name" placeholder="Enter name of player 1">
+                        </input>
+                        <p> Player 1, please type in your name.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="player2name">Player 2 Name</label>
+                        <input type="text" class="form-control" id="player2name" placeholder="Enter name of player 2">
+                        </input>
+                        <p> Player 2, please type in your name.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" id="submit" class="btn btn-default" value="submit">
+                        </input>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
