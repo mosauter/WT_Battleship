@@ -1,7 +1,9 @@
 package controllers;// WuiController
 
+import controllers.util.Message;
 import de.htwg.battleship.controller.IMasterController;
 import de.htwg.battleship.observer.IObserver;
+import play.mvc.WebSocket;
 
 /**
  * WuiController
@@ -11,10 +13,17 @@ import de.htwg.battleship.observer.IObserver;
  */
 public class WuiController implements IObserver {
 
-    private IMasterController masterController;
+    private final IMasterController masterController;
+    private final WebSocket.Out<String> socket;
 
-    public WuiController(IMasterController masterController) {
+    public WuiController(IMasterController masterController, WebSocket.Out<String> socket) {
         this.masterController = masterController;
+        this.socket = socket;
+        masterController.addObserver(this);
+    }
+
+    private void send(Message msg) {
+        socket.write(msg.toJSON());
     }
 
     @Override

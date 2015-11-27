@@ -6,17 +6,15 @@ import de.htwg.battleship.aview.tui.TUI;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
-import views.html.about;
 import views.html.game;
 import views.html.home;
-import views.html.index;
 
 public class Application extends Controller {
 
     static Battleship bs = Battleship.getInstance();
 
     public Result index() {
-        return ok(index.render(about.render("Battleship POW! POW!")));
+        return home();
     }
 
     public Result wui(String command) {
@@ -43,7 +41,7 @@ public class Application extends Controller {
                                 WebSocket.Out<String> out) {
                 in.onMessage(event -> {
                     WuiControllerMock wuiControllerMock =
-                        new WuiControllerMock(out);
+                        new WuiControllerMock(bs.getMasterController(), out);
                     wuiControllerMock.analyzeMessage(event);
                 });
                 in.onClose(() -> System.out.println("CLOSING SOCKET"));

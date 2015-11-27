@@ -9,6 +9,7 @@ import controllers.util.PlaceMessage;
 import controllers.util.ShootMessage;
 import controllers.util.WinMessage;
 import de.htwg.battleship.BattleshipModule;
+import de.htwg.battleship.controller.IMasterController;
 import de.htwg.battleship.model.IPlayer;
 import de.htwg.battleship.util.StatCollection;
 import play.mvc.WebSocket;
@@ -31,7 +32,8 @@ public class WuiControllerMock {
 
     private WebSocket.Out<String> socket;
 
-    public WuiControllerMock(WebSocket.Out<String> socket) {
+    public WuiControllerMock(IMasterController masterController, WebSocket.Out<String> socket) {
+        // masterController is not used in the mock, only for the api
         this.socket = socket;
     }
 
