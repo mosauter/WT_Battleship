@@ -72,8 +72,9 @@ public class WuiController implements IObserver {
                         .fillMap(masterController.getPlayer1().getOwnBoard().getShipList(), shipMapPlayer1, masterController
                             .getPlayer1().getOwnBoard().getShips());
                     msg = new PlaceMessage(State.PLACE1, shipMapPlayer1);
+                    break;
                 }
-                break;
+                return;
             case FINALPLACE1:
                 if (firstPlayer) {
                     Map<Integer, Set<Integer>> shipMapFinal1 = StatCollection.createMap();
@@ -81,8 +82,9 @@ public class WuiController implements IObserver {
                         .fillMap(masterController.getPlayer1().getOwnBoard().getShipList(), shipMapFinal1, masterController
                             .getPlayer1().getOwnBoard().getShips());
                     msg = new PlaceMessage(State.PLACE1, shipMapFinal1);
+                    break;
                 }
-                break;
+                return;
             case PLACE2:
                 if (! firstPlayer) {
                     Map<Integer, Set<Integer>> shipMapPlayer2 = StatCollection.createMap();
@@ -90,8 +92,9 @@ public class WuiController implements IObserver {
                         .fillMap(masterController.getPlayer1().getOwnBoard().getShipList(), shipMapPlayer2, masterController
                             .getPlayer1().getOwnBoard().getShips());
                     msg = new PlaceMessage(State.PLACE2, shipMapPlayer2);
+                    break;
                 }
-                break;
+                return;
             case FINALPLACE2:
                 if (! firstPlayer) {
                     Map<Integer, Set<Integer>> shipMapFinal2 = StatCollection.createMap();
@@ -99,8 +102,9 @@ public class WuiController implements IObserver {
                         .fillMap(masterController.getPlayer1().getOwnBoard().getShipList(), shipMapFinal2, masterController
                             .getPlayer1().getOwnBoard().getShips());
                     msg = new PlaceMessage(State.PLACE1, shipMapFinal2);
+                    break;
                 }
-                break;
+                return;
             case PLACEERR:
                 msg = new InvalidMessage(State.PLACEERR);
                 break;
@@ -111,6 +115,7 @@ public class WuiController implements IObserver {
             case SHOOT2:
                 break;
             case HIT:
+
                 break;
             case MISS:
                 break;
