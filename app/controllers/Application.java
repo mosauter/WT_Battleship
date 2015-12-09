@@ -1,6 +1,7 @@
 package controllers;
 
 
+import controllers.util.GameInstance;
 import de.htwg.battleship.Battleship;
 import de.htwg.battleship.aview.tui.TUI;
 import play.mvc.Controller;
@@ -9,7 +10,15 @@ import play.mvc.WebSocket;
 import views.html.game;
 import views.html.home;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Application extends Controller {
+
+    /**
+     * List of {@link GameInstance} with one player waiting for an opponent.
+     */
+    private List<GameInstance> onePlayer = new LinkedList<>();
 
     static Battleship bs = Battleship.getInstance();
 
@@ -35,15 +44,33 @@ public class Application extends Controller {
         return ok(game.render());
     }
 
-    public WebSocket<String> socket() {
+    public WebSocket<String> socket(String login) {
         return new WebSocket<String>() {
-            public void onReady(WebSocket.In<String> in,
-                                WebSocket.Out<String> out) {
+            private GameInstance instance;
+            private WuiController wuiController;
+
+            public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
+                if (!onePlayer.isEmpty()) {
+                    GameInstance gameInstance = onePlayer.get(0);
+                    onePlayer.remove(0);
+                    gameInstance.setSocketTwo(out);
+                    this.wuiController = new WuiController(gameInstance
+                        .getInstance().getMasterController(), out, false);
+                    gameInstance.setWuiControllerTwo(this.wuiController);
+                } else {
+                    Battleship battleship = Battleship.getInstance();
+                    this.wuiController = new WuiController(battleship
+                        .getMasterController(), out, true);
+                    this.instance = new GameInstance(battleship, out, this.wuiController);
+                    onePlayer.add(this.instance);
+                    this.wuiController.startGame();
+                }
+                this.wuiController.setName(login);
+
                 in.onMessage(event -> {
-                    WuiControllerMock wuiControllerMock =
-                        new WuiControllerMock(bs.getMasterController(), out);
-                    wuiControllerMock.analyzeMessage(event);
+                    this.wuiController.analyzeMessage(event);
                 });
+
                 in.onClose(() -> System.out.println("CLOSING SOCKET"));
             }
         };
