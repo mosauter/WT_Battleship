@@ -17,5 +17,5 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 #
 GET     /about                      controllers.Assets.at(path="/public", file="/about.html")
 
-GET     /socket                     @controllers.Application.socket()
+GET     /socket                     @controllers.Application.socket(login: String = "dummyName")
 

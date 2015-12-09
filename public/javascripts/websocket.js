@@ -1,6 +1,7 @@
 "use strict";
 
 var socketAddress = "ws://localhost:9000/socket";
+var socket;
 
 var messageType = {
     // HIT and MISS
@@ -23,7 +24,7 @@ var messageType = {
 
 
 $(function() {
-    var socket = new WebSocket(socketAddress);
+    socket = new WebSocket(socketAddress);
 
     socket.onopen = function () {
         console.log("Opened socket %o");
