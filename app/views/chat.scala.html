@@ -1,11 +1,17 @@
 
 
 @main("Chat room") {
-<section>
-    <h1>Welcome to Battlegame's chatroom!</h1>
+<br>
+<br>
+<br>
 
-    <input type="text" id="socket-input" />
-    <div id="socket-messages"></div>
-    <script type="text/javascript" charset="utf-8" src="@routes.Application.wsJs()"></script>
-</section>
+<div class="container chatBackground">
+    <h1 class="whitetext">Welcome to Battlegame's chatroom!</h1>
+    <br>
+    <div class="jumbotron whitetext col-sm-8">
+        <input type="text" class="form-control" id="socket-input" placeholder="your message" />
+        <div id="socket-messages"></div>
+        <script type="text/javascript" charset="utf-8" src="@routes.Application.wsJs()"></script>
+    </div>
+</div>
 }
