@@ -7,7 +7,11 @@ $(function(){
     var socket = new WS('@routes.Application.wsInterface().webSocketURL(request)');
 
     var writeMessages = function(event){
-        $('#socket-messages').prepend('<p>'+event.data+'</p>');
+        var dt = new Date();
+        //var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " UHR";
+        var time = dt.getHours() + ":" + dt.getMinutes() + " Uhr";
+        //$('#socket-messages').prepend('<p>'+new Date($.now())+'    '+event.data+'</p>');
+        $('#socket-messages').prepend('<p>'+'<span style="color:#5cdce0">'+time+'</span>'+'&nbsp;&nbsp;'+event.data+'</p>');
     }
 
     socket.onmessage = writeMessages;
