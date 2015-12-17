@@ -11,7 +11,7 @@ $(function(){
         //var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " UHR";
         var time = dt.getHours() + ":" + dt.getMinutes() + " Uhr";
         //$('#socket-messages').prepend('<p>'+new Date($.now())+'    '+event.data+'</p>');
-        $('#socket-messages').prepend('<p>'+'<span style="color:#5cdce0">'+time+'</span>'+'&nbsp;&nbsp;'+event.data+'</p>');
+        $('#socket-messages').prepend('<p>'+'<span style="color:#5cdce0;font-size: 10pt;">'+time+'</span>'+'&nbsp;&nbsp;'+'<span style="font-size: 12.4pt">'+event.data+'</span>'+'</p>');
     }
 
     socket.onmessage = writeMessages;
