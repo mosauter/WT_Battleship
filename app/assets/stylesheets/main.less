@@ -3,7 +3,9 @@
 @ship1: '/assets/images/shipImage.jpg';
 @ship2: '/assets/images/shipImage2.jpg';
 @ship3: '/assets/images/shipImage3.jpg';
-@chat1: '/assets/images/11.jpg';
+@chatbackground1: '/assets/images/11.jpg';
+@chatbackground2: '/assets/images/21.png';
+@chatbackground3: '/assets/images/23.jpg';
 
 @navTextColor: #FFF;
 @navhover: @playButtoon;
@@ -191,9 +193,32 @@ input {
 
 
 .chatBackground {
-    background-image: url(@chat1);
+    background-image: url(@chatbackground1);
     min-height: 560px;
     background-size: cover;
     height: 100%;
 
+}
+
+
+.chatslide1, .chatslide2, .chatslide3 {
+  min-height: 560px;
+  background-size: cover;
+  height: 100%;
+}
+
+.chatslide1 {
+  background-image: url(@chatbackground1);
+}
+
+.chatslide2 {
+  background-image: url(@chatbackground2);
+}
+
+.chatslide3 {
+  background-image: url(@chatbackground3);
+}
+
+.transparentSemi{
+  background:rgba(255,255,255,0.1) !important;;
 }
