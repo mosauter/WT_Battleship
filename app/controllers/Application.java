@@ -9,9 +9,12 @@ import play.mvc.Result;
 import play.mvc.WebSocket;
 import views.html.game;
 import views.html.home;
+import views.html.*;
+import models.*;
 
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class Application extends Controller {
 
@@ -75,4 +78,30 @@ public class Application extends Controller {
             }
         };
     }
+
+
+
+    // render chat page
+    public static Result chat() {
+        return ok(chat.render());
+    }
+
+
+    // get the ws.js script
+    public static Result wsJs() {
+        return ok(views.js.ws.render());
+    }
+
+    // Websocket interface
+    public static WebSocket<String> wsInterface(){
+        return new WebSocket<String>(){
+
+            // called when websocket handshake is done
+            public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out){
+                Chat.start(in, out);
+            }
+        };
+    }
+
+
 }

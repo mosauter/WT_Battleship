@@ -19,3 +19,9 @@ GET     /about                      controllers.Assets.at(path="/public", file="
 
 GET     /socket                     @controllers.Application.socket(login: String = "dummyName")
 
+#chat
+
+# Home page # index/chat
+GET     /chat                       controllers.Application.chat()
+GET     /assets.javascript.ws.js    controllers.Application.wsJs()
+GET     /wsInterface                controllers.Application.wsInterface()
