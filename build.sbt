@@ -9,8 +9,11 @@ scalaVersion := "2.11.6"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "ws.securesocial" %% "securesocial" % "3.0-M4"
 )
+
+resolvers += Resolver.sonatypeRepo("snapshots")
 
 libraryDependencies += "com.google.code.gson" % "gson" % "2.5"
 
