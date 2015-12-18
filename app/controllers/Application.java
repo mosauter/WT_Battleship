@@ -13,6 +13,15 @@ import views.html.home;
 import java.util.LinkedList;
 import java.util.List;
 
+import securesocial.core.BasicProfile;
+import securesocial.core.RuntimeEnvironment;
+import securesocial.core.java.SecureSocial;
+import securesocial.core.java.SecuredAction;
+import securesocial.core.java.UserAwareAction;
+import service.DemoUser;
+
+
+
 public class Application extends Controller {
 
     /**
@@ -26,7 +35,10 @@ public class Application extends Controller {
         return home();
     }
 
+    /*WUI can only be accessed if user is logged in*/
+    @SecuredAction
     public Result wui(String command) {
+        DemoUser user = (DemoUser) ctx().args.get(SecureSocial.USER_KEY);
         TUI tui = bs.getTui();
         tui.processInputLine(command);
         String s = tui.printTUI();
