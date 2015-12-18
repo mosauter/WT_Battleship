@@ -76,6 +76,14 @@ public class Application extends Controller {
         return ok("Hello " + userName + ", you are seeing a public page");
     }
 
+
+    @SecuredAction
+    public Result linkResult() {
+        DemoUser current = (DemoUser) ctx().args.get(SecureSocial.USER_KEY);
+        return ok(linkResult.render(current, current.identities));
+    }
+
+
     /**
      * Sample use of SecureSocial.currentUser. Access the /current-user to test it
      */
