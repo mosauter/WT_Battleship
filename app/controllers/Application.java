@@ -24,6 +24,51 @@ import service.DemoUser;
 
 public class Application extends Controller {
 
+    private RuntimeEnvironment env;
+
+    /**
+     * A constructor needed to get a hold of the environment instance.
+     * This could be injected using a DI framework instead too.
+     *
+     * @param env
+     */
+    @Inject()
+    public Application (RuntimeEnvironment env) {
+        this.env = env;
+    }
+    /**
+     * This action only gets called if the user is logged in.
+     *
+     * @return
+     */
+
+    @SecuredAction
+    public Result securePage() {
+
+        DemoUser user = (DemoUser) ctx().args.get(SecureSocial.USER_KEY);
+        return ok(securePage.render(user, SecureSocial.env()));
+    }
+
+    @UserAwareAction
+    public Result userAware() {
+        DemoUser demoUser = (DemoUser) ctx().args.get(SecureSocial.USER_KEY);
+        String userName ;
+        if ( demoUser != null ) {
+            BasicProfile user = demoUser.main;
+            if ( user.firstName().isDefined() ) {
+                userName = user.firstName().get();
+            } else if ( user.fullName().isDefined()) {
+                userName = user.fullName().get();
+            } else {
+                userName = "authenticated user";
+            }
+        } else {
+            userName = "guest";
+        }
+        return ok("Hello " + userName + ", you are seeing a public page");
+    }
+
+
     /**
      * List of {@link GameInstance} with one player waiting for an opponent.
      */
