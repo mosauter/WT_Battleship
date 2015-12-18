@@ -49,6 +49,11 @@ public class Application extends Controller {
         return ok(securePage.render(user, SecureSocial.env()));
     }
 
+    /*Wenn man in Java auf den username zugreifen moechte:
+    *  // accessing the first name
+    *  String msg = "Hello " + user.firstName()
+    *   gute Dokumentation auf:http://securesocial.ws/guide/securing.html
+    * */
     @UserAwareAction
     public Result userAware() {
         DemoUser demoUser = (DemoUser) ctx().args.get(SecureSocial.USER_KEY);
@@ -66,6 +71,26 @@ public class Application extends Controller {
             userName = "guest";
         }
         return ok("Hello " + userName + ", you are seeing a public page");
+    }
+
+    /**
+     * Sample use of SecureSocial.currentUser. Access the /current-user to test it
+     */
+    public F.Promise<Result> currentUser() {
+        return SecureSocial.currentUser(env).map( new F.Function<Object, Result>() {
+            @Override
+            public Result apply(Object maybeUser) throws Throwable {
+                String id;
+
+                if ( maybeUser != null ) {
+                    DemoUser user = (DemoUser) maybeUser;
+                    id = user.main.userId();
+                } else {
+                    id = "not available. Please log in.";
+                }
+                return ok("your id is " + id);
+            }
+        });
     }
 
 
