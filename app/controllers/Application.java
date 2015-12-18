@@ -1,6 +1,7 @@
 package controllers;
 
-
+import com.google.inject.Inject;
+import play.libs.F;
 import controllers.util.GameInstance;
 import de.htwg.battleship.Battleship;
 import de.htwg.battleship.aview.tui.TUI;
@@ -19,6 +20,8 @@ import securesocial.core.java.SecureSocial;
 import securesocial.core.java.SecuredAction;
 import securesocial.core.java.UserAwareAction;
 import service.DemoUser;
+import views.html.securePage;
+import views.html.linkResult;
 
 
 
