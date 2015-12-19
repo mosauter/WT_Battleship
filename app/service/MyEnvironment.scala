@@ -18,8 +18,18 @@ package service
 
 import securesocial.core.RuntimeEnvironment
 import securesocial.core.services.UserService
+import scala.collection.immutable.ListMap
+
+import securesocial.controllers.{ MailTemplates, ViewTemplates }
+import securesocial.core.authenticator._
+import securesocial.core.providers._
+import securesocial.core.providers.utils.{ Mailer, PasswordHasher, PasswordValidator }
+import securesocial.core.services._
 
 class MyEnvironment extends RuntimeEnvironment.Default {
   type U = DemoUser
   override val userService: UserService[U] = new InMemoryUserService()
+  override lazy val providers = ListMap(
+    include(new GoogleProvider(routes, cacheService, oauth2ClientFor(GoogleProvider.Google)))
+  )
 }
