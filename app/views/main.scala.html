@@ -1,4 +1,11 @@
-@(title: String)(content: Html)
+@(title: String, nav: String = "")(content: Html)
+
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import play.api.libs.json._
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
+
 
 <!DOCTYPE html>
 
@@ -53,12 +60,56 @@
                             </ul>
                         </li>
                         <li><a href="#contact" data-toggle="modal">Contact</a></li>
+                        <li class="@("active".when(nav == ""))"><a href="@routes.Application.index()">("playauthenticate.navigation.home")</a></li>
+                        <li class="@("active".when(nav == "restricted"))"><a href="@routes.Application.restricted()">("playauthenticate.navigation.restricted")</a></li>
+
+                        @subjectNotPresent() {
+                             <li class="@("active".when(nav == "signup"))"><a href="@routes.Application.signup()">("playauthenticate.navigation.signup")</a></li>
+                        }
                     </ul>
+
+                    @subjectPresentOr() {
+                        <ul class="nav navbar-nav navbar-right">
+                            @defining(Application.getLocalUser(session())) { user =>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> @user.name <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="@("active".when(nav == "profile"))"><a href="@routes.Application.profile()">("playauthenticate.navigation.profile")</a></li>
+                                    <li><a href="@routes.Account.link()">("playauthenticate.navigation.link_more")</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout()"><i class="icon-off"></i> ("playauthenticate.navigation.logout")</a></li>
+                                </ul>
+                            </li>
+                            }
+                        </ul>
+                    } {
+                        <a href="@routes.Application.login()" class=" navbar-right btn btn-default navbar-btn @("disabled".when(nav == "login"))">("playauthenticate.navigation.login")</a>
+                    }
+
+
                 </div>
             </div>
         </div>
 
+        <div class="container">
+            @if(flash.contains(Application.FLASH_ERROR_KEY)) {
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">
+                            Close</span></button>
+                    @flash().get(Application.FLASH_ERROR_KEY)
+                </div>
+            }
+            @if(flash.contains(Application.FLASH_MESSAGE_KEY)) {
+                <div class="alert alert-success" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">
+                            Close</span></button>
+                    @flash().get(Application.FLASH_MESSAGE_KEY)
+                </div>
+            }
+
         @content
+
+        </div>
 
         <div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation/foot">
             <div class="container">
