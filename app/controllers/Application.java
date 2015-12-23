@@ -14,10 +14,6 @@ import models.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import providers.MyUsernamePasswordAuthProvider;
-import providers.MyUsernamePasswordAuthProvider.MyLogin;
-import providers.MyUsernamePasswordAuthProvider.MySignup;
-
 import views.html.*;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
@@ -107,67 +103,8 @@ public class Application extends Controller {
         };
     }
 
-
-
-    public static User getLocalUser(final Session session) {
-        final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
-        final User localUser = User.findByAuthUserIdentity(currentAuthUser);
-        return localUser;
-    }
-
-    @Restrict(@Group(Application.USER_ROLE))
-    public static Result restricted() {
-        final User localUser = getLocalUser(session());
-        return ok(restricted.render(localUser));
-    }
-
-    @Restrict(@Group(Application.USER_ROLE))
-    public static Result profile() {
-        final User localUser = getLocalUser(session());
-        return ok(profile.render(localUser));
-    }
-
     public static Result login() {
         return ok(login.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
-    }
-
-    public static Result doLogin() {
-        com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-        final Form<MyLogin> filledForm = MyUsernamePasswordAuthProvider.LOGIN_FORM
-                .bindFromRequest();
-        if (filledForm.hasErrors()) {
-            // User did not fill everything properly
-            return badRequest(login.render(filledForm));
-        } else {
-            // Everything was filled
-            return UsernamePasswordAuthProvider.handleLogin(ctx());
-        }
-    }
-
-    public static Result signup() {
-        return ok(signup.render(MyUsernamePasswordAuthProvider.SIGNUP_FORM));
-    }
-
-    public static Result jsRoutes() {
-        return ok(
-                Routes.javascriptRouter("jsRoutes",
-                        controllers.routes.javascript.Signup.forgotPassword()))
-                .as("text/javascript");
-    }
-
-    public static Result doSignup() {
-        com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-        final Form<MySignup> filledForm = MyUsernamePasswordAuthProvider.SIGNUP_FORM
-                .bindFromRequest();
-        if (filledForm.hasErrors()) {
-            // User did not fill everything properly
-            return badRequest(signup.render(filledForm));
-        } else {
-            // Everything was filled
-            // do something with your part of the form before handling the user
-            // signup
-            return UsernamePasswordAuthProvider.handleSignup(ctx());
-        }
     }
 
     public static String formatTimestamp(final long t) {

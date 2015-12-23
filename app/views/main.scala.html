@@ -61,28 +61,8 @@
                         </li>
                         <li><a href="#contact" data-toggle="modal">Contact</a></li>
                         <li class="@("active".when(nav == ""))"><a href="@routes.Application.index()">("playauthenticate.navigation.home")</a></li>
-                        <li class="@("active".when(nav == "restricted"))"><a href="@routes.Application.restricted()">("playauthenticate.navigation.restricted")</a></li>
-
-                        @subjectNotPresent() {
-                             <li class="@("active".when(nav == "signup"))"><a href="@routes.Application.signup()">("playauthenticate.navigation.signup")</a></li>
-                        }
                     </ul>
-
-                    @subjectPresentOr() {
-                        <ul class="nav navbar-nav navbar-right">
-                            @defining(Application.getLocalUser(session())) { user =>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> @user.name <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li class="@("active".when(nav == "profile"))"><a href="@routes.Application.profile()">("playauthenticate.navigation.profile")</a></li>
-                                    <li><a href="@routes.Account.link()">("playauthenticate.navigation.link_more")</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout()"><i class="icon-off"></i> ("playauthenticate.navigation.logout")</a></li>
-                                </ul>
-                            </li>
-                            }
-                        </ul>
-                    } {
+                    {
                         <a href="@routes.Application.login()" class=" navbar-right btn btn-default navbar-btn @("disabled".when(nav == "login"))">("playauthenticate.navigation.login")</a>
                     }
 
