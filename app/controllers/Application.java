@@ -10,6 +10,7 @@ import play.mvc.Result;
 import play.mvc.WebSocket;
 import views.html.game;
 import views.html.home;
+import play.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +27,7 @@ import views.html.linkResult;
 
 
 public class Application extends Controller {
+    public static Logger.ALogger logger = Logger.of("application.controllers.Application");
 
     private RuntimeEnvironment env;
 
@@ -87,13 +89,18 @@ public class Application extends Controller {
     /**
      * Sample use of SecureSocial.currentUser. Access the /current-user to test it
      */
+
+    /**
+     *gibt die ID des angemeldeten users aus: currentUser()
+     */
+
     public F.Promise<Result> currentUser() {
-        return SecureSocial.currentUser(env).map( new F.Function<Object, Result>() {
+        return SecureSocial.currentUser(env).map(new F.Function<Object, Result>() {
             @Override
             public Result apply(Object maybeUser) throws Throwable {
                 String id;
 
-                if ( maybeUser != null ) {
+                if (maybeUser != null) {
                     DemoUser user = (DemoUser) maybeUser;
                     id = user.main.userId();
                 } else {
@@ -113,6 +120,9 @@ public class Application extends Controller {
     static Battleship bs = Battleship.getInstance();
 
     public Result index() {
+        if(logger.isDebugEnabled()){
+            logger.debug("access granted to index");
+        }
         return home();
     }
 
