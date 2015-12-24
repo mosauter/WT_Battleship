@@ -42,3 +42,5 @@ scalacOptions := Seq("-encoding", "UTF-8", "-Xlint", "-deprecation", "-unchecked
 
 
 fork in run := true
+
+fork in run := true

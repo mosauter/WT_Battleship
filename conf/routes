@@ -25,7 +25,6 @@ GET     /socket                     @controllers.Application.socket(login: Strin
 # Home page
 GET        /securePage          @controllers.Application.securePage
 GET        /userAware           @controllers.Application.userAware
-#GET        /only-twitter        @controllers.Application.onlyTwitter
 GET        /link-result         @controllers.Application.linkResult
 GET        /current-user        @controllers.Application.currentUser
 
