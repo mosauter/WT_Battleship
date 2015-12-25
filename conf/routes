@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                           @controllers.Application.index()
+#GET     /                           @controllers.Application.index()
 GET     /battleship                 @controllers.Application.wui(command:String = "1")
 GET     /battleship/:command        @controllers.Application.wui(command:String)
 
@@ -19,3 +19,31 @@ GET     /about                      controllers.Assets.at(path="/public", file="
 
 GET     /socket                     @controllers.Application.socket(login: String = "dummyName")
 
+
+##from google oAuth:
+
+GET         /                                 controllers.Application.index()
+GET         /loginForm                        controllers.Application.loginForm()
+GET         /facebook/index.html              controllers.Application.facebookIndex()
+GET         /facebookadmin/index.html         controllers.Application.facebookAdminIndex()
+GET         /facebookcustom/index.html        controllers.Application.facebookCustomIndex()
+GET         /twitter/index.html               controllers.Application.twitterIndex()
+GET         /form/index.html                  controllers.Application.formIndex()
+GET         /form/index.html.json             controllers.Application.formIndexJson()
+GET         /basicauth/index.html             controllers.Application.basicauthIndex()
+GET         /cas/index.html                   controllers.Application.casIndex()
+GET         /saml/index.html                  controllers.Application.samlIndex()
+GET         /oidc/index.html                  controllers.Application.oidcIndex()
+GET         /protected/index.html             controllers.Application.protectedIndex()
+GET         /jwt.html                         controllers.Application.jwt()
+GET         /dba/index.html                   controllers.Application.dbaIndex()
+POST        /dba/index.html                   controllers.Application.dbaIndex()
+GET         /rest-jwt/index.html              controllers.Application.restJwtIndex()
+GET         /callback                         @org.pac4j.play.CallbackController.callback()
+POST        /callback                         @org.pac4j.play.CallbackController.callback()
+GET         /casProxyCallback                 @org.pac4j.play.CallbackController.callback()
+POST        /casProxyCallback                 @org.pac4j.play.CallbackController.callback()
+GET         /logout                           @org.pac4j.play.ApplicationLogoutController.logout()
+
+
+#####ACHTUNG: Unsere home-seite ist momentan deaktiviert zu testzwecken

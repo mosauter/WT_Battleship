@@ -1,61 +1,144 @@
-@(message: Html)
 
-@main("Battleship") {
+@(profile : org.pac4j.core.profile.CommonProfile, urlFacebook: String, urlTwitter: String, urlForm: String, urlBasicAuth: String, urlCas: String, urlOidc: String, urlSaml: String)
 
-<style>
-   .sliding_ship{
-   position: absolute;
-   top: 100px;
-   width: 250px;
-   height: 90px;
-   transition: left 2s ease-out, right 2s ease-out;
-   }
 
-   #ship_left{
-   left: -260px;
-   }
+<!DOCTYPE html>
 
-   #ship_right{
-   right: -260px;
-   }
+<html lang="en">
+<head>
 
-   #main {
-   width: 900px;
-   text-align: center;
-   margin: 0px auto;
-   }
+    <meta charset="UTF-8">
+    <meta name="author" content="Moritz Sauter, Felix Wiedenbach, Pavandeep Singh">
 
-   #main h1{
-   font-family: 'Helvetica';
-   font-weight: bold;
-   font-size: 40px;
-   color: blue;
-   }
-</style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<section id="main">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/stylesheets/main.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 
-   <h1>Battleship</h1>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/assets/javascripts/websocket.js"></script>
+</head>
+<body>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Battleship</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admins & Co <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">Admin & Dashboard</li>
+                        <li><a href="#">Moritz</a></li>
+                        <li><a href="#">Felix</a></li>
+                        <li><a href="#">Pavan</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Image sources</li>
+                        <li><a href="#">Ship1</a></li>
+                        <li><a href="#">Ship2</a></li>
+                    </ul>
+                </li>
+                <li><a href="#contact" data-toggle="modal">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
-   <a class="button" href="/battleship" title="Let's get ready to fight!">Play</a>
 
-</section>
 
-<img id="ship_left" class="sliding_ship" src="@routes.Assets.versioned("images/ship_left.png")" alt="ship"/>
-<img id="ship_right" class="sliding_ship" src="@routes.Assets.versioned("images/ship_right.png")" alt="ship"/>
+<h1>index</h1>
+<a href="facebook/index.html">Protected url by Facebook : facebook/index.html</a> (use a real account)<br />
+<a href="facebookadmin/index.html">Protected url by Facebook with ROLE_ADMIN: facebookadmin/index.html</a> (use a real account)<br />
+<a href="facebookcustom/index.html">Protected url by Facebook with custom authorizer (= must be a <em>HttpProfile</em> where the username starts with "jle"): facebookcustom/index.html</a> (login with form or basic authentication before with jle* username)<br />
+<a href="twitter/index.html">Protected url by Twitter: twitter/index.html</a> or <a href="twitter/index.html?client_name=FacebookClient">by Facebook: twitter/index.html?client_name=FacebookClient</a> (use a real account)<br />
+<a href="form/index.html">Protected url by form authentication : form/index.html</a> (use login = pwd)<br />
+<a href="javascript:ajaxClick();">Click here to send AJAX request after performing form authentication</a><br />
+<a href="basicauth/index.html">Protected url by basic auth : basicauth/index.html</a> (use login = pwd)<br />
+<a href="cas/index.html">Protected url by CAS : cas/index.html</a> (use login = pwd)<br />
+<a href="saml/index.html">Protected url by SAML : saml/index.html</a> (use a real account)<br />
+<a href="oidc/index.html">Protected url by OpenID Connect : oidc/index.html</a> (use a real account)<br />
+<a href="protected/index.html">Protected url: protected/index.html</a> (won't start any login process)<br />
+<br />
+<a href="jwt.html">Generate a JWT token</a><br />
+<a href="/dba/index.html">Protected url by DirectBasicAuthClient: /dba/index.html</a> (POST the <em>Authorization</em> header with value: <em>Basic amxlbGV1OmpsZWxldQ==</em>) then by <a href="/dba/index.html">ParameterClient: /dba/index.html</a> (with request parameter: token=<em>jwt_generated_token</em>)<br />
+<a href="/rest-jwt/index.html">Protected url by ParameterClient: /rest-jwt/index.html</a> (with request parameter: token=<em>jwt_generated_token</em>)<br />
+<br />
+<a href="/logout?url=/">logout</a>
+<br /><br />
+profile : @profile
+<br /><br />
+<hr />
+<a href="@urlFacebook">Authenticate with Facebook</a><br />
+<a href="@urlTwitter">Authenticate with Twitter</a><br />
+<a href="@urlForm">Authenticate with form</a><br />
+<a href="@urlBasicAuth">Authenticate with basic auth</a><br />
+<a href="@urlCas">Authenticate with CAS</a><br />
+<a href="@urlSaml">Authenticate with SAML</a><br />
+<a href="@urlOidc">Authenticate with OpenID Connect</a><br />
+<br />
+<br />
+<h2>Find the source code on <a target="_blank" href="https://github.com/pac4j/play-pac4j-java-demo">https://github.com/pac4j/play-pac4j-java-demo</a><br/>
+<br />
+See it running on Heroku: <a target="_blank" href="http://play-pac4j-java-demo.herokuapp.com">http://play-pac4j-java-demo.herokuapp.com</a></h2>
 
-<script>
-      console.log('test');
-      window.addEventListener("load", function(event) {
-         console.log('test1');
-         setTimeout(function(){
-            console.log('move');
-            var ship_left = document.getElementById('ship_left');
-            var ship_right = document.getElementById('ship_right');
-            ship_left.style.left = '-20px';
-            ship_right.style.right = '-20px';
-         }, 5000);
-      });
-   </script>
+<!-- Link to Google CDN's jQuery; fall back to local -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="assets/js/jquery.min.js"><\/script>')</script>
 
-}
+<script src="assets/js/app.js"></script>
+
+
+
+
+<div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation/foot">
+    <div class="container">
+        <div class=" navbar-text pull-left">
+            <p>© A project by <a href="http://www.htwg-konstanz.de">HTWG Konstanz</a></p>
+        </div>
+        <div class="navbar-text pull-right">
+            <a href="#"><i class="fa fa-facebook-square fa-2x"></i></a>
+            <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
+            <a href="#"><i class="fa fa-google-plus fa-2x"></i></a>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="contact" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Contact</h4>
+            </div>
+            <div class="modal-body">
+                <p>For general inquiries please email one of the following:</p>
+                <ul>
+                    <li>pasingh&#64;htwg-konstanz.de</li>
+                    <li>fewieden&#64;htwg-konstanz.de</li>
+                    <li>mosauter&#64;htwg-konstanz.de</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-play" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
