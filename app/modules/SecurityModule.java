@@ -26,6 +26,9 @@ import play.Environment;
 
 import java.io.File;
 
+/**Security module will process the credentials for google and facebook platforms.
+ * Redirect url's must be defined in respective platforms.
+ */
 public class SecurityModule extends AbstractModule {
 
     public final static String JWT_SALT = "12345678901234567890123456789012";
