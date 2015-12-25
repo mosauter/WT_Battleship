@@ -32,91 +32,70 @@ import play.mvc.Result;
 import play.twirl.api.Content;
 
 
-//public class Application extends Controller {
-public class Application extends UserProfileController<CommonProfile> {
+public class Application extends Controller {
+//public class Application extends UserProfileController<CommonProfile> {
 
     /*Start google oAuth methods*/
 
+    Auth auth = new Auth();
+
 
     public Result index() throws Exception {
-        // profile (maybe null if not authenticated)
-        final CommonProfile profile = getUserProfile();
-        final Clients clients = config.getClients();
-        final PlayWebContext context = new PlayWebContext(ctx(), config.getSessionStore());
-        final String urlFacebook = ((IndirectClient) clients.findClient("FacebookClient")).getRedirectAction(context, false).getLocation();
-        final String urlTwitter = ((IndirectClient) clients.findClient("TwitterClient")).getRedirectAction(context, false).getLocation();
-        final String urlForm = ((IndirectClient) clients.findClient("FormClient")).getRedirectAction(context, false).getLocation();
-        final String urlBasicAuth = ((IndirectClient) clients.findClient("IndirectBasicAuthClient")).getRedirectAction(context, false).getLocation();
-        final String urlCas = ((IndirectClient) clients.findClient("CasClient")).getRedirectAction(context, false).getLocation();
-        //final String urlOidc = ((IndirectClient) clients.findClient("OidcClient")).getRedirectAction(context, false).getLocation();
-        final String urlOidc = "google";
-        final String urlSaml = ((IndirectClient) clients.findClient("SAML2Client")).getRedirectAction(context, false).getLocation();
-        return ok(views.html.index.render(profile, urlFacebook, urlTwitter, urlForm, urlBasicAuth, urlCas, urlOidc,
-                urlSaml));
+        return auth.index();
     }
 
-    private Result protectedIndexView() {
-        // profile
-        final CommonProfile profile = getUserProfile();
-        final String username = profile.getFamilyName();
+    /*private Result protectedIndexView() {
+        auth.protectedIndexView();
+    }*/
 
-        //return ok(views.html.protectedIndex.render(profile,username));
-        return ok(views.html.namePage.render(username));
-    }
-
-    @RequiresAuthentication(clientName = "FacebookClient")
+    //@RequiresAuthentication(clientName = "FacebookClient")
     public Result facebookIndex() {
-        return protectedIndexView();
+        return auth.facebookIndex();
     }
 
-    @RequiresAuthentication(clientName = "FacebookClient", authorizerName = "admin")
+    //@RequiresAuthentication(clientName = "FacebookClient", authorizerName = "admin")
     public Result facebookAdminIndex() {
-        return protectedIndexView();
+        return auth.facebookAdminIndex();
     }
 
-    @RequiresAuthentication(clientName = "FacebookClient", authorizerName = "custom")
+    //@RequiresAuthentication(clientName = "FacebookClient", authorizerName = "custom")
     public Result facebookCustomIndex() {
-        return protectedIndexView();
+        return auth.facebookCustomIndex();
     }
 
-    @RequiresAuthentication(clientName = "TwitterClient,FacebookClient")
+    //@RequiresAuthentication(clientName = "TwitterClient,FacebookClient")
     public Result twitterIndex() {
-        return protectedIndexView();
+        return auth.twitterIndex();
     }
 
-    @RequiresAuthentication
+    //@RequiresAuthentication
     public Result protectedIndex() {
-        return protectedIndexView();
+        return auth.protectedIndex();
     }
 
-    @RequiresAuthentication(clientName = "FormClient")
+    //@RequiresAuthentication(clientName = "FormClient")
     public Result formIndex() {
-        return protectedIndexView();
+        return auth.formIndex();
     }
 
     // Setting the isAjax parameter is no longer necessary as AJAX requests are automatically detected:
     // a 401 error response will be returned instead of a redirection to the login url.
-    @RequiresAuthentication(clientName = "FormClient")
+   // @RequiresAuthentication(clientName = "FormClient")
     public Result formIndexJson() {
-        final CommonProfile profile = getUserProfile();
-        final String username = profile.getFamilyName();
-        //Content content = views.html.protectedIndex.render(profile,username);
-        Content content = views.html.namePage.render(username);
-        JsonContent jsonContent = new JsonContent(content.body());
-        return ok(jsonContent);
+        return auth.formIndexJson();
     }
 
-    @RequiresAuthentication(clientName = "IndirectBasicAuthClient")
+    //@RequiresAuthentication(clientName = "IndirectBasicAuthClient")
     public Result basicauthIndex() {
-        return protectedIndexView();
+        return auth.basicauthIndex();
     }
 
-    @RequiresAuthentication(clientName = "DirectBasicAuthClient,ParameterClient")
+    //@RequiresAuthentication(clientName = "DirectBasicAuthClient,ParameterClient")
     public Result dbaIndex() {
-        return protectedIndexView();
+        return auth.dbaIndex();
     }
 
-    @RequiresAuthentication(clientName = "CasClient")
+    //@RequiresAuthentication(clientName = "CasClient")
     public Result casIndex() {
         /*final CommonProfile profile = getUserProfile();
         final String service = "http://localhost:8080/proxiedService";
@@ -126,37 +105,30 @@ public class Application extends UserProfileController<CommonProfile> {
             proxyTicket = proxyProfile.getProxyTicketFor(service);
         }
         return ok(views.html.casProtectedIndex.render(profile, service, proxyTicket));*/
-        return protectedIndexView();
+        return auth.casIndex();
     }
 
-    @RequiresAuthentication(clientName = "SAML2Client")
+    //@RequiresAuthentication(clientName = "SAML2Client")
     public Result samlIndex() {
-        return protectedIndexView();
+        return auth.samlIndex();
     }
 
-    @RequiresAuthentication(clientName = "OidcClient")
+    //@RequiresAuthentication(clientName = "OidcClient")
     public Result oidcIndex() {
-        return protectedIndexView();
+        return auth.oidcIndex();
     }
 
-    @RequiresAuthentication(clientName = "ParameterClient")
+    //@RequiresAuthentication(clientName = "ParameterClient")
     public Result restJwtIndex() {
-        return protectedIndexView();
+        return auth.restJwtIndex();
     }
 
-    public Result loginForm() throws TechnicalException {
-        final FormClient formClient = (FormClient) config.getClients().findClient("FormClient");
-        return ok(views.html.loginForm.render(formClient.getCallbackUrl()));
+    public Result loginForm(){
+        return auth.loginForm();
     }
 
     public Result jwt() {
-        final UserProfile profile = getUserProfile();
-        final JwtGenerator generator = new JwtGenerator(SecurityModule.JWT_SALT);
-        String token = "";
-        if (profile != null) {
-            token = generator.generate(profile);
-        }
-        return ok(views.html.jwt.render(token));
+        return auth.jwt();
     }
 
 
