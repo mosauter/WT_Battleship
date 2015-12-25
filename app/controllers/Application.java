@@ -4,6 +4,7 @@ package controllers;
 import controllers.util.GameInstance;
 import de.htwg.battleship.Battleship;
 import de.htwg.battleship.aview.tui.TUI;
+import org.apache.maven.wagon.authorization.AuthorizationException;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
@@ -37,10 +38,9 @@ public class Application extends Controller {
 
     /*Start google oAuth methods*/
 
-    Auth auth = new Auth();
-
-
+    Auth auth =new Auth();
     public Result index() throws Exception {
+        System.out.println("adsfadsf");
         return auth.index();
     }
 
