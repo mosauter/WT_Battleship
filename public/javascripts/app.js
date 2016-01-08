@@ -141,6 +141,11 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
 
     $scope.placing = true;
     $scope.switchOrientation = function(ship){
+        if(($scope.ships[ship]['orientation'] && parseInt(ship) + $scope.ships[ship]['y'] > 9) ||
+            (!$scope.ships[ship]['orientation'] && parseInt(ship) + $scope.ships[ship]['x'] > 9)){
+            alert("You can't switch the orientation at this position!");
+            return;
+        }
         $scope.toggleShipOnField($scope.ships[ship]['x'], $scope.ships[ship]['y'], parseInt(ship), 'x');
         $scope.ships[ship]['orientation'] = $scope.ships[ship]['orientation'] ? false : true;
         $scope.toggleShipOnField($scope.ships[ship]['x'], $scope.ships[ship]['y'], parseInt(ship), 's');
@@ -160,8 +165,16 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             alert('Wrong input!');
             return;
         }
+        var orientation = true;
+        if(x + parseInt(ship) > 9){
+            orientation = false;
+        }
+        if(!orientation && y + parseInt(ship) > 9){
+            alert("Ship can't be placed horizontal or vertical");
+            return;
+        }
 
-        $scope.ships[ship] = {'x': x, 'y': y, 'orientation': true, 'isPlaced': true};
+        $scope.ships[ship] = {'x': x, 'y': y, 'orientation': orientation, 'isPlaced': true};
         $scope.toggleShipOnField(x, y, parseInt(ship), 's');
     };
 
