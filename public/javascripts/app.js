@@ -69,6 +69,20 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         WIN2: "WIN2"
     };
 
+    $scope.alphabet = ['A','B','C','D','E','F','G','H','I','J'];
+    $scope.field = [];
+    $scope.opponent = [];
+
+    $scope.ships = {
+        '2': {'isPlaced': false},
+        '3': {'isPlaced': false},
+        '4': {'isPlaced': false},
+        '5': {'isPlaced': false},
+        '6': {'isPlaced': false}
+    };
+
+    $scope.placing = true;
+
     var $socket = $websocket('ws://localhost:9000/socket');
 
     $socket.onOpen(function(){
@@ -117,8 +131,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         }
     });
 
-    $scope.alphabet = ['A','B','C','D','E','F','G','H','I','J'];
-
     $scope.initFields = function() {
         var arr = [];
         for (var i = 0; i < 10; i++){
@@ -130,19 +142,9 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
     $scope.field = $scope.initFields();
     $scope.opponent = $scope.initFields();
 
-    // 'x': 0, 'y': 0, 'orientation': true
-    $scope.ships = {
-        '2': {'isPlaced': false},
-        '3': {'isPlaced': false},
-        '4': {'isPlaced': false},
-        '5': {'isPlaced': false},
-        '6': {'isPlaced': false}
-    };
-
-    $scope.placing = true;
     $scope.switchOrientation = function(ship){
-        if(($scope.ships[ship]['orientation'] && parseInt(ship) + $scope.ships[ship]['y'] > 9) ||
-            (!$scope.ships[ship]['orientation'] && parseInt(ship) + $scope.ships[ship]['x'] > 9)){
+        if(($scope.ships[ship]['orientation'] && parseInt(ship) + $scope.ships[ship]['y'] - 1 > 9) ||
+            (!$scope.ships[ship]['orientation'] && parseInt(ship) + $scope.ships[ship]['x'] - 1 > 9)){
             alert("You can't switch the orientation at this position!");
             return;
         }
@@ -166,10 +168,10 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             return;
         }
         var orientation = true;
-        if(x + parseInt(ship) > 9){
+        if(x + parseInt(ship) - 1 > 9){
             orientation = false;
         }
-        if(!orientation && y + parseInt(ship) > 9){
+        if(!orientation && y + parseInt(ship) - 1 > 9){
             alert("Ship can't be placed horizontal or vertical");
             return;
         }
@@ -192,6 +194,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         angular.forEach($scope.ships, function(value, key){
             if(!value.isPlaced){
                 alert("You're not ready yet! Please reset ship with length " + key);
+                //TODO: this return just exits the anonymous function but should exit sendShips
                 return;
             }
         });
@@ -203,6 +206,8 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
                 'orientation': value['orientation']
             }));
         });
+        //TODO: just temporary, has to be moved to socket listener
+        $scope.placing = false;
     };
 
     $scope.fillField = function(field, arr, value){
@@ -213,22 +218,26 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         });
     };
 
-    /*
-     * always getting no such element if id="card{{x}}{{i}}" in battle.html
-     * so we can't trigger an animation to flip the card via js
-     *
-     * probably has to be moved to socket on message event
-     */
     $scope.shoot = function(x, y){
-        if ($scope.field[x][y] == 'x'){
+        if($scope.placing){
+            alert("You're not allowed to shoot yet!");
+            return;
+        }
+        if ($scope.opponent[x][y] == 'x'){
             $socket.send(JSON.stringify({
                 'type': 'SHOOT',
                 'x': x,
                 'y': y
             }));
-            //angular.element('#card' + y + x).removeClass('water').addClass('hit');
+            /*
+             * TODO: always getting no such element if id="card{{x}}{{i}}" in battle.html
+             * so we can't trigger an animation to flip the card via js
+             *
+             * probably has to be moved to socket on message event
+             * angular.element('#card' + y + x).removeClass('water').addClass('hit');
+             */
         } else {
-            alert('You shot on this field already');
+            alert('You shot on this field already!');
         }
     };
 
