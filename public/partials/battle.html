@@ -1,0 +1,75 @@
+<div class="col-sm-12 jumbotron row">
+	<div class="col-md-6" ng-if="!placing">
+		<h3>Opponent's field:</h3>
+		<table id="opponentView" class="playboard">
+			<thead>
+			<tr>
+				<th>&nbsp;&nbsp;</th>
+				<th style="text-align: center;" ng-repeat="i in [] | range:10">{{i + 1}}</th>
+			</tr>
+			</thead>
+			<tr ng-repeat="x in alphabet track by $index">
+				<th>{{x}}</th>
+				<td ng-repeat="i in [] | range:10">
+					<div class="card" ng-click="shoot(i, $parent.$index)"
+						 ng-class="{
+							'water': opponent[i][$parent.$index] == 'x',
+							'hit': opponent[i][$parent.$index] == 'h',
+							'miss': opponent[i][$parent.$index] == 'm'
+						 }">
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-6">
+		<h3>Your field:</h3>
+		<table id="thisPlayerView">
+			<thead>
+				<tr>
+					<th>&nbsp;&nbsp;</th>
+					<th style="text-align: center;" ng-repeat="i in [] | range:10">{{i + 1}}</th>
+				</tr>
+			</thead>
+			<tr ng-repeat="x in alphabet track by $index">
+				<th>{{x}}</th>
+				<td ng-repeat="i in [] | range:10">
+					<div class="card"
+						 ng-class="{
+							'water': field[i][$parent.$index] == 'x',
+							'hit': field[i][$parent.$index] == 'h',
+							'miss': field[i][$parent.$index] == 'm',
+							'ship': field[i][$parent.$index] == 's'
+						 }">
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-6" ng-if="placing">
+		<h3>Place Menu:</h3>
+		<table>
+			<thead>
+				<th>Ship length</th>
+				<th>&nbsp;|&nbsp;</th>
+				<th>Orientation</th>
+				<th>&nbsp;|&nbsp;</th>
+				<th>Actions</th>
+			</thead>
+			<tr ng-repeat="(key, value) in ships">
+				<td colspan="2">{{key}}</td>
+				<td colspan="2">{{value.isPlaced ? (value.orientation ? 'horizontal' : 'vertical') : 'not set'}}</td>
+				<td class="placeMenuPadding">
+					<button class="btn btn-warning" ng-click="switchOrientation(key)" ng-if="value.isPlaced">
+						{{value.orientation ? 'Change to vertical' : 'Change to horizontal'}}
+					</button>
+					<button class="btn btn-danger" ng-click="removeShip(key)" ng-if="value.isPlaced">Remove</button>
+					<button class="btn btn-primary" ng-click="placeShip(key)" ng-if="!value.isPlaced">Place</button>
+				</td>
+			</tr>
+		</table>
+		<div>
+			<button class="btn btn-play" ng-click="sendShips()">I am ready!</button>
+		</div>
+	</div>
+</div>
