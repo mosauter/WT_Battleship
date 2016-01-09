@@ -68,11 +68,10 @@ public class Application extends Controller {
                 }
                 this.wuiController.setName(anInt++ + login);
 
-                in.onMessage(event -> {
-                    this.wuiController.analyzeMessage(event);
-                });
+                in.onMessage(event -> this.wuiController.analyzeMessage(event));
 
-                in.onClose(() -> System.out.println("CLOSING SOCKET"));
+                in.onClose( // TODO: send other client a message
+                    () -> System.out.println("CLOSING SOCKET"));
             }
         };
     }
