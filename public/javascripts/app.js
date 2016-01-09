@@ -1,7 +1,7 @@
 /**
  * Created by fw on 09.12.15.
  */
-
+var socketAddress = 'ws://localhost:9000/socket';
 var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
 
 app.config(function($routeProvider){
@@ -83,7 +83,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
 
     $scope.placing = true;
 
-    var $socket = $websocket('ws://localhost:9000/socket');
+    var $socket = $websocket(socketAddress);
 
     $socket.onOpen(function(){
         console.log('Connection established!');
