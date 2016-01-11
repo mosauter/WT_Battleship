@@ -22,8 +22,8 @@ import de.htwg.battleship.util.State;
  */
 public class InvalidMessage extends Message {
 
-    public InvalidMessage(State type) {
-        this.type = type;
+    public InvalidMessage() {
+        this.type = State.WRONGINPUT;
     }
 
 }
