@@ -208,12 +208,15 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             return;
         }
         angular.forEach($scope.ships, function(value, key){
-            $socket.send(JSON.stringify({
-                'type': 'PLACE',
-                'x': value['x'],
-                'y': value['y'],
-                'orientation': value['orientation']
-            }));
+            //$socket.send(JSON.stringify({
+            //    'type': 'PLACE',
+            //    'x': value['x'],
+            //    'y': value['y'],
+            //    'orientation': value['orientation']
+            //}));
+            console.log(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
+            $socket.send(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
+
         });
         //TODO: just temporary, has to be moved to socket listener
         $scope.placing = false;
