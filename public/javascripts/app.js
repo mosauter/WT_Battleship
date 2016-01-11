@@ -190,14 +190,23 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         }
     };
 
+    var BreakException = {};
+
     $scope.sendShips = function(){
-        angular.forEach($scope.ships, function(value, key){
-            if(!value.isPlaced){
-                alert("You're not ready yet! Please reset ship with length " + key);
-                //TODO: this return just exits the anonymous function but should exit sendShips
-                return;
+        try {
+            angular.forEach($scope.ships, function (value, key) {
+                if (!value.isPlaced) {
+                    alert("You're not ready yet! Please reset ship with length " + key);
+                    throw BreakException;
+                }
+            });
+        } catch (e) {
+            if (e !== BreakException) {
+                throw e;
             }
-        });
+            // function is properly exited
+            return;
+        }
         angular.forEach($scope.ships, function(value, key){
             $socket.send(JSON.stringify({
                 'type': 'PLACE',
