@@ -51,6 +51,16 @@ public class Auth extends UserProfileController<CommonProfile> {
                 urlSaml));
     }
 
+    public String getCurrentUsername(){
+
+        final CommonProfile profile = getUserProfile();
+        final String username = profile.getFamilyName();
+        /*Instead of username from login-account, also the email-id from login-account can be returned.
+        If needed, just ask. For our purposes username seems to be better.
+        */
+        return username;
+    }
+
     private Result protectedIndexView() {
         // profile
         final CommonProfile profile = getUserProfile();
