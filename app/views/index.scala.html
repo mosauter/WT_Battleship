@@ -24,7 +24,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="/assets/javascripts/websocket.js"></script>
 </head>
-<body>
+<br>
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -63,24 +63,16 @@
 
 
 <h1>index</h1>
-<a href="facebook/index.html">Protected url by Facebook : facebook/index.html</a> (use a real account)<br />
-<a href="facebookadmin/index.html">Protected url by Facebook with ROLE_ADMIN: facebookadmin/index.html</a> (use a real account)<br />
-<a href="facebookcustom/index.html">Protected url by Facebook with custom authorizer (= must be a <em>HttpProfile</em> where the username starts with "jle"): facebookcustom/index.html</a> (login with form or basic authentication before with jle* username)<br />
-<a href="oidc/index.html">Protected url by OpenID Connect : oidc/index.html</a> (use a real account)<br />
-<a href="protected/index.html">Protected url: protected/index.html</a> (won't start any login process)<br />
+<a href="facebook/index.html">Click to login with Facebook : facebook/index.html</a> (use a real account)<br />
+<a href="oidc/index.html">Click to login with Google (OpenID Connect) : oidc/index.html</a> (use a real account)<br />
+<a href="protected/index.html">Click to view username after your login: protected/index.html</a> (won't start any login process)<br />
 <br />
 <br />
 <a href="/logout?url=/">logout</a>
 <br /><br />
-profile : @profile
+Profile information: <br>@profile</br>
 <br /><br />
 <hr />
-<a href="@urlFacebook">Authenticate with Facebook</a><br />
-<a href="@urlOidc">Authenticate with OpenID Connect</a><br />
-<br />
-<br />
-<br />
-See it running on Heroku: <a target="_blank" href="http://play-pac4j-java-demo.herokuapp.com">http://play-pac4j-java-demo.herokuapp.com</a></h2>
 
 <!-- Link to Google CDN's jQuery; fall back to local -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
