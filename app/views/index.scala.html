@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<html lang="en">
+<br lang="en">
 <head>
 
     <meta charset="UTF-8">
@@ -61,25 +61,30 @@
 </div>
 
 
-
-<h1>index</h1>
-<a href="facebook/index.html">Click to login with Facebook : facebook/index.html</a> (use a real account)<br />
-<a href="oidc/index.html">Click to login with Google (OpenID Connect) : oidc/index.html</a> (use a real account)<br />
-<a href="protected/index.html">Click to view username after your login: protected/index.html</a> (won't start any login process)<br />
-<br />
-<br />
-<a href="/logout?url=/">logout</a>
-<br /><br />
-Profile information: <br>@profile</br>
-<br /><br />
-<hr />
-
-<!-- Link to Google CDN's jQuery; fall back to local -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="assets/js/jquery.min.js"><\/script>')</script>
-
-<script src="assets/js/app.js"></script>
-
+<div class="container">
+    <br/>
+    <h1>How would you like to login?</h1>
+    <br/>
+    <div class="row jumbotron">
+        <div class="col-lg-6">
+            <a href="facebook/index.html">Click to login with Facebook : facebook/index.html</a> (use a real account)<br />
+        </div>
+        <div class="col-lg-6">
+            <a href="oidc/index.html">Click to login with Google (OpenID Connect) : oidc/index.html</a> (use a real account)<br />
+            <br />
+        </div>
+    </div>
+    <br/>
+    <br>Click to view username after your login: </br>
+    <a href="protected/index.html">protected/index.html</a> (won't start any login process)<br />
+    <br />
+    <br> Click here to logout:</br>
+    <a href="/logout?url=/">logout</a>
+    <br /><br />
+    Your profile information will be shown here after login: <br>@profile</br>
+    <br /><br />
+    <hr />
+</div>
 
 
 
@@ -118,4 +123,12 @@ Profile information: <br>@profile</br>
     </div>
 </div>
 </body>
+
+<!-- Link to Google CDN's jQuery; fall back to local -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="assets/js/jquery.min.js"><\/script>')</script>
+
+<script src="assets/js/app.js"></script>
+
+
 </html>
