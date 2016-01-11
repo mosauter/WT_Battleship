@@ -236,11 +236,12 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             return;
         }
         if ($scope.opponent[x][y] == 'x'){
-            $socket.send(JSON.stringify({
-                'type': 'SHOOT',
-                'x': x,
-                'y': y
-            }));
+            //$socket.send(JSON.stringify({
+            //    'type': 'SHOOT',
+            //    'x': x,
+            //    'y': y
+            //}));
+            $socket.send(x + ' ' + y);
             /*
              * TODO: always getting no such element if id="card{{x}}{{i}}" in battle.html
              * so we can't trigger an animation to flip the card via js
