@@ -18,7 +18,7 @@ public class Application extends Controller {
     /**
      * List of {@link GameInstance} with one player waiting for an opponent.
      */
-    private List<GameInstance> onePlayer = new LinkedList<>();
+    private static List<GameInstance> onePlayer = new LinkedList<>();
 
     static Battleship bs = Battleship.getInstance();
     static int anInt = 0;
