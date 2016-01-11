@@ -65,6 +65,7 @@ public class Auth extends UserProfileController<CommonProfile> {
         return protectedIndexView();
     }
 
+    /*
     @RequiresAuthentication(clientName = "FacebookClient", authorizerName = "admin")
     public Result facebookAdminIndex() {
         return protectedIndexView();
@@ -79,6 +80,7 @@ public class Auth extends UserProfileController<CommonProfile> {
     public Result twitterIndex() {
         return protectedIndexView();
     }
+    */
 
     @RequiresAuthentication
     public Result protectedIndex() {
@@ -102,6 +104,7 @@ public class Auth extends UserProfileController<CommonProfile> {
         return ok(jsonContent);
     }
 
+        /*
     @RequiresAuthentication(clientName = "IndirectBasicAuthClient")
     public Result basicauthIndex() {
         return protectedIndexView();
@@ -112,6 +115,7 @@ public class Auth extends UserProfileController<CommonProfile> {
         return protectedIndexView();
     }
 
+    */
     @RequiresAuthentication(clientName = "CasClient")
     public Result casIndex() {
         /*final CommonProfile profile = getUserProfile();
@@ -124,6 +128,7 @@ public class Auth extends UserProfileController<CommonProfile> {
         return ok(views.html.casProtectedIndex.render(profile, service, proxyTicket));*/
         return protectedIndexView();
     }
+
 
     @RequiresAuthentication(clientName = "SAML2Client")
     public Result samlIndex() {
