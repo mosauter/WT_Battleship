@@ -1,9 +1,9 @@
 package controllers;// WuiController
 
-import com.google.gson.Gson;
 import controllers.util.HitMessage;
 import controllers.util.InvalidMessage;
 import controllers.util.Message;
+import controllers.util.PlaceErrorMessage;
 import controllers.util.PlaceMessage;
 import controllers.util.ShootMessage;
 import controllers.util.WaitMessage;
@@ -15,6 +15,8 @@ import de.htwg.battleship.util.State;
 import play.Logger;
 import play.mvc.WebSocket;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,14 +28,21 @@ import java.util.Set;
  */
 public class WuiController implements IObserver {
 
+    private static final String HORIZONTAL_ORIENTATION = "true";
+
     private final IMasterController masterController;
     private final WebSocket.Out<String> socket;
     private final boolean firstPlayer;
+    private final List<String[]> bufferedPlaceList;
+    private final List<String[]> bufferedShootList;
+    private boolean placeOneFinished = false;
 
     public WuiController(IMasterController masterController, WebSocket.Out<String> socket, boolean first) {
         this.masterController = masterController;
         this.socket = socket;
         this.firstPlayer = first;
+        this.bufferedPlaceList = new LinkedList<>();
+        this.bufferedShootList = new LinkedList<>();
         masterController.addObserver(this);
     }
 
@@ -45,8 +54,58 @@ public class WuiController implements IObserver {
     }
 
     public void analyzeMessage(String message) {
-        Gson gson = new Gson();
         Logger.info("Received message:\n" + message);
+        String[] field = message.split(" ");
+        // x y orientation -> which player
+        if (field.length == 3) {
+            placeShip(field);
+        }
+        // x y -> test which player
+        if (field.length == 2) {
+            shoot(field);
+        }
+    }
+
+    private boolean processShootList() {
+        if (bufferedPlaceList.isEmpty()) {
+            return false;
+        }
+        String[] instruction = bufferedShootList.get(0);
+        bufferedShootList.remove(0);
+        shoot(instruction);
+        return true;
+    }
+
+    private void shoot(String[] field) {
+        if (firstPlayer && masterController.getCurrentState()
+                                           .equals(State.SHOOT1) || !firstPlayer && masterController
+            .getCurrentState().equals(State.SHOOT2)) {
+            masterController
+                .shoot(Integer.parseInt(field[0]), Integer.parseInt(field[1]));
+        } else {
+            bufferedShootList.add(field);
+        }
+    }
+
+    private boolean processPlaceList() {
+        if (bufferedPlaceList.isEmpty()) {
+            return false;
+        }
+        String[] instruction = bufferedPlaceList.get(0);
+        bufferedPlaceList.remove(0);
+        placeShip(instruction);
+        return true;
+    }
+
+    private void placeShip(String[] field) {
+        if (firstPlayer && masterController.getCurrentState()
+                                           .equals(State.PLACE1) || !firstPlayer && masterController
+            .getCurrentState().equals(State.PLACE2)) {
+            masterController.placeShip(Integer.parseInt(field[0]), Integer
+                .parseInt(field[1]), field[3].equals(HORIZONTAL_ORIENTATION));
+        } else {
+            bufferedPlaceList.add(field);
+        }
     }
 
     public void setName(String name) {
@@ -84,6 +143,10 @@ public class WuiController implements IObserver {
             // PLACING SHIPS
             case PLACE1:
                 if (firstPlayer) {
+                    if (processPlaceList()) {
+                        // TODO: check proper use
+                        return;
+                    }
                     Map<Integer, Set<Integer>> shipMapPlayer1 = StatCollection
                         .createMap();
                     masterController
@@ -96,6 +159,7 @@ public class WuiController implements IObserver {
                 // if secondPlayer he should not get a message
                 return;
             case FINALPLACE1:
+                this.placeOneFinished = true;
                 if (firstPlayer) {
                     Map<Integer, Set<Integer>> shipMapFinal1 = StatCollection
                         .createMap();
@@ -110,6 +174,10 @@ public class WuiController implements IObserver {
                 return;
             case PLACE2:
                 if (!firstPlayer) {
+                    if (processPlaceList()) {
+                        // TODO: check proper use
+                        return;
+                    }
                     Map<Integer, Set<Integer>> shipMapPlayer2 = StatCollection
                         .createMap();
                     masterController
@@ -135,11 +203,21 @@ public class WuiController implements IObserver {
                 // if firstPlayer he should not get a message
                 return;
             case PLACEERR:
-                msg = new InvalidMessage(State.PLACEERR);
+                if (placeOneFinished) {
+                    // minimum in PLACE2
+                    msg = new PlaceErrorMessage(masterController.getPlayer2()
+                                                                .getOwnBoard()
+                                                                .getShips() + 2);
+                } else {
+                    msg = new PlaceErrorMessage(masterController.getPlayer1()
+                                                                .getOwnBoard()
+                                                                .getShips() + 2);
+                }
                 break;
 
             // SHOOTING ON EACH OTHER
             case SHOOT1:
+                // TODO: look after bufferedShootList
                 boolean[][] field1;
                 if (firstPlayer) {
                     // opponent = player 2
@@ -153,6 +231,7 @@ public class WuiController implements IObserver {
                 msg = new ShootMessage(State.SHOOT1, field1);
                 break;
             case SHOOT2:
+                // TODO: look after bufferedShootList
                 boolean[][] field2;
                 if (firstPlayer) {
                     // opponent = player 2
@@ -231,7 +310,7 @@ public class WuiController implements IObserver {
                 break;
 
             default:
-                msg = new InvalidMessage(State.WRONGINPUT);
+                msg = new InvalidMessage();
                 break;
         }
         this.send(msg);
