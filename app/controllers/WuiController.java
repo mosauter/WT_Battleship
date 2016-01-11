@@ -1,5 +1,6 @@
 package controllers;// WuiController
 
+import controllers.util.FirstPlayerMessage;
 import controllers.util.HitMessage;
 import controllers.util.InvalidMessage;
 import controllers.util.Message;
@@ -19,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
 
 /**
  * WuiController
@@ -37,6 +39,8 @@ public class WuiController implements IObserver {
     private final List<String[]> bufferedShootList;
     private boolean placeOneFinished = false;
 
+    private static Semaphore addShip;
+
     public WuiController(IMasterController masterController, WebSocket.Out<String> socket, boolean first) {
         this.masterController = masterController;
         this.socket = socket;
@@ -44,6 +48,7 @@ public class WuiController implements IObserver {
         this.bufferedPlaceList = new LinkedList<>();
         this.bufferedShootList = new LinkedList<>();
         masterController.addObserver(this);
+        this.send(new FirstPlayerMessage(first));
     }
 
     private void send(Message msg) {
@@ -99,10 +104,23 @@ public class WuiController implements IObserver {
 
     private void placeShip(String[] field) {
         if (firstPlayer && masterController.getCurrentState()
-                                           .equals(State.PLACE1) || !firstPlayer && masterController
-            .getCurrentState().equals(State.PLACE2)) {
-            masterController.placeShip(Integer.parseInt(field[0]), Integer
-                .parseInt(field[1]), field[3].equals(HORIZONTAL_ORIENTATION));
+                                           .equals(State.PLACE1)
+            || !firstPlayer && masterController.getCurrentState()
+                                               .equals(State.PLACE2)) {
+            try {
+                addShip.acquire();
+                System.out.println("adding ship -> " + (firstPlayer && masterController
+                    .getCurrentState()
+                    .equals(State.PLACE1) || !firstPlayer && masterController.getCurrentState().equals(State.PLACE2)));
+
+                masterController.placeShip(Integer.parseInt(field[0]), Integer.parseInt(field[1]), field[2]
+                    .equals(HORIZONTAL_ORIENTATION));
+                System.out.println("HALLO DU I");
+                addShip.release();
+            } catch (Exception e) {
+                System.out.println(e);
+                // ignore
+            }
         } else {
             bufferedPlaceList.add(field);
         }
