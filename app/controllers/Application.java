@@ -3,7 +3,6 @@ package controllers;
 
 import controllers.util.GameInstance;
 import de.htwg.battleship.Battleship;
-import de.htwg.battleship.aview.tui.TUI;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
@@ -20,21 +19,10 @@ public class Application extends Controller {
      */
     private static List<GameInstance> onePlayer = new LinkedList<>();
 
-    static Battleship bs = Battleship.getInstance();
     static int anInt = 0;
 
     public Result index() {
         return home();
-    }
-
-    public Result wui(String command) {
-        TUI tui = bs.getTui();
-        tui.processInputLine(command);
-        String s = tui.printTUI();
-        String b = s.replaceAll("\n", "<br>");
-        b = b.replaceAll(" ", "&nbsp;");
-
-        return ok(views.html.battleship.render(b));
     }
 
     public Result home() {

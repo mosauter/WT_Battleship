@@ -4,9 +4,6 @@
 
 # Home page
 GET     /                           @controllers.Application.index()
-GET     /battleship                 @controllers.Application.wui(command:String = "1")
-GET     /battleship/:command        @controllers.Application.wui(command:String)
-
 
 GET     /home                       @controllers.Application.home()
 GET     /game                       @controllers.Application.game()
