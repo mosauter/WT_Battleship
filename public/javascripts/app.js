@@ -2,6 +2,7 @@
  * Created by fw on 09.12.15.
  */
 var socketAddress = 'ws://localhost:9000/socket';
+// var socketAddress = 'ws://still-beach-5359.herokuapp.com/socket'
 var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
 
 app.config(function($routeProvider){
