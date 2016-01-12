@@ -39,7 +39,7 @@ public class WuiController implements IObserver {
     private final List<String[]> bufferedShootList;
     private boolean placeOneFinished = false;
 
-    private static Semaphore addShip;
+    private Semaphore addShip;
 
     public WuiController(IMasterController masterController, WebSocket.Out<String> socket, boolean first) {
         this.masterController = masterController;
@@ -49,6 +49,7 @@ public class WuiController implements IObserver {
         this.bufferedShootList = new LinkedList<>();
         masterController.addObserver(this);
         this.send(new FirstPlayerMessage(first));
+        this.addShip = new Semaphore(1);
     }
 
     private void send(Message msg) {
@@ -61,13 +62,48 @@ public class WuiController implements IObserver {
     public void analyzeMessage(String message) {
         Logger.info("Received message:\n" + message);
         String[] field = message.split(" ");
-        // x y orientation -> which player
         if (field.length == 3) {
+            // x y orientation -> which player
             placeShip(field);
-        }
-        // x y -> test which player
-        if (field.length == 2) {
+        } else if (field.length == 2) {
+            // x y -> test which player
             shoot(field);
+        } else {
+            send(new InvalidMessage());
+        }
+    }
+
+    private boolean processPlaceList() {
+        if (bufferedPlaceList.isEmpty()) {
+            return false;
+        }
+        String[] instruction = bufferedPlaceList.get(0);
+        bufferedPlaceList.remove(0);
+        placeShip(instruction);
+        return true;
+    }
+
+    private void placeShip(String[] field) {
+        System.out
+            .println("adding ship -> " + (firstPlayer && masterController
+                .getCurrentState()
+                .equals(State.PLACE1) || !firstPlayer && masterController
+                .getCurrentState().equals(State.PLACE2)));
+        if (firstPlayer && masterController.getCurrentState()
+                                           .equals(State.PLACE1) || !firstPlayer && masterController
+            .getCurrentState().equals(State.PLACE2)) {
+            try {
+                addShip.acquire();
+                masterController.placeShip(Integer.parseInt(field[0]), Integer
+                    .parseInt(field[1]), field[2]
+                    .equals(HORIZONTAL_ORIENTATION));
+                addShip.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+                // ignore
+            }
+        } else {
+            bufferedPlaceList.add(field);
         }
     }
 
@@ -92,40 +128,6 @@ public class WuiController implements IObserver {
         }
     }
 
-    private boolean processPlaceList() {
-        if (bufferedPlaceList.isEmpty()) {
-            return false;
-        }
-        String[] instruction = bufferedPlaceList.get(0);
-        bufferedPlaceList.remove(0);
-        placeShip(instruction);
-        return true;
-    }
-
-    private void placeShip(String[] field) {
-        if (firstPlayer && masterController.getCurrentState()
-                                           .equals(State.PLACE1)
-            || !firstPlayer && masterController.getCurrentState()
-                                               .equals(State.PLACE2)) {
-            try {
-                addShip.acquire();
-                System.out.println("adding ship -> " + (firstPlayer && masterController
-                    .getCurrentState()
-                    .equals(State.PLACE1) || !firstPlayer && masterController.getCurrentState().equals(State.PLACE2)));
-
-                masterController.placeShip(Integer.parseInt(field[0]), Integer.parseInt(field[1]), field[2]
-                    .equals(HORIZONTAL_ORIENTATION));
-                System.out.println("HALLO DU I");
-                addShip.release();
-            } catch (Exception e) {
-                System.out.println(e);
-                // ignore
-            }
-        } else {
-            bufferedPlaceList.add(field);
-        }
-    }
-
     public void setName(String name) {
         this.masterController.setPlayerName(name);
     }
@@ -137,8 +139,142 @@ public class WuiController implements IObserver {
     @Override
     public void update() {
         Message msg = null;
+        Logger.debug("On update getting State -> " + masterController.getCurrentState());
+        if (firstPlayer) {
+            checkFirst();
+        } else {
+            checkSecond();
+        }
+    }
+
+    private void checkFirst() {
+        Message msg = null;
         State currentState = masterController.getCurrentState();
-        Logger.debug("On update getting State -> " + currentState);
+        switch (masterController.getCurrentState()) {
+            case START:
+                break;
+
+            case OPTIONS:
+                break;
+
+            case GETNAME1:
+                // as this is set in the creation state this msg is not needed
+                // so msg = null and nothing is sent
+                break;
+            case GETNAME2:
+                msg = new WaitMessage();
+                // if this is the second player
+                // msg = null and nothing is sent
+                break;
+
+            // PLACING SHIPS
+            case PLACE1:
+                if (processPlaceList()) {
+                    // TODO: check proper use
+                    return;
+                }
+            case FINALPLACE1:
+                this.placeOneFinished = true;
+                Map<Integer, Set<Integer>> shipMap = StatCollection
+                    .createMap();
+                masterController
+                    .fillMap(masterController.getPlayer1().getOwnBoard()
+                                             .getShipList(), shipMap, masterController
+                        .getPlayer1().getOwnBoard().getShips());
+                msg = new PlaceMessage(currentState, shipMap);
+                break;
+            case PLACE2:
+            case FINALPLACE2:
+                msg = new WaitMessage();
+                break;
+            case PLACEERR:
+                if (!placeOneFinished) {
+                    msg = new PlaceErrorMessage(masterController.getPlayer1()
+                                                                .getOwnBoard()
+                                                                .getShips() + 2);
+                }
+                break;
+
+            // SHOOTING ON EACH OTHER
+            case SHOOT1:
+            case SHOOT2:
+                // TODO: look after bufferedShootList
+                // opponent = player 2
+                boolean[][] field = masterController.getPlayer2().getOwnBoard()
+                                         .getHitMap();
+                msg = new ShootMessage(currentState, field);
+                break;
+
+            case HIT:
+            case MISS:
+                msg = new HitMessage(currentState.equals(State.HIT));
+                break;
+
+            // SOMEONE HAS WON
+            case WIN1:
+                Map<Integer, Set<Integer>> shipMap11 = StatCollection
+                    .createMap();
+                masterController
+                    .fillMap(masterController.getPlayer1().getOwnBoard()
+                                             .getShipList(), shipMap11, masterController
+                        .getPlayer1().getOwnBoard().getShips());
+                Map<Integer, Set<Integer>> shipMap21 = StatCollection
+                    .createMap();
+                masterController
+                    .fillMap(masterController.getPlayer2().getOwnBoard()
+                                             .getShipList(), shipMap21, masterController
+                        .getPlayer2().getOwnBoard().getShips());
+                boolean[][] winnerHitMap1 = masterController.getPlayer2()
+                                                            .getOwnBoard()
+                                                            .getHitMap();
+                boolean[][] looserHitMap1 = masterController.getPlayer1()
+                                                            .getOwnBoard()
+                                                            .getHitMap();
+                msg = new WinMessage(State.WIN1, masterController
+                    .getPlayer1(), shipMap11, winnerHitMap1, masterController
+                    .getPlayer2(), shipMap21, looserHitMap1);
+                break;
+            case WIN2:
+                Map<Integer, Set<Integer>> shipMap12 = StatCollection
+                    .createMap();
+                masterController
+                    .fillMap(masterController.getPlayer1().getOwnBoard()
+                                             .getShipList(), shipMap12, masterController
+                        .getPlayer1().getOwnBoard().getShips());
+                Map<Integer, Set<Integer>> shipMap22 = StatCollection
+                    .createMap();
+                masterController
+                    .fillMap(masterController.getPlayer2().getOwnBoard()
+                                             .getShipList(), shipMap22, masterController
+                        .getPlayer2().getOwnBoard().getShips());
+                boolean[][] winnerHitMap2 = masterController.getPlayer1()
+                                                            .getOwnBoard()
+                                                            .getHitMap();
+                boolean[][] looserHitMap2 = masterController.getPlayer2()
+                                                            .getOwnBoard()
+                                                            .getHitMap();
+                msg = new WinMessage(State.WIN2, masterController
+                    .getPlayer2(), shipMap22, winnerHitMap2, masterController
+                    .getPlayer1(), shipMap12, looserHitMap2);
+                break;
+            /*
+             * default case, so not needed here
+             * case WRONGINPUT:
+             *     break;
+             */
+            case END:
+                break;
+
+            default:
+                msg = new InvalidMessage();
+                break;
+        }
+        this.send(msg);
+    }
+
+    private void checkSecond() {
+        Message msg = null;
+        State currentState = masterController.getCurrentState();
         switch (currentState) {
             case START:
                 break;
@@ -151,83 +287,33 @@ public class WuiController implements IObserver {
                 // so msg = null and nothing is sent
                 break;
             case GETNAME2:
-                if (firstPlayer) {
-                    msg = new WaitMessage();
-                }
                 // if this is the second player
                 // msg = null and nothing is sent
                 break;
 
             // PLACING SHIPS
             case PLACE1:
-                if (firstPlayer) {
-                    if (processPlaceList()) {
-                        // TODO: check proper use
-                        return;
-                    }
-                    Map<Integer, Set<Integer>> shipMapPlayer1 = StatCollection
-                        .createMap();
-                    masterController
-                        .fillMap(masterController.getPlayer1().getOwnBoard()
-                                                 .getShipList(), shipMapPlayer1, masterController
-                            .getPlayer1().getOwnBoard().getShips());
-                    msg = new PlaceMessage(State.PLACE1, shipMapPlayer1);
-                    break;
-                }
-                // if secondPlayer he should not get a message
-                return;
             case FINALPLACE1:
-                this.placeOneFinished = true;
-                if (firstPlayer) {
-                    Map<Integer, Set<Integer>> shipMapFinal1 = StatCollection
-                        .createMap();
-                    masterController
-                        .fillMap(masterController.getPlayer1().getOwnBoard()
-                                                 .getShipList(), shipMapFinal1, masterController
-                            .getPlayer1().getOwnBoard().getShips());
-                    msg = new PlaceMessage(State.PLACE1, shipMapFinal1);
-                    break;
-                }
-                // if secondPlayer he should not get a message
-                return;
+                msg = new WaitMessage();
+                break;
             case PLACE2:
-                if (!firstPlayer) {
-                    if (processPlaceList()) {
-                        // TODO: check proper use
-                        return;
-                    }
-                    Map<Integer, Set<Integer>> shipMapPlayer2 = StatCollection
-                        .createMap();
-                    masterController
-                        .fillMap(masterController.getPlayer2().getOwnBoard()
-                                                 .getShipList(), shipMapPlayer2, masterController
-                            .getPlayer2().getOwnBoard().getShips());
-                    msg = new PlaceMessage(State.PLACE2, shipMapPlayer2);
-                    break;
+                if (processPlaceList()) {
+                    // TODO: check proper use
+                    return;
                 }
-                // if firstPlayer he should not get a message
-                return;
             case FINALPLACE2:
-                if (!firstPlayer) {
-                    Map<Integer, Set<Integer>> shipMapFinal2 = StatCollection
-                        .createMap();
-                    masterController
-                        .fillMap(masterController.getPlayer2().getOwnBoard()
-                                                 .getShipList(), shipMapFinal2, masterController
-                            .getPlayer2().getOwnBoard().getShips());
-                    msg = new PlaceMessage(State.PLACE1, shipMapFinal2);
-                    break;
-                }
-                // if firstPlayer he should not get a message
-                return;
+                Map<Integer, Set<Integer>> shipMap = StatCollection
+                    .createMap();
+                masterController
+                    .fillMap(masterController.getPlayer2().getOwnBoard()
+                                             .getShipList(), shipMap, masterController
+                        .getPlayer2().getOwnBoard().getShips());
+                msg = new PlaceMessage(currentState, shipMap);
+                break;
             case PLACEERR:
                 if (placeOneFinished) {
                     // minimum in PLACE2
                     msg = new PlaceErrorMessage(masterController.getPlayer2()
-                                                                .getOwnBoard()
-                                                                .getShips() + 2);
-                } else {
-                    msg = new PlaceErrorMessage(masterController.getPlayer1()
                                                                 .getOwnBoard()
                                                                 .getShips() + 2);
                 }
@@ -235,32 +321,12 @@ public class WuiController implements IObserver {
 
             // SHOOTING ON EACH OTHER
             case SHOOT1:
-                // TODO: look after bufferedShootList
-                boolean[][] field1;
-                if (firstPlayer) {
-                    // opponent = player 2
-                    field1 = masterController.getPlayer2().getOwnBoard()
-                                             .getHitMap();
-                } else {
-                    // opponent = player 1
-                    field1 = masterController.getPlayer1().getOwnBoard()
-                                             .getHitMap();
-                }
-                msg = new ShootMessage(State.SHOOT1, field1);
-                break;
             case SHOOT2:
                 // TODO: look after bufferedShootList
-                boolean[][] field2;
-                if (firstPlayer) {
-                    // opponent = player 2
-                    field2 = masterController.getPlayer2().getOwnBoard()
-                                             .getHitMap();
-                } else {
-                    // opponent = player 1
-                    field2 = masterController.getPlayer1().getOwnBoard()
-                                             .getHitMap();
-                }
-                msg = new ShootMessage(State.SHOOT1, field2);
+                // opponent = player 1
+                boolean[][] field = masterController.getPlayer1().getOwnBoard()
+                                         .getHitMap();
+                msg = new ShootMessage(currentState, field);
                 break;
             case HIT:
                 msg = new HitMessage(true);
