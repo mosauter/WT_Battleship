@@ -217,7 +217,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             //}));
             console.log(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
             $socket.send(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
-
         });
         //TODO: just temporary, has to be moved to socket listener
         $scope.placing = false;
