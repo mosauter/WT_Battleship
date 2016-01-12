@@ -2,8 +2,6 @@ package controllers.util;
 
 import com.google.gson.Gson;
 
-import de.htwg.battleship.util.State;
-
 /**
  * Message
  *
@@ -12,7 +10,7 @@ import de.htwg.battleship.util.State;
  */
 public abstract class Message {
 
-    protected State type;
+    protected String type;
 
     public String toJSON() {
         return new Gson().toJson(this);

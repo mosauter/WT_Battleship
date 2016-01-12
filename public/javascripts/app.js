@@ -1,7 +1,8 @@
 /**
  * Created by fw on 09.12.15.
  */
-
+var socketAddress = 'ws://localhost:9000/socket';
+// var socketAddress = 'ws://still-beach-5359.herokuapp.com/socket'
 var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
 
 app.config(function($routeProvider){
@@ -83,7 +84,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
 
     $scope.placing = true;
 
-    var $socket = $websocket('ws://localhost:9000/socket');
+    var $socket = $websocket(socketAddress);
 
     $socket.onOpen(function(){
         console.log('Connection established!');
@@ -190,21 +191,32 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         }
     };
 
+    var BreakException = {};
+
     $scope.sendShips = function(){
-        angular.forEach($scope.ships, function(value, key){
-            if(!value.isPlaced){
-                alert("You're not ready yet! Please reset ship with length " + key);
-                //TODO: this return just exits the anonymous function but should exit sendShips
-                return;
+        try {
+            angular.forEach($scope.ships, function (value, key) {
+                if (!value.isPlaced) {
+                    alert("You're not ready yet! Please reset ship with length " + key);
+                    throw BreakException;
+                }
+            });
+        } catch (e) {
+            if (e !== BreakException) {
+                throw e;
             }
-        });
+            // function is properly exited
+            return;
+        }
         angular.forEach($scope.ships, function(value, key){
-            $socket.send(JSON.stringify({
-                'type': 'PLACE',
-                'x': value['x'],
-                'y': value['y'],
-                'orientation': value['orientation']
-            }));
+            //$socket.send(JSON.stringify({
+            //    'type': 'PLACE',
+            //    'x': value['x'],
+            //    'y': value['y'],
+            //    'orientation': value['orientation']
+            //}));
+            console.log(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
+            $socket.send(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
         });
         //TODO: just temporary, has to be moved to socket listener
         $scope.placing = false;
@@ -224,11 +236,12 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             return;
         }
         if ($scope.opponent[x][y] == 'x'){
-            $socket.send(JSON.stringify({
-                'type': 'SHOOT',
-                'x': x,
-                'y': y
-            }));
+            //$socket.send(JSON.stringify({
+            //    'type': 'SHOOT',
+            //    'x': x,
+            //    'y': y
+            //}));
+            $socket.send(x + ' ' + y);
             /*
              * TODO: always getting no such element if id="card{{x}}{{i}}" in battle.html
              * so we can't trigger an animation to flip the card via js

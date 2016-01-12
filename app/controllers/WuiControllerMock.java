@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static de.htwg.battleship.util.State.PLACE1;
-import static de.htwg.battleship.util.State.PLACEERR;
 import static de.htwg.battleship.util.State.SHOOT1;
 import static de.htwg.battleship.util.State.WIN1;
 
@@ -85,7 +84,7 @@ public class WuiControllerMock {
                     looser, mp2, isHitMap2).toJSON();
                 break;
             default:
-                msg = new InvalidMessage(PLACEERR).toJSON();
+                msg = new InvalidMessage().toJSON();
                 break;
         }
 

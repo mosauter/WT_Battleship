@@ -18,9 +18,10 @@ public class Application extends Controller {
     /**
      * List of {@link GameInstance} with one player waiting for an opponent.
      */
-    private List<GameInstance> onePlayer = new LinkedList<>();
+    private static List<GameInstance> onePlayer = new LinkedList<>();
 
     static Battleship bs = Battleship.getInstance();
+    static int anInt = 0;
 
     public Result index() {
         return home();
@@ -65,13 +66,12 @@ public class Application extends Controller {
                     onePlayer.add(this.instance);
                     this.wuiController.startGame();
                 }
-                this.wuiController.setName(login);
+                this.wuiController.setName(anInt++ + login);
 
-                in.onMessage(event -> {
-                    this.wuiController.analyzeMessage(event);
-                });
+                in.onMessage(event -> this.wuiController.analyzeMessage(event));
 
-                in.onClose(() -> System.out.println("CLOSING SOCKET"));
+                in.onClose( // TODO: send other client a message
+                    () -> System.out.println("CLOSING SOCKET"));
             }
         };
     }
