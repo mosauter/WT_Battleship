@@ -46,17 +46,16 @@ app.controller('HomeCtrl', ['$scope', '$location', function($scope, $location){
     };
 }]);
 
-app.controller('LobbyCtrl', ['$scope', function($scope){
-    $scope.user = {};
-}]);
-
 app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($scope, $websocket, $location){
     var messageType = {
         // HIT and MISS
-        HIT: "HIT", // HIT and MISS are the same message
+        HIT: "HIT",
+        MISS: "MISS",
         // INVALID
         WRONGINPUT: "WRONGINPUT",
         PLACEERR: "PLACEERR",
+        WAIT: "WAIT",
+        START: "START",
         // PLACE
         PLACE1: "PLACE1",
         PLACE2: "PLACE2",
@@ -73,6 +72,8 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
     $scope.alphabet = ['A','B','C','D','E','F','G','H','I','J'];
     $scope.field = [];
     $scope.opponent = [];
+    $scope.sendNext = 2;
+    $scope.duplicate = {};
 
     $scope.ships = {
         '2': {'isPlaced': false},
@@ -82,7 +83,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         '6': {'isPlaced': false}
     };
 
-    $scope.placing = true;
+    $scope.waiting = false;
 
     var $socket = $websocket(socketAddress);
 
@@ -103,22 +104,50 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         var msg = JSON.parse(message.data);
         console.log("Message %o received", msg);
         switch (msg.type) {
+            case messageType.START:
+                $scope.firstPlayer = msg.firstPlayer;
+                break;
+            case messageType.WAIT:
+                $scope.waiting = true;
+                break;
             case messageType.HIT:
+            case messageType.MISS:
                 break;
             case messageType.WRONGINPUT:
-            case messageType.PLACEERR:
                 alert('Something went wrong, please try again!');
+                break;
+            case messageType.PLACEERR:
+                $scope.sendNext = msg.errShipLength;
+                alert("You can't place ship with length " + msg.errShipLength +
+                    " on x:" + $scope.ships['' + msg.errShipLength]['x'] +
+                    " y:" +$scope.alphabet[$scope.ships['' + msg.errShipLength]['y']]);
+                $scope.removeShip(''+msg.errShipLength);
+                var newShips={};
+                for(var i = msg.errShipLength; i < 7; i++) {
+                    newShips[''+i] = $scope.ships[''+i];
+                }
+                $scope.ships = newShips;
+                $scope.duplicate = {};
                 break;
             case messageType.PLACE1:
             case messageType.PLACE2:
+                $scope.fillField($scope.field, msg.shipMap, 's');
+                if(Object.keys($scope.duplicate).length !== 0){
+                    $scope.sendShip();
+                }
+                $scope.waiting = false;
+                $scope.placing = true;
                 break;
             case messageType.FINALPLACE1:
-                break;
             case messageType.FINALPLACE2:
+                $scope.fillField($scope.field, msg.shipMap, 's');
+                $scope.waiting = false;
+                $scope.placing = false;
                 break;
             case messageType.SHOOT1:
-                break;
             case messageType.SHOOT2:
+                $scope.fillHitMap($scope.opponent, msg.isShootMap, msg.isHitMap);
+                $scope.fillHitMap($scope.field, msg.opponentShootMap, 1);
                 break;
             case messageType.WIN1:
             case messageType.WIN2:
@@ -192,8 +221,9 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
     };
 
     var BreakException = {};
+    var PlaceErrException = {};
 
-    $scope.sendShips = function(){
+    $scope.submitShips = function(){
         try {
             angular.forEach($scope.ships, function (value, key) {
                 if (!value.isPlaced) {
@@ -208,26 +238,41 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             // function is properly exited
             return;
         }
-        angular.forEach($scope.ships, function(value, key){
-            //$socket.send(JSON.stringify({
-            //    'type': 'PLACE',
-            //    'x': value['x'],
-            //    'y': value['y'],
-            //    'orientation': value['orientation']
-            //}));
-            console.log(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
-            $socket.send(value['x'] + ' ' +  value['y'] + ' ' + value['orientation']);
-        });
+        $scope.duplicate = angular.copy($scope.ships);
+        $scope.sendShip();
         //TODO: just temporary, has to be moved to socket listener
         $scope.placing = false;
     };
 
-    $scope.fillField = function(field, arr, value){
-        angular.forEach(arr, function(x, y){
-            angular.forEach(x, function(v, k){
-                field[x][k] = value;
+    $scope.sendShip = function(){
+        console.log("Sending ship with length = %o", $scope.sendNext);
+        $socket.send($scope.duplicate['' + $scope.sendNext]['x'] + ' ' +
+            $scope.duplicate['' + $scope.sendNext]['y'] + ' ' +
+            $scope.duplicate['' + $scope.sendNext]['orientation']);
+        console.log("sent this: %o",$scope.duplicate['' + $scope.sendNext]['x'] + ' ' +
+            $scope.duplicate['' + $scope.sendNext]['y'] + ' ' +
+            $scope.duplicate['' + $scope.sendNext]['orientation']);
+        $scope.sendNext++;
+    };
+
+    $scope.fillField = function(field, arr, val){
+        angular.forEach(arr, function(value, key){
+            angular.forEach(value, function(v){
+                field[key][v] = val;
             });
         });
+    };
+
+    $scope.fillHitMap = function(field, shootMap, hitMap){
+        for(var x = 0; x < shootMap.length; x++){
+            for(var y = 0; y < shootMap[x].length; y++){
+                if(shootMap[x][y] && typeof hitMap === 'number' && hitMap[x][y]){
+                    field[x][y] = field[x][y] === 's'? 'h' : field[x][y] === 'h' ? 'h' : 'm' ;
+                } else if(shootMap[x][y]) {
+                    field[x][y] = hitMap[x][y] ? 'h' : 'm';
+                }
+            }
+        }
     };
 
     $scope.shoot = function(x, y){
@@ -236,11 +281,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
             return;
         }
         if ($scope.opponent[x][y] == 'x'){
-            //$socket.send(JSON.stringify({
-            //    'type': 'SHOOT',
-            //    'x': x,
-            //    'y': y
-            //}));
             $socket.send(x + ' ' + y);
             /*
              * TODO: always getting no such element if id="card{{x}}{{i}}" in battle.html
@@ -254,4 +294,8 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         }
     };
 
+}]);
+
+app.controller('LobbyCtrl', ['$scope', function($scope){
+    $scope.user = {};
 }]);

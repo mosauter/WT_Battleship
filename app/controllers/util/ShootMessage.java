@@ -14,6 +14,7 @@ import de.htwg.battleship.util.State;
  *     {
  *         "type": ( SHOOT1 | SHOOT2 ),
  *         "isHitMap": [[]]
+ *         "isShootMap": [[]]
  *     }
  *     }
  * </pre>
@@ -24,9 +25,13 @@ import de.htwg.battleship.util.State;
 public class ShootMessage extends Message {
 
     private final boolean[][] isHitMap;
+    private final boolean[][] isShootMap;
+    private final boolean[][] opponentShootMap;
 
-    public ShootMessage(State type, boolean[][] isHitMap) {
+    public ShootMessage(State type, boolean[][] isShootMap, boolean[][] isHitMap, boolean[][] opponentShootMap) {
         this.type = type.toString();
+        this.isShootMap = isShootMap;
         this.isHitMap = isHitMap;
+        this.opponentShootMap = opponentShootMap;
     }
 }
