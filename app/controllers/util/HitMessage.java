@@ -28,6 +28,6 @@ public class HitMessage extends Message {
 
     public HitMessage(boolean wasHit) {
         this.wasHit = wasHit;
-        this.type = State.HIT;
+        this.type = wasHit ? State.HIT.toString() : State.MISS.toString();
     }
 }

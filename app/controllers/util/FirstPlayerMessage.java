@@ -15,7 +15,7 @@ public class FirstPlayerMessage extends Message {
     private final boolean firstPlayer;
 
     public FirstPlayerMessage(boolean firstPlayer) {
-        this.type = State.START;
+        this.type = State.START.toString();
         this.firstPlayer = firstPlayer;
     }
 }

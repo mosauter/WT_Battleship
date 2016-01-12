@@ -28,7 +28,7 @@ public class PlaceErrorMessage extends Message {
     private final int errShipLength;
 
     public PlaceErrorMessage(int shipLength) {
-        this.type = State.PLACEERR;
+        this.type = State.PLACEERR.toString();
         this.errShipLength = shipLength;
     }
 }

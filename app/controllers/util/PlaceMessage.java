@@ -32,7 +32,7 @@ public class PlaceMessage extends Message {
     private final Map<Integer, Set<Integer>> shipMap;
 
     public PlaceMessage(State type, Map<Integer, Set<Integer>> shipMap) {
-        this.type = type;
+        this.type = type.toString();
         this.shipMap = shipMap;
     }
 }

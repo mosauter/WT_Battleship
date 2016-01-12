@@ -23,7 +23,7 @@ import de.htwg.battleship.util.State;
 public class InvalidMessage extends Message {
 
     public InvalidMessage() {
-        this.type = State.WRONGINPUT;
+        this.type = State.WRONGINPUT.toString();
     }
 
 }

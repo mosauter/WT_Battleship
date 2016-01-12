@@ -46,7 +46,7 @@ public class WinMessage extends Message {
                       boolean[][] winnerHitMap, IPlayer looser,
                       Map<Integer, Set<Integer>> looserMap,
                       boolean[][] looserHitMap) {
-        this.type = type;
+        this.type = type.toString();
         this.winner = winner;
         this.winnerMap = winnerMap;
         this.winnerHitMap = winnerHitMap;

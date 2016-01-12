@@ -26,7 +26,7 @@ public class ShootMessage extends Message {
     private final boolean[][] isHitMap;
 
     public ShootMessage(State type, boolean[][] isHitMap) {
-        this.type = type;
+        this.type = type.toString();
         this.isHitMap = isHitMap;
     }
 }
