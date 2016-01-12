@@ -26,10 +26,12 @@ public class ShootMessage extends Message {
 
     private final boolean[][] isHitMap;
     private final boolean[][] isShootMap;
+    private final boolean[][] opponentShootMap;
 
-    public ShootMessage(State type, boolean[][] isShootMap, boolean[][] isHitMap) {
+    public ShootMessage(State type, boolean[][] isShootMap, boolean[][] isHitMap, boolean[][] opponentShootMap) {
         this.type = type.toString();
         this.isShootMap = isShootMap;
         this.isHitMap = isHitMap;
+        this.opponentShootMap = opponentShootMap;
     }
 }

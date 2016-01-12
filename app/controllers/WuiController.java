@@ -204,7 +204,8 @@ public class WuiController implements IObserver {
                                                        .getOwnBoard()
                                                        .getHitMap();
                 boolean[][] hitMap = getHitMap(shootMap, masterController.getPlayer2());
-                msg = new ShootMessage(currentState, shootMap, hitMap);
+                boolean[][] opponentShootMap = masterController.getPlayer1().getOwnBoard().getHitMap();
+                msg = new ShootMessage(currentState, shootMap, hitMap, opponentShootMap);
                 break;
 
             case HIT:
@@ -343,7 +344,8 @@ public class WuiController implements IObserver {
                 boolean[][] shootMap = masterController.getPlayer1().getOwnBoard()
                                                     .getHitMap();
                 boolean[][] hitMap = getHitMap(shootMap, masterController.getPlayer1());
-                msg = new ShootMessage(currentState, shootMap, hitMap);
+                boolean[][] opponentShootMap = masterController.getPlayer2().getOwnBoard().getHitMap();
+                msg = new ShootMessage(currentState, shootMap, hitMap, opponentShootMap);
                 break;
             case HIT:
                 msg = new HitMessage(true);
