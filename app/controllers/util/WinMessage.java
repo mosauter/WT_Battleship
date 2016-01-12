@@ -20,10 +20,10 @@ import java.util.Set;
  *         "type": ( WIN1 | WIN2 ),
  *         "winner": {},
  *         "winnerMap: {},
- *         "winnerHitMap: [[]],
+ *         "winnerShootMap: [[]],
  *         "looser": {},
  *         "looserMap": {},
- *         "looserHitMap": [[]]
+ *         "looserShootMap": [[]]
  *     }
  *     }
  * </pre>
@@ -35,23 +35,23 @@ public class WinMessage extends Message {
 
     private final IPlayer winner;
     private final Map<Integer, Set<Integer>> winnerMap;
-    private final boolean[][] winnerHitMap;
+    private final boolean[][] winnerShootMap;
 
     private final IPlayer looser;
     private final Map<Integer, Set<Integer>> looserMap;
-    private final boolean[][] looserHitMap;
+    private final boolean[][] looserShootMap;
 
     public WinMessage(State type, IPlayer winner,
                       Map<Integer, Set<Integer>> winnerMap,
-                      boolean[][] winnerHitMap, IPlayer looser,
+                      boolean[][] winnerShootMap, IPlayer looser,
                       Map<Integer, Set<Integer>> looserMap,
-                      boolean[][] looserHitMap) {
+                      boolean[][] looserShootMap) {
         this.type = type.toString();
         this.winner = winner;
         this.winnerMap = winnerMap;
-        this.winnerHitMap = winnerHitMap;
+        this.winnerShootMap = winnerShootMap;
         this.looser = looser;
         this.looserMap = looserMap;
-        this.looserHitMap = looserHitMap;
+        this.looserShootMap = looserShootMap;
     }
 }
