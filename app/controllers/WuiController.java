@@ -10,6 +10,7 @@ import controllers.util.ShootMessage;
 import controllers.util.WaitMessage;
 import controllers.util.WinMessage;
 import de.htwg.battleship.controller.IMasterController;
+import de.htwg.battleship.model.IPlayer;
 import de.htwg.battleship.observer.IObserver;
 import de.htwg.battleship.util.StatCollection;
 import de.htwg.battleship.util.State;
@@ -84,11 +85,10 @@ public class WuiController implements IObserver {
     }
 
     private void placeShip(String[] field) {
-        System.out
-            .println("adding ship -> " + (firstPlayer && masterController
-                .getCurrentState()
-                .equals(State.PLACE1) || !firstPlayer && masterController
-                .getCurrentState().equals(State.PLACE2)));
+        System.out.println("adding ship -> " + (firstPlayer && masterController
+            .getCurrentState()
+            .equals(State.PLACE1) || !firstPlayer && masterController
+            .getCurrentState().equals(State.PLACE2)));
         if (firstPlayer && masterController.getCurrentState()
                                            .equals(State.PLACE1) || !firstPlayer && masterController
             .getCurrentState().equals(State.PLACE2)) {
@@ -139,7 +139,8 @@ public class WuiController implements IObserver {
     @Override
     public void update() {
         Message msg = null;
-        Logger.debug("On update getting State -> " + masterController.getCurrentState());
+        Logger.debug("On update getting State -> " + masterController
+            .getCurrentState());
         if (firstPlayer) {
             checkFirst();
         } else {
@@ -175,8 +176,7 @@ public class WuiController implements IObserver {
                 }
             case FINALPLACE1:
                 this.placeOneFinished = true;
-                Map<Integer, Set<Integer>> shipMap = StatCollection
-                    .createMap();
+                Map<Integer, Set<Integer>> shipMap = StatCollection.createMap();
                 masterController
                     .fillMap(masterController.getPlayer1().getOwnBoard()
                                              .getShipList(), shipMap, masterController
@@ -200,9 +200,11 @@ public class WuiController implements IObserver {
             case SHOOT2:
                 // TODO: look after bufferedShootList
                 // opponent = player 2
-                boolean[][] field = masterController.getPlayer2().getOwnBoard()
-                                         .getHitMap();
-                msg = new ShootMessage(currentState, field);
+                boolean[][] shootMap = masterController.getPlayer2()
+                                                       .getOwnBoard()
+                                                       .getHitMap();
+                boolean[][] hitMap = getHitMap(shootMap, masterController.getPlayer2());
+                msg = new ShootMessage(currentState, shootMap, hitMap);
                 break;
 
             case HIT:
@@ -272,6 +274,21 @@ public class WuiController implements IObserver {
         this.send(msg);
     }
 
+    private boolean[][] getHitMap(boolean[][] shootMap, IPlayer player) {
+        boolean[][] hitMap = new boolean[StatCollection.heightLenght][StatCollection.heightLenght];
+        Map<Integer, Set<Integer>> shipMap = StatCollection.createMap();
+        masterController
+            .fillMap(player.getOwnBoard().getShipList(), shipMap, player
+                .getOwnBoard().getShips());
+
+        for (Integer y : shipMap.keySet()) {
+            for (Integer x : shipMap.get(y)) {
+                hitMap[x][y] = shootMap[x][y];
+            }
+        }
+        return hitMap;
+    }
+
     private void checkSecond() {
         Message msg = null;
         State currentState = masterController.getCurrentState();
@@ -302,8 +319,7 @@ public class WuiController implements IObserver {
                     return;
                 }
             case FINALPLACE2:
-                Map<Integer, Set<Integer>> shipMap = StatCollection
-                    .createMap();
+                Map<Integer, Set<Integer>> shipMap = StatCollection.createMap();
                 masterController
                     .fillMap(masterController.getPlayer2().getOwnBoard()
                                              .getShipList(), shipMap, masterController
@@ -324,9 +340,10 @@ public class WuiController implements IObserver {
             case SHOOT2:
                 // TODO: look after bufferedShootList
                 // opponent = player 1
-                boolean[][] field = masterController.getPlayer1().getOwnBoard()
-                                         .getHitMap();
-                msg = new ShootMessage(currentState, field);
+                boolean[][] shootMap = masterController.getPlayer1().getOwnBoard()
+                                                    .getHitMap();
+                boolean[][] hitMap = getHitMap(shootMap, masterController.getPlayer1());
+                msg = new ShootMessage(currentState, shootMap, hitMap);
                 break;
             case HIT:
                 msg = new HitMessage(true);
