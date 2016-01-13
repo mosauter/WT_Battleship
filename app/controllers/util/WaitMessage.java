@@ -11,7 +11,9 @@ package controllers.util;
  *
  * <pre>
  *     {
- *         "type": "WAIT"
+ *         "type": "WAIT",
+ *         "yourName": "Name",
+ *         "opponentName": "Name"
  *     }
  * </pre>
  *
@@ -20,7 +22,12 @@ package controllers.util;
  */
 public class WaitMessage extends Message {
 
-    public WaitMessage() {
+    private final String yourName;
+    private final String opponentName;
+
+    public WaitMessage(String yourName, String opponentName) {
+        this.yourName = yourName;
+        this.opponentName = opponentName;
         this.type = "WAIT";
     }
 

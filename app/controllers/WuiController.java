@@ -188,7 +188,7 @@ public class WuiController implements IObserver {
         State currentState = masterController.getCurrentState();
         switch (masterController.getCurrentState()) {
             case GETNAME2:
-                msg = new WaitMessage();
+                msg = createWaitMessage();
                 // if this is the second player
                 // msg = null and nothing is sent
                 break;
@@ -206,7 +206,7 @@ public class WuiController implements IObserver {
                 break;
             case PLACE2:
             case FINALPLACE2:
-                msg = new WaitMessage();
+                msg = createWaitMessage();
                 break;
             case PLACEERR:
                 if (!placeOneFinished) {
@@ -255,7 +255,7 @@ public class WuiController implements IObserver {
             // PLACING SHIPS
             case PLACE1:
             case FINALPLACE1:
-                msg = new WaitMessage();
+                msg = createWaitMessage();
                 break;
             case PLACE2:
                 if (processPlaceList()) {
@@ -306,5 +306,14 @@ public class WuiController implements IObserver {
                 break;
         }
         this.send(msg);
+    }
+
+    private WaitMessage createWaitMessage() {
+        if (firstPlayer) {
+            return new WaitMessage(masterController.getPlayer1().getName(),
+                                   masterController.getPlayer2().getName());
+        }
+        return new WaitMessage(masterController.getPlayer2().getName(),
+                                 masterController.getPlayer1().getName());
     }
 }
