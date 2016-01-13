@@ -59,7 +59,7 @@ public class Application extends Controller {
                         .getInstance().getMasterController(), out, false);
                     gameInstance.setWuiControllerTwo(this.wuiController);
                 } else {
-                    Battleship battleship = Battleship.getInstance();
+                    Battleship battleship = Battleship.getInstance(true);
                     this.wuiController = new WuiController(battleship
                         .getMasterController(), out, true);
                     this.instance = new GameInstance(battleship, out, this.wuiController);

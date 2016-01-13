@@ -1,6 +1,6 @@
 <div class="col-sm-12 jumbotron row">
 	<div class="col-md-6" ng-if="!placing">
-		<h3>Opponent's field:</h3>
+		<h3>{{enemy || 'Opponent'}}'s field:</h3>
 		<table id="opponentView" class="playboard">
 			<thead>
 			<tr>
@@ -15,7 +15,8 @@
 						 ng-class="{
 							'water': opponent[i][$parent.$index] == 'x',
 							'hit': opponent[i][$parent.$index] == 'h',
-							'miss': opponent[i][$parent.$index] == 'm'
+							'miss': opponent[i][$parent.$index] == 'm',
+							'ship': opponent[i][$parent.$index] == 's'
 						 }">
 					</div>
 				</td>
@@ -45,6 +46,9 @@
 				</td>
 			</tr>
 		</table>
+		<div ng-if="end">
+			<button class="btn btn-play" style="margin-top:10px;" ng-click="goBack();">Go back!</button>
+		</div>
 	</div>
 	<div class="col-md-6" ng-if="placing">
 		<h3>Place Menu:</h3>

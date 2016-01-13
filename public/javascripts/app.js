@@ -1,7 +1,7 @@
 /**
  * Created by fw on 09.12.15.
  */
-var socketAddress = 'ws://localhost:9000/socket';
+// var socketAddress = 'ws://localhost:9000/socket';
 // var socketAddress = 'ws://still-beach-5359.herokuapp.com/socket'
 var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
 
@@ -11,10 +11,10 @@ app.config(function($routeProvider){
             templateUrl: 'assets/partials/index.html',
             controller: 'HomeCtrl'
         })
-        .when('/lobby', {
+        /*.when('/lobby', {
             templateUrl: 'assets/partials/lobby.html',
             controller: 'LobbyCtrl'
-        })
+        })*/
         .when('/battle', {
             templateUrl: 'assets/partials/battle.html',
             controller: 'BattleCtrl'
@@ -35,16 +35,20 @@ app.filter('range', function() {
 });
 
 app.controller('HomeCtrl', ['$scope', '$location', function($scope, $location){
-    //TODO: Google Login magic goes here, maybe!
-
-    $scope.lobby = function(){
+    /*$scope.lobby = function(){
         $location.path("/lobby");
-    };
+    };*/
 
     $scope.fight = function(){
-        $location.path('/battle')
+        $location.path('/battle');
     };
 }]);
+
+function getSocketAddress() {
+    var socketAddress = window.location.origin.replace("https", "ws").replace("http", "ws");
+    console.log(socketAddress);
+    return socketAddress + "/socket";
+}
 
 app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($scope, $websocket, $location){
     var messageType = {
@@ -83,9 +87,18 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         '6': {'isPlaced': false}
     };
 
-    $scope.waiting = false;
+    /*$scope.ships = {
+        '2': {'x': 0, 'y': 0, 'orientation': true, 'isPlaced': true},
+        '3': {'x': 0, 'y': 1, 'orientation': true, 'isPlaced': true},
+        '4': {'x': 0, 'y': 2, 'orientation': true, 'isPlaced': true},
+        '5': {'x': 0, 'y': 3, 'orientation': true, 'isPlaced': true},
+        '6': {'x': 0, 'y': 4, 'orientation': true, 'isPlaced': true}
+    };*/
 
-    var $socket = $websocket(socketAddress);
+    $scope.waiting = false;
+    $scope.placing = true;
+
+    var $socket = $websocket(getSocketAddress());
 
     $socket.onOpen(function(){
         console.log('Connection established!');
@@ -108,6 +121,8 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
                 $scope.firstPlayer = msg.firstPlayer;
                 break;
             case messageType.WAIT:
+                $scope.me = msg.yourName;
+                $scope.enemy = msg.opponentName;
                 $scope.waiting = true;
                 break;
             case messageType.HIT:
@@ -136,7 +151,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
                     $scope.sendShip();
                 }
                 $scope.waiting = false;
-                $scope.placing = true;
                 break;
             case messageType.FINALPLACE1:
             case messageType.FINALPLACE2:
@@ -151,15 +165,41 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
                 break;
             case messageType.WIN1:
             case messageType.WIN2:
-                if(msg.winner){
-                    alert(msg.winner + ' has won the game!');
-                }
-                $location.path('/');
+                $scope.endOfGame(msg);
                 break;
             default:
                 break;
         }
     });
+
+    $scope.endOfGame = function(msg){
+        $scope.field = $scope.initFields();
+        $scope.opponent = $scope.initFields();
+        var winnerField, looserField, alertMsg;
+
+        if($scope.firstPlayer && msg.type === messageType.WIN1 ||
+            !$scope.firstPlayer && msg.type === messageType.WIN2){
+            winnerField = $scope.field;
+            looserField = $scope.opponent;
+            alertMsg = 'You won the game!';
+        } else {
+            winnerField = $scope.opponent;
+            looserField = $scope.field;
+            alertMsg = 'You lost!';
+        }
+        $scope.fillField(winnerField, msg.winnerMap, 's');
+        $scope.fillField(looserField, msg.looserMap, 's');
+
+        $scope.fillHitMap(looserField, msg.winnerShootMap, 1);
+        $scope.fillHitMap(winnerField, msg.looserShootMap, 1);
+
+        alert(alertMsg);
+        $scope.end = true;
+    };
+
+    $scope.goBack = function(){
+        $location.path('/');
+    };
 
     $scope.initFields = function() {
         var arr = [];
@@ -221,7 +261,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
     };
 
     var BreakException = {};
-    var PlaceErrException = {};
 
     $scope.submitShips = function(){
         try {
@@ -240,8 +279,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
         }
         $scope.duplicate = angular.copy($scope.ships);
         $scope.sendShip();
-        //TODO: just temporary, has to be moved to socket listener
-        $scope.placing = false;
     };
 
     $scope.sendShip = function(){
@@ -256,17 +293,23 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
     };
 
     $scope.fillField = function(field, arr, val){
-        angular.forEach(arr, function(value, key){
+        for(var y = 0; y < Object.keys(arr).length; y++){
+            for(var x = 0; x < arr[y].length; x++){
+                field[x][y] = val;
+            }
+        }
+
+        /*angular.forEach(arr, function(value, key){
             angular.forEach(value, function(v){
                 field[key][v] = val;
             });
-        });
+        });*/
     };
 
     $scope.fillHitMap = function(field, shootMap, hitMap){
         for(var x = 0; x < shootMap.length; x++){
             for(var y = 0; y < shootMap[x].length; y++){
-                if(shootMap[x][y] && typeof hitMap === 'number' && hitMap[x][y]){
+                if(shootMap[x][y] && typeof hitMap === 'number'){
                     field[x][y] = field[x][y] === 's'? 'h' : field[x][y] === 'h' ? 'h' : 'm' ;
                 } else if(shootMap[x][y]) {
                     field[x][y] = hitMap[x][y] ? 'h' : 'm';
@@ -276,26 +319,18 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function($sco
     };
 
     $scope.shoot = function(x, y){
+        if(!!$scope.end){
+            return;
+        }
         if($scope.placing){
             alert("You're not allowed to shoot yet!");
             return;
         }
         if ($scope.opponent[x][y] == 'x'){
             $socket.send(x + ' ' + y);
-            /*
-             * TODO: always getting no such element if id="card{{x}}{{i}}" in battle.html
-             * so we can't trigger an animation to flip the card via js
-             *
-             * probably has to be moved to socket on message event
-             * angular.element('#card' + y + x).removeClass('water').addClass('hit');
-             */
         } else {
             alert('You shot on this field already!');
         }
     };
 
-}]);
-
-app.controller('LobbyCtrl', ['$scope', function($scope){
-    $scope.user = {};
 }]);
