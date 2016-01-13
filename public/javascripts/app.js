@@ -45,7 +45,7 @@ app.controller('HomeCtrl', ['$scope', '$location', function($scope, $location){
 }]);
 
 function getSocketAddress() {
-    var socketAddress = window.location.origin.replace("https", "ws").replace("http", "ws");
+    var socketAddress = window.location.origin.replace("https", "wss").replace("http", "ws");
     console.log(socketAddress);
     return socketAddress + "/socket";
 }
