@@ -54,18 +54,18 @@ public class Auth extends UserProfileController<CommonProfile> {
     public String getCurrentUsername(){
 
         final CommonProfile profile = getUserProfile();
-        final String username = profile.getFamilyName();
-        /*Instead of username from login-account, also the email-id from login-account can be returned.
-        If needed, just ask. For our purposes username seems to be better.
-        */
-        return username;
+        return  (String) profile.getAttribute("name");
+    }
+
+    @RequiresAuthentication(clientName = "OidcClient")
+    public Result game() {
+        Application app = new Application();
+        return app.game(this.getCurrentUsername());
     }
 
     private Result protectedIndexView() {
         // profile
-        final CommonProfile profile = getUserProfile();
-        final String username = profile.getFamilyName();
-
+        final String username = this.getCurrentUsername();
         //return ok(views.html.protectedIndex.render(profile,username));
         return ok(views.html.namePage.render(username));
     }

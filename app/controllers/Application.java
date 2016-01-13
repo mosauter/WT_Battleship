@@ -33,6 +33,7 @@ import play.mvc.Result;
 import play.twirl.api.Content;
 
 
+
 public class Application extends Controller {
 //public class Application extends UserProfileController<CommonProfile> {
 
@@ -65,11 +66,11 @@ public class Application extends Controller {
     }
 
     public Result home() {
-        return ok(home.render());
+        return ok(home.render("DUMMY"));
     }
 
-    public Result game() {
-        return ok(game.render());
+    public Result game(String username) {
+        return ok(game.render(username));
     }
 
     public WebSocket<String> socket(String login) {
