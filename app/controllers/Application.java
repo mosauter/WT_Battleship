@@ -66,7 +66,7 @@ public class Application extends Controller {
     }
 
     public Result home() {
-        return ok(home.render("DUMMY"));
+        return ok(home.render("Login"));
     }
 
     public Result game(String username) {

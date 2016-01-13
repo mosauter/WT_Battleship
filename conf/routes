@@ -23,8 +23,9 @@ GET     /socket                     controllers.Auth.socketAuth()
 
 ##from google oAuth:
 
-GET         /                                 controllers.Auth.index() #mit home ersetzen spater
-GET         /home                             controllers.Application.index()
+#Pfad "/" mit home-methode ersetzen spater
+GET         /                                 controllers.Auth.index()
+GET         /home                             controllers.Application.home()
 GET         /loginPage                        controllers.Auth.index()
 
 GET         /facebook/index.html              controllers.Auth.facebookIndex()
