@@ -78,9 +78,8 @@ public class Auth extends UserProfileController<CommonProfile> {
     }
 
     @RequiresAuthentication(clientName = "FacebookClient")
-    public Result facebookIndex() {
-        return protectedIndexView();
-    }
+    //public Result facebookIndex() {return protectedIndexView();}
+    public Result facebookIndex() {return game();}
 
     /*
     @RequiresAuthentication(clientName = "FacebookClient", authorizerName = "admin")
@@ -153,9 +152,10 @@ public class Auth extends UserProfileController<CommonProfile> {
     }
 
     @RequiresAuthentication(clientName = "OidcClient")
+    //public Result oidcIndex() {return protectedIndexView();}
     public Result oidcIndex() {
-        return protectedIndexView();
-    }
+        return game();
+        }
 
     @RequiresAuthentication(clientName = "ParameterClient")
     public Result restJwtIndex() {
