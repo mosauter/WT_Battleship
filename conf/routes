@@ -17,12 +17,16 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 #
 GET     /about                      controllers.Assets.at(path="/public", file="/about.html")
 
-GET     /socket                     @controllers.Application.socket(login: String = "dummyName")
+####################################################GET     /socket                     @controllers.Application.socket(login: String = "dummyName")
+GET     /socket                     controllers.Auth.socketAuth()
 
 
 ##from google oAuth:
 
-GET         /                                 controllers.Auth.index()
+GET         /                                 controllers.Auth.index() #mit home ersetzen spater
+GET         /home                             controllers.Application.index()
+GET         /loginPage                        controllers.Auth.index()
+
 GET         /facebook/index.html              controllers.Auth.facebookIndex()
 GET         /oidc/index.html                  controllers.Auth.oidcIndex()
 GET         /protected/index.html             controllers.Auth.protectedIndex()
