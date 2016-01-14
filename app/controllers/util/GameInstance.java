@@ -69,6 +69,14 @@ public class GameInstance {
         return socketTwo;
     }
 
+    public void closedSocket(boolean playerOne) {
+        if (playerOne && wuiControllerTwo != null) {
+            this.wuiControllerTwo.closedSocket();
+        } else {
+            this.wuiControllerOne.closedSocket();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -31,6 +31,7 @@ public class WuiController implements IObserver {
     private final List<String[]> bufferedPlaceList;
     private final List<String[]> bufferedShootList;
     private boolean placeOneFinished = false;
+    private AliveSender aliveSender;
 
     private Semaphore addShip;
 
@@ -44,6 +45,7 @@ public class WuiController implements IObserver {
         masterController.addObserver(this);
         this.send(new FirstPlayerMessage(first));
         this.addShip = new Semaphore(1);
+        this.aliveSender = new AliveSender(socket);
     }
 
     @Override
@@ -315,5 +317,10 @@ public class WuiController implements IObserver {
         }
         return new WaitMessage(masterController.getPlayer2().getName(),
                                  masterController.getPlayer1().getName());
+    }
+
+    public void closedSocket() {
+        // TODO: send win message to player
+        this.aliveSender.setDone();
     }
 }

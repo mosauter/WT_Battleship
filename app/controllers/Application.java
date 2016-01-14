@@ -35,6 +35,7 @@ public class Application extends Controller {
 
     public WebSocket<String> socket(String login) {
         return new WebSocket<String>() {
+            private boolean firstPlayer;
             private GameInstance instance;
             private WuiController wuiController;
 
@@ -46,6 +47,7 @@ public class Application extends Controller {
                     this.wuiController = new WuiController(gameInstance
                         .getInstance().getMasterController(), out, false);
                     gameInstance.setWuiControllerTwo(this.wuiController);
+                    firstPlayer = false;
                 } else {
                     Battleship battleship = Battleship.getInstance(true);
                     this.wuiController = new WuiController(battleship
@@ -53,13 +55,18 @@ public class Application extends Controller {
                     this.instance = new GameInstance(battleship, out, this.wuiController);
                     onePlayer.add(this.instance);
                     this.wuiController.startGame();
+                    firstPlayer = true;
                 }
                 this.wuiController.setName(anInt++ + login);
 
                 in.onMessage(event -> this.wuiController.analyzeMessage(event));
 
-                in.onClose( // TODO: send other client a message
-                    () -> System.out.println("CLOSING SOCKET"));
+                in.onClose(() -> {
+                    System.out.println("CLOSING SOCKET");
+                    this.instance.closedSocket(firstPlayer);
+                    // removing from list if there was only one instance in the list
+                    onePlayer.remove(this.instance);
+                });
             }
         };
     }
