@@ -29,11 +29,10 @@ public class WuiController implements IObserver {
     private final WebSocket.Out<String> socket;
     private final boolean firstPlayer;
     private final List<String[]> bufferedPlaceList;
-    private final List<String[]> bufferedShootList;
     private boolean placeOneFinished = false;
-    private AliveSender aliveSender;
+    private final AliveSender aliveSender;
 
-    private Semaphore addShip;
+    private final Semaphore addShip;
 
     public WuiController(IMasterController masterController,
                          WebSocket.Out<String> socket, boolean first) {
@@ -41,7 +40,6 @@ public class WuiController implements IObserver {
         this.socket = socket;
         this.firstPlayer = first;
         this.bufferedPlaceList = new LinkedList<>();
-        this.bufferedShootList = new LinkedList<>();
         masterController.addObserver(this);
         this.send(new FirstPlayerMessage(first));
         this.addShip = new Semaphore(1);
@@ -50,7 +48,6 @@ public class WuiController implements IObserver {
 
     @Override
     public void update() {
-        Message msg = null;
         Logger.debug(
             "On update getting State -> " + masterController.getCurrentState());
         if (firstPlayer) {
@@ -93,10 +90,8 @@ public class WuiController implements IObserver {
     }
 
     private void placeShip(String[] field) {
-        if (firstPlayer &&
-            masterController.getCurrentState().equals(State.PLACE1) ||
-            !firstPlayer &&
-            masterController.getCurrentState().equals(State.PLACE2)) {
+        if (firstPlayer && masterController.getCurrentState() == State.PLACE1 ||
+            !firstPlayer && masterController.getCurrentState() == State.PLACE2) {
             try {
                 addShip.acquire();
                 masterController.placeShip(Integer.parseInt(field[0]),
@@ -112,26 +107,14 @@ public class WuiController implements IObserver {
         }
     }
 
-    private boolean processShootList() {
-        if (bufferedPlaceList.isEmpty()) {
-            return false;
-        }
-        String[] instruction = bufferedShootList.get(0);
-        bufferedShootList.remove(0);
-        shoot(instruction);
-        return true;
-    }
-
     private void shoot(String[] field) {
-        if (firstPlayer &&
-            masterController.getCurrentState().equals(State.SHOOT1) ||
-            !firstPlayer &&
-            masterController.getCurrentState().equals(State.SHOOT2)) {
+        if (firstPlayer && masterController.getCurrentState() == State.SHOOT1 ||
+            !firstPlayer && masterController.getCurrentState() == State.SHOOT2) {
             masterController
                 .shoot(Integer.parseInt(field[0]), Integer.parseInt(field[1]));
-        } else {
-            bufferedShootList.add(field);
         }
+        // else -> the player isn't allowed to shoot in this state
+        // instruction is omitted
     }
 
     public void setName(String name) {
@@ -155,9 +138,9 @@ public class WuiController implements IObserver {
     }
 
     private WinMessage createWinMessage(State state) {
-        IPlayer winner = state.equals(State.WIN1) ? masterController
+        IPlayer winner = state == State.WIN1 ? masterController
             .getPlayer1() : masterController.getPlayer2();
-        IPlayer looser = state.equals(State.WIN1) ? masterController
+        IPlayer looser = state == State.WIN1 ? masterController
             .getPlayer2() : masterController.getPlayer1();
         Map<Integer, Set<Integer>> winnerShips = getShipMap(winner);
         Map<Integer, Set<Integer>> looserShips = getShipMap(looser);
@@ -221,7 +204,6 @@ public class WuiController implements IObserver {
             // SHOOTING ON EACH OTHER
             case SHOOT1:
             case SHOOT2:
-                // TODO: look after bufferedShootList
                 // opponent = player 2
                 msg = createShootMessage(currentState,
                                          masterController.getPlayer1(),
@@ -230,7 +212,7 @@ public class WuiController implements IObserver {
 
             case HIT:
             case MISS:
-                msg = new HitMessage(currentState.equals(State.HIT));
+                msg = new HitMessage(currentState == State.HIT);
                 break;
 
             // SOMEONE HAS WON
@@ -280,7 +262,6 @@ public class WuiController implements IObserver {
             // SHOOTING ON EACH OTHER
             case SHOOT1:
             case SHOOT2:
-                // TODO: look after bufferedShootList
                 // opponent = player 1
                 msg = createShootMessage(currentState,
                                          masterController.getPlayer2(),
@@ -316,11 +297,13 @@ public class WuiController implements IObserver {
                                    masterController.getPlayer2().getName());
         }
         return new WaitMessage(masterController.getPlayer2().getName(),
-                                 masterController.getPlayer1().getName());
+                               masterController.getPlayer1().getName());
     }
 
     public void closedSocket() {
-        // TODO: send win message to player
         this.aliveSender.setDone();
+        // sending Winn message -> other player left game / killed his socket
+        this.send(createWinMessage(firstPlayer ? State.WIN1 : State.WIN2));
+        this.socket.close();
     }
 }

@@ -17,15 +17,11 @@ public class Application extends Controller {
     /**
      * List of {@link GameInstance} with one player waiting for an opponent.
      */
-    private static List<GameInstance> onePlayer = new LinkedList<>();
+    private static final List<GameInstance> onePlayer = new LinkedList<>();
 
-    static int anInt = 0;
+    private static int anInt = 0;
 
     public Result index() {
-        return home();
-    }
-
-    public Result home() {
         return ok(home.render());
     }
 
