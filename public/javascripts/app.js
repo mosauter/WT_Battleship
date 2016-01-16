@@ -1,4 +1,5 @@
 /**
+ * Angular App
  * Created by fw on 09.12.15.
  */
 var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
@@ -68,13 +69,13 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
     $scope.sendNext = 2;
     $scope.duplicate = {};
 
-    //$scope.ships = {
-    //    '2': {'isPlaced': false},
-    //    '3': {'isPlaced': false},
-    //    '4': {'isPlaced': false},
-    //    '5': {'isPlaced': false},
-    //    '6': {'isPlaced': false}
-    //};
+    $scope.ships = {
+        '2': {'isPlaced': false},
+        '3': {'isPlaced': false},
+        '4': {'isPlaced': false},
+        '5': {'isPlaced': false},
+        '6': {'isPlaced': false}
+    };
 
     // ALL SHIPS HORIZONTAL
     /*$scope.ships = {
@@ -86,13 +87,13 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
      };*/
 
     // ALL SHIPS VERTICAL
-    $scope.ships = {
+    /*$scope.ships = {
      '2': {'x': 0, 'y': 0, 'orientation': false, 'isPlaced': true},
      '3': {'x': 1, 'y': 0, 'orientation': false, 'isPlaced': true},
      '4': {'x': 2, 'y': 0, 'orientation': false, 'isPlaced': true},
      '5': {'x': 3, 'y': 0, 'orientation': false, 'isPlaced': true},
      '6': {'x': 4, 'y': 0, 'orientation': false, 'isPlaced': true}
-     };
+     };*/
 
     $scope.waiting = false;
     $scope.placing = true;
@@ -311,12 +312,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
                 field[arr[y][x]][y] = val;
             }
         }
-
-        /*angular.forEach(arr, function(value, key){
-         angular.forEach(value, function(v){
-         field[key][v] = val;
-         });
-         });*/
     };
 
     $scope.fillHitMap = function (field, shootMap, hitMap) {
