@@ -38,7 +38,7 @@ public class AliveSender implements Runnable {
                 Thread.sleep(TIMERMILLIS);
                 this.socket.write(new AliveMessage().toJSON());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // ignore interrupt, is send by this.setDone()
             }
         }
     }
