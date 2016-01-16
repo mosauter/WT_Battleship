@@ -21,12 +21,12 @@ public class Application extends Controller {
 
     private static int anInt = 0;
 
-    public Result index() {
-        return ok(home.render());
+    public Result home() {
+        return ok(home.render("Login"));
     }
 
-    public Result game() {
-        return ok(game.render());
+    public Result game(String username) {
+        return ok(game.render(username));
     }
 
     public WebSocket<String> socket(String login) {

@@ -1,4 +1,5 @@
-@main("Battleship") {
+@(username: String)
+@main("Battleship")(username) {
     <script>
             $(function () {
                 $('.carousel').carousel({
@@ -29,21 +30,21 @@
             <h1>Welcome to Battleship!</h1>
 
             <p>This is an awesome game!</p>
-            <a href="#" class="btn btn-main">About us</a>
+            <a href="/home" class="btn btn-main">About us</a>
             <a href="/game" class="btn btn-play">Play</a>
-            <a href="#" class="btn btn-warning">Donate :)</a>
+            <a href="/game" class="btn btn-warning">Donate :)</a>
         </div>
 
         <div class="row" id="thumbnails">
             <div class="col-sm-4 wh">
-                <a href="#" class="thumbnail">
+                <a href="/game" class="thumbnail">
                     <img src="/assets/images/shipImage.jpg" alt="ship" />
                 </a>
 
                 <h3>About us.</h3>
 
                 <p> We guys are awesome. Learn more about us.</p>
-                <a href="#" class="btn btn-info">About us</a>
+                <a href="/game" class="btn btn-info">About us</a>
             </div>
 
             <div class="col-sm-4">
@@ -58,14 +59,14 @@
             </div>
 
             <div class="col-sm-4">
-                <a href="#" class="thumbnail">
+                <a href="/game" class="thumbnail">
                     <img src="/assets/images/shipImage3.jpg" alt="ship" />
                 </a>
 
                 <h3>Preview</h3>
 
                 <p> Do you want to know what the game is like?</p>
-                <a href="#" class="btn btn-info">Preview</a>
+                <a href="/game" class="btn btn-info">Preview</a>
             </div>
         </div>
 
