@@ -300,10 +300,13 @@ public class WuiController implements IObserver {
                                masterController.getPlayer1().getName());
     }
 
+    public void setAliveDone() {
+        aliveSender.setDone();
+    }
+
     public void closedSocket() {
         this.aliveSender.setDone();
         // sending Winn message -> other player left game / killed his socket
         this.send(createWinMessage(firstPlayer ? State.WIN1 : State.WIN2));
-        this.socket.close();
     }
 }

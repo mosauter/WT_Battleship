@@ -35,33 +35,41 @@ public class Application extends Controller {
             private GameInstance instance;
             private WuiController wuiController;
 
-            public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
-                if (!onePlayer.isEmpty()) {
-                    GameInstance gameInstance = onePlayer.get(0);
-                    onePlayer.remove(0);
-                    gameInstance.setSocketTwo(out);
-                    this.wuiController = new WuiController(gameInstance
-                        .getInstance().getMasterController(), out, false);
-                    gameInstance.setWuiControllerTwo(this.wuiController);
-                    firstPlayer = false;
-                } else {
+            public void onReady(WebSocket.In<String> in,
+                                WebSocket.Out<String> out) {
+                if (onePlayer.isEmpty()) {
                     Battleship battleship = Battleship.getInstance(true);
-                    this.wuiController = new WuiController(battleship
-                        .getMasterController(), out, true);
-                    this.instance = new GameInstance(battleship, out, this.wuiController);
+                    this.wuiController =
+                        new WuiController(battleship.getMasterController(), out,
+                                          true);
+                    this.instance =
+                        new GameInstance(battleship, out, this.wuiController);
                     onePlayer.add(this.instance);
                     this.wuiController.startGame();
                     firstPlayer = true;
+                } else {
+                    this.instance = onePlayer.get(0);
+                    onePlayer.remove(0);
+                    this.instance.setSocketTwo(out);
+                    this.wuiController = new WuiController(
+                        this.instance.getInstance().getMasterController(), out,
+                        false);
+                    this.instance.setWuiControllerTwo(this.wuiController);
+                    firstPlayer = false;
                 }
                 this.wuiController.setName(anInt++ + login);
 
-                in.onMessage(event -> this.wuiController.analyzeMessage(event));
+                in.onMessage((String message) -> this.wuiController
+                    .analyzeMessage(message));
 
                 in.onClose(() -> {
-                    System.out.println("CLOSING SOCKET");
-                    this.instance.closedSocket(firstPlayer);
-                    // removing from list if there was only one instance in the list
-                    onePlayer.remove(this.instance);
+                    try {
+                        this.instance.closedSocket(firstPlayer);
+                        // removing from list if there was only one instance in the list
+                        onePlayer.remove(this.instance);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
             }
         };
