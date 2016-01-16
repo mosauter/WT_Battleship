@@ -6,14 +6,13 @@ import de.htwg.battleship.util.State;
 
 /**
  * The InvalidMessage is sent in the
- * {@link de.htwg.battleship.util.State#WRONGINPUT} and in the
- * {@link de.htwg.battleship.util.State#PLACEERR} state.
+ * {@link de.htwg.battleship.util.State#WRONGINPUT} state.
  *
  * The Message in JSON via {@link Message#toJSON()} should result in:
  * <pre>
  *     {@code
  *     {
- *         "type": ( WRONGINPUT | PLACEERR )
+ *         "type": WRONGINPUT
  *     }
  *     }
  * </pre>
@@ -23,8 +22,8 @@ import de.htwg.battleship.util.State;
  */
 public class InvalidMessage extends Message {
 
-    public InvalidMessage(State type) {
-        this.type = type;
+    public InvalidMessage() {
+        this.type = State.WRONGINPUT.toString();
     }
 
 }

@@ -2,8 +2,6 @@
 
 package controllers.util;
 
-import de.htwg.battleship.util.State;
-
 /**
  * WaitMessage signals the client that the he must wait for a second player to
  * join the current lobby.
@@ -13,7 +11,9 @@ import de.htwg.battleship.util.State;
  *
  * <pre>
  *     {
- *         "type": "GETNAME2"
+ *         "type": "WAIT",
+ *         "yourName": "Name",
+ *         "opponentName": "Name"
  *     }
  * </pre>
  *
@@ -22,7 +22,13 @@ import de.htwg.battleship.util.State;
  */
 public class WaitMessage extends Message {
 
-    public WaitMessage() {
-        this.type = State.GETNAME2;
+    private final String yourName;
+    private final String opponentName;
+
+    public WaitMessage(String yourName, String opponentName) {
+        this.yourName = yourName;
+        this.opponentName = opponentName;
+        this.type = "WAIT";
     }
+
 }
