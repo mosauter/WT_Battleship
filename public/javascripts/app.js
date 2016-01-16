@@ -1,8 +1,6 @@
 /**
  * Created by fw on 09.12.15.
  */
-// var socketAddress = 'ws://localhost:9000/socket';
-// var socketAddress = 'ws://still-beach-5359.herokuapp.com/socket'
 var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
 
 app.config(function ($routeProvider) {
@@ -11,10 +9,6 @@ app.config(function ($routeProvider) {
             templateUrl: 'assets/partials/index.html',
             controller: 'HomeCtrl'
         })
-        /*.when('/lobby', {
-         templateUrl: 'assets/partials/lobby.html',
-         controller: 'LobbyCtrl'
-         })*/
         .when('/battle', {
             templateUrl: 'assets/partials/battle.html',
             controller: 'BattleCtrl'
@@ -35,10 +29,6 @@ app.filter('range', function () {
 });
 
 app.controller('HomeCtrl', ['$scope', '$location', function ($scope, $location) {
-    /*$scope.lobby = function(){
-     $location.path("/lobby");
-     };*/
-
     $scope.fight = function () {
         $location.path('/battle');
     };
@@ -46,7 +36,6 @@ app.controller('HomeCtrl', ['$scope', '$location', function ($scope, $location) 
 
 function getSocketAddress() {
     var socketAddress = window.location.origin.replace("http", "ws");
-    console.log(socketAddress);
     return socketAddress + "/socket";
 }
 
@@ -79,14 +68,15 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
     $scope.sendNext = 2;
     $scope.duplicate = {};
 
-    $scope.ships = {
-        '2': {'isPlaced': false},
-        '3': {'isPlaced': false},
-        '4': {'isPlaced': false},
-        '5': {'isPlaced': false},
-        '6': {'isPlaced': false}
-    };
+    //$scope.ships = {
+    //    '2': {'isPlaced': false},
+    //    '3': {'isPlaced': false},
+    //    '4': {'isPlaced': false},
+    //    '5': {'isPlaced': false},
+    //    '6': {'isPlaced': false}
+    //};
 
+    // ALL SHIPS HORIZONTAL
     /*$scope.ships = {
      '2': {'x': 0, 'y': 0, 'orientation': true, 'isPlaced': true},
      '3': {'x': 0, 'y': 1, 'orientation': true, 'isPlaced': true},
@@ -94,6 +84,15 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
      '5': {'x': 0, 'y': 3, 'orientation': true, 'isPlaced': true},
      '6': {'x': 0, 'y': 4, 'orientation': true, 'isPlaced': true}
      };*/
+
+    // ALL SHIPS VERTICAL
+    $scope.ships = {
+     '2': {'x': 0, 'y': 0, 'orientation': false, 'isPlaced': true},
+     '3': {'x': 1, 'y': 0, 'orientation': false, 'isPlaced': true},
+     '4': {'x': 2, 'y': 0, 'orientation': false, 'isPlaced': true},
+     '5': {'x': 3, 'y': 0, 'orientation': false, 'isPlaced': true},
+     '6': {'x': 4, 'y': 0, 'orientation': false, 'isPlaced': true}
+     };
 
     $scope.waiting = false;
     $scope.placing = true;
@@ -173,6 +172,9 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
     });
 
     $scope.endOfGame = function (msg) {
+        if ($scope.end) {
+            return;
+        }
         // if opponent closes game in PLACE-States
         // -> this player has won
         $scope.placing = false;
@@ -306,7 +308,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
     $scope.fillField = function (field, arr, val) {
         for (var y = 0; y < Object.keys(arr).length; y++) {
             for (var x = 0; x < arr[y].length; x++) {
-                field[x][y] = val;
+                field[arr[y][x]][y] = val;
             }
         }
 
