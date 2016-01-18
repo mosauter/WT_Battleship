@@ -125,7 +125,6 @@ public class WuiController implements IObserver {
             shoot(field);
         } else {
             send(new InvalidMessage());
-            // TODO: evaluate maybe "getEntireUpdate"
         }
     }
 
