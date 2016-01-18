@@ -19,8 +19,6 @@ public class Application extends Controller {
      */
     private static final List<GameInstance> onePlayer = new LinkedList<>();
 
-    private static int anInt = 0;
-
     public Result home() {
         return ok(home.render("Login"));
     }
@@ -57,7 +55,7 @@ public class Application extends Controller {
                     this.instance.setWuiControllerTwo(this.wuiController);
                     firstPlayer = false;
                 }
-                this.wuiController.setName(anInt++ + login);
+                this.wuiController.setName(login);
 
                 in.onMessage((String message) -> this.wuiController
                     .analyzeMessage(message));

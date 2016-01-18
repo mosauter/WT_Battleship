@@ -25,11 +25,8 @@ GET     /sol                                 @controllers.Application.socket(log
 GET         /                                 controllers.Auth.index()
 GET         /loginPage                        controllers.Auth.index()
 
-GET         /facebook/index.html              controllers.Auth.facebookIndex()
 GET         /oidc/index.html                  controllers.Auth.oidcIndex()
-GET         /protected/index.html             controllers.Auth.protectedIndex()
 GET         /jwt.html                         controllers.Auth.jwt()
-GET         /rest-jwt/index.html              controllers.Auth.restJwtIndex()
 GET         /callback                         @org.pac4j.play.CallbackController.callback()
 POST        /callback                         @org.pac4j.play.CallbackController.callback()
 GET         /casProxyCallback                 @org.pac4j.play.CallbackController.callback()
