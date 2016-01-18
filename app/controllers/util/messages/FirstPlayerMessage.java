@@ -1,6 +1,6 @@
 // FirstPlayerMessage
 
-package controllers.util;
+package controllers.util.messages;
 
 import de.htwg.battleship.util.State;
 

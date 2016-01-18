@@ -4,34 +4,27 @@
 
 # Home page
 
-GET     /home                       @controllers.Application.home()
-GET     /game                       @controllers.Auth.game()
-GET     /gol                        @controllers.Application.game(login: String = "DUMM 01")
+GET         /                        @controllers.Application.home()
+GET         /home                    @controllers.Application.home()
 
 # Page where the game takes place (first as single page app)
+GET         /game                    @controllers.Auth.game()
+GET         /gol                     @controllers.Application.game(login: String = "DUMM 01")
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file            controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /socket                     controllers.Auth.socketAuth()
+# method to get a socket which is bound to a specific instance of a game, when you are authenticated
+GET         /socket                  controllers.Auth.socketAuth()
+# method for development needs if you want a socket without a login
+GET         /sol                     @controllers.Application.socket(login: String = "dummyName")
 
-# method to get a socket which is bound to a specific instance of a game
-GET     /sol                                 @controllers.Application.socket(login: String = "dummyName")
+# authentication methods
+GET         /login                   controllers.Auth.index()
 
-
-##from google oAuth:
-
-#Pfad "/" mit home-methode ersetzen spater
-GET         /                                 controllers.Auth.index()
-GET         /loginPage                        controllers.Auth.index()
-
-GET         /oidc/index.html                  controllers.Auth.oidcIndex()
-GET         /jwt.html                         controllers.Auth.jwt()
-GET         /callback                         @org.pac4j.play.CallbackController.callback()
-POST        /callback                         @org.pac4j.play.CallbackController.callback()
-GET         /casProxyCallback                 @org.pac4j.play.CallbackController.callback()
-POST        /casProxyCallback                 @org.pac4j.play.CallbackController.callback()
-GET         /logout                           @org.pac4j.play.ApplicationLogoutController.logout()
-
-
-#####ACHTUNG: Unsere home-seite ist momentan deaktiviert zu testzwecken
+GET         /callback                @org.pac4j.play.CallbackController.callback()
+POST        /callback                @org.pac4j.play.CallbackController.callback()
+GET         /casProxyCallback        @org.pac4j.play.CallbackController.callback()
+POST        /casProxyCallback        @org.pac4j.play.CallbackController.callback()
+GET         /logout                  @org.pac4j.play.ApplicationLogoutController.logout()

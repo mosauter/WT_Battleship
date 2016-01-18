@@ -1,6 +1,6 @@
 // WaitMessage
 
-package controllers.util;
+package controllers.util.messages;
 
 /**
  * WaitMessage signals the client that the he must wait for a second player to

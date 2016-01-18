@@ -1,10 +1,16 @@
 @fontFam: 'Open Sans';
 @headerFont: 'Oswald';
-@ship1: '/assets/images/shipImage.jpg';
-@ship2: '/assets/images/shipImage2.jpg';
-@ship3: '/assets/images/shipImage3.jpg';
-@googleIcon: '/assets/images/Facebook_plus.png';
-@facebookIcon: '/assets/images/google_plus.png';
+
+// images on the home site for the carousel
+@shipImageHome1: '/assets/images/shipImage.jpg';
+@shipImageHome2: '/assets/images/shipImage2.jpg';
+@shipImageHome3: '/assets/images/shipImage3.jpg';
+
+// variables for game field
+@fieldHit: '/assets/images/field_hit.jpg';
+@fieldMiss: '/assets/images/field_miss.jpg';
+@fieldShip: '/assets/images/field_ship.jpg';
+@fieldEmpty: '/assets/images/field_empty.jpg';
 
 @navTextColor: #FFF;
 @navhover: @playButtoon;
@@ -142,15 +148,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .slide1 {
-  background-image: url(@ship1);
+  background-image: url(@shipImageHome1);
 }
 
 .slide2 {
-  background-image: url(@ship2);
+  background-image: url(@shipImageHome2);
 }
 
 .slide3 {
-  background-image: url(@ship3);
+  background-image: url(@shipImageHome3);
 }
 
 .carousel.carousel-fade .item {
@@ -203,22 +209,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .water {
-  background: url('/assets/images/noshot.jpg') no-repeat;
+  background: url(@fieldEmpty) no-repeat;
   background-size: cover;
 }
 
 .hit {
-  background: url('/assets/images/fire.jpg') no-repeat;
+  background: url(@fieldHit) no-repeat;
   background-size: cover;
 }
 
 .miss {
-  background: url('/assets/images/miss.jpg') no-repeat;
+  background: url(@fieldMiss) no-repeat;
   background-size: cover;
 }
 
 .ship {
-  background: url('/assets/images/ship.jpg') no-repeat;
+  background: url(@fieldShip) no-repeat;
   background-size: cover;
 }
 
