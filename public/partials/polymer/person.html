@@ -1,22 +1,36 @@
-<dom-module id="person">
+<dom-module id="person-block">
 
     <template>
-        <div class="jumbotron">
-            <div class="col-xs-3">
-                <img src="https://avatars0.githubusercontent.com/u/{{profileId}}?v=3&s=460" />
-            </div>
-            <div class="col-xs-9">
-                <div class="row">
-                    <label for="name">Name:</label>
-                    <p name="name">{{name}}</p>
+        <div class="jumbotron small-padding">
+            <div class="row">
+                <div class="col-xs-4">
+                    <img src="https://avatars0.githubusercontent.com/u/{{profileid}}?v=3&s=200"/>
                 </div>
-                <div class="row">
-                    <label for="github">Github:</label>
-                    <a href="https://www.github.com/{{profileName}}" name="github">{{profileName}}</a>
+                <div class="col-xs-4">
+                    <div class="row">
+                        <label>Name:</label>
+                        <p>{{name}}</p>
+                    </div>
+                    <div class="row">
+                        <label>Age:</label>
+                        <p>{{age}}</p>
+                    </div>
+                    <div class="row">
+                        <label>Hobbies:</label>
+                        <p>{{hobbies}}</p>
+                    </div>
                 </div>
-                <div class="row">
-                    <label for="age">Age:</label>
-                    <p name="age">{{age}}</p>
+                <div class="col-xs-4">
+                    <div class="row">
+                        <label>Github:</label>
+                        <p><a href="https://www.github.com/{{profilename}}">{{profilename}}</a>
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <label>Projects:</label>
+                        <p>{{projects}}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -24,21 +38,21 @@
 
     <script>
         Polymer({
-            is: "person",
+            is: "person-block",
             properties: {
                 name: {
                     type: String
                 },
-                profileId: {
+                profileid: {
                     type: Number
                 },
-                profileName: {
+                profilename: {
                     type: String
                 },
                 age: {
                     type: Number
                 },
-                hobbys: {
+                hobbies: {
                     type: String
                 },
                 projects: {

@@ -6,6 +6,7 @@ import de.htwg.battleship.Battleship;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
+import views.html.about;
 import views.html.game;
 import views.html.home;
 
@@ -21,6 +22,10 @@ public class Application extends Controller {
 
     public Result home() {
         return ok(home.render("Login"));
+    }
+
+    public Result about() {
+        return ok(about.render("Login"));
     }
 
     public Result game(String username) {
