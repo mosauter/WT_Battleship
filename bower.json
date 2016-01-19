@@ -1,0 +1,20 @@
+{
+  "name": "WT_Battleship",
+  "homepage": "https://github.com/mosauter/WT_Battleship",
+  "authors": [
+    "Moritz Sauter <SauterMoritz at gmx dot de>",
+    "Felix Wiedenbach",
+    "Pavandeep Singh"
+  ],
+  "license": "GPLv2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0"
+  }
+}

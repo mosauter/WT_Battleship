@@ -2,6 +2,7 @@
 
 package controllers.util;
 
+import controllers.util.messages.AliveMessage;
 import play.mvc.WebSocket;
 
 /**
@@ -12,6 +13,9 @@ import play.mvc.WebSocket;
  */
 public class AliveSender implements Runnable {
 
+    /**
+     * Constant to send a 'Heart Beat' every 30 seconds.
+     */
     private static final int TIMERMILLIS = 30000;
 
     private final WebSocket.Out<String> socket;
@@ -33,7 +37,7 @@ public class AliveSender implements Runnable {
 
     @Override
     public void run() {
-        while (! done) {
+        while (!done) {
             try {
                 Thread.sleep(TIMERMILLIS);
                 this.socket.write(new AliveMessage().toJSON());

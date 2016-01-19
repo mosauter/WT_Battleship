@@ -24,11 +24,31 @@ public class GameInstance {
      * Unique ID of each GameInstance.
      */
     private final UUID uuid;
+    /**
+     * Single instance of the game -> {@link de.htwg.battleship.Battleship}
+     */
     private final Battleship instance;
+    /**
+     * The {@link WuiController} for the first player.
+     */
     private final WuiController wuiControllerOne;
+    /**
+     * The {@link play.mvc.WebSocket.Out} socket of the first player.
+     */
     private final Out socketOne;
+    /**
+     * The {@link WuiController} for the second player.
+     */
     private WuiController wuiControllerTwo;
+    /**
+     * The {@link play.mvc.WebSocket.Out} socket of the second player.
+     */
     private Out socketTwo;
+    /**
+     * This boolean indicates if one of the two players has closed his socket.
+     * So this keeps the sockets from sending again and preventing {@link
+     * java.nio.channels.ClosedChannelException}
+     */
     private boolean closedSockets;
 
     public GameInstance(final Battleship instance, final Out socketOne,
@@ -40,19 +60,6 @@ public class GameInstance {
         closedSockets = false;
     }
 
-    public void setWuiControllerTwo(WuiController wuiControllerTwo) {
-        this.wuiControllerTwo = wuiControllerTwo;
-    }
-
-    public WuiController getWuiControllerOne() {
-
-        return wuiControllerOne;
-    }
-
-    public WuiController getWuiControllerTwo() {
-        return wuiControllerTwo;
-    }
-
     public Battleship getInstance() {
         return instance;
     }
@@ -61,14 +68,35 @@ public class GameInstance {
         return socketOne;
     }
 
-    public void setSocketTwo(Out socketTwo) {
-        this.socketTwo = socketTwo;
-    }
-
     public Out getSocketTwo() {
         return socketTwo;
     }
 
+    public void setSocketTwo(Out socketTwo) {
+        this.socketTwo = socketTwo;
+    }
+
+    public WuiController getWuiControllerOne() {
+        return wuiControllerOne;
+    }
+
+    public WuiController getWuiControllerTwo() {
+        return wuiControllerTwo;
+    }
+
+    public void setWuiControllerTwo(final WuiController wuiControllerTwo) {
+        this.wuiControllerTwo = wuiControllerTwo;
+    }
+
+    /**
+     * Is called when one player closes his socket. So this ends the 'Heart
+     * Beater' {@link AliveSender} and delegates the event to the {@link
+     * WuiController}.
+     *
+     * @param playerOne indicates which player closed his socket and caused this
+     *                  event true    indicates that this was the first player
+     *                  false   indicates that this was the second player
+     */
     public void closedSocket(boolean playerOne) {
         if (closedSockets) {
             return;
@@ -80,7 +108,9 @@ public class GameInstance {
             this.wuiControllerTwo.closedSocket();
         } else {
             // player two closed the socket
-            this.wuiControllerTwo.setAliveDone();
+            if (this.wuiControllerTwo != null) {
+                this.wuiControllerTwo.setAliveDone();
+            }
             this.wuiControllerOne.closedSocket();
         }
     }

@@ -1,6 +1,6 @@
 // AliveMessage
 
-package controllers.util;
+package controllers.util.messages;
 
 /**
  * AliveMessage is very useless message. It's only necessary for Heroku.

@@ -1,4 +1,5 @@
 @(username: String)
+
 @main("Battleship")(username) {
     <script>
             $(function () {
@@ -36,38 +37,20 @@
         </div>
 
         <div class="row" id="thumbnails">
-            <div class="col-sm-4 wh">
-                <a href="/game" class="thumbnail">
-                    <img src="/assets/images/shipImage.jpg" alt="ship" />
-                </a>
+            <content-block link="/about" image="/assets/images/shipImage.jpg"
+            imageAlt="ship" heading="About us"
+            teaser="Learn more about the game and its developers.">
+            </content-block>
 
-                <h3>About us.</h3>
+            <content-block link="/game" image="/assets/images/shipImage2.jpg"
+            imageAlt="ship" heading="Play"
+            teaser="Play the game.">
+            </content-block>
 
-                <p> We guys are awesome. Learn more about us.</p>
-                <a href="/game" class="btn btn-info">About us</a>
-            </div>
-
-            <div class="col-sm-4">
-                <a href="/game" class="thumbnail">
-                    <img src="/assets/images/shipImage2.jpg" alt="ship" />
-                </a>
-
-                <h3>Instructions/Play</h3>
-
-                <p> How to play the game.</p>
-                <a href="/game" class="btn btn-info">Instructions</a>
-            </div>
-
-            <div class="col-sm-4">
-                <a href="/game" class="thumbnail">
-                    <img src="/assets/images/shipImage3.jpg" alt="ship" />
-                </a>
-
-                <h3>Preview</h3>
-
-                <p> Do you want to know what the game is like?</p>
-                <a href="/game" class="btn btn-info">Preview</a>
-            </div>
+            <content-block link="/instructions" image="/assets/images/shipImage3.jpg"
+            imageAlt="ship" heading="Instructions"
+            teaser="Learn how to play and the rules of our realisation of Battleship.">
+            </content-block>
         </div>
 
     </div>
@@ -76,7 +59,8 @@
 
         <p> This site is built with bootstrap and contains:</p>
         <li class="dropup">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Features <b class="caret"></b>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Features <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
                 <li><a href="#">menu</a></li>

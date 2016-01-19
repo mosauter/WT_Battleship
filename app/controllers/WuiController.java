@@ -1,6 +1,9 @@
-package controllers;// WuiController
+// WuiController
 
-import controllers.util.*;
+package controllers;
+
+import controllers.util.AliveSender;
+import controllers.util.messages.*;
 import de.htwg.battleship.controller.IMasterController;
 import de.htwg.battleship.model.IPlayer;
 import de.htwg.battleship.observer.IObserver;
@@ -16,20 +19,55 @@ import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 /**
- * WuiController
+ * WuiController is the controller which is used to communicate between the
+ * Web-Interface and the {@link IMasterController}. It sends {@link Message} to
+ * the client and analyzes instructions by the client in the {@link
+ * WuiController#analyzeMessage(String)}-Method.
  *
  * @author ms
  * @since 2015-11-25
  */
 public class WuiController implements IObserver {
 
+    /**
+     * The String which is used to determine if the ship in the place
+     * instruction by the client is set with horizontal orientation. If the
+     * String doesn't matches this means the ship is placed with vertical
+     * orientation.
+     */
     private static final String HORIZONTAL_ORIENTATION = "true";
 
+    /**
+     * The {@link IMasterController} of the corresponding game instance {@link
+     * de.htwg.battleship.Battleship}.
+     */
     private final IMasterController masterController;
+    /**
+     * The {@link play.mvc.WebSocket.Out<String>} which is used to communicate
+     * with the client.
+     */
     private final WebSocket.Out<String> socket;
+    /**
+     * Indicates if this {@link WuiController} is assigned to the first or the
+     * second player.
+     */
     private final boolean firstPlayer;
+    /**
+     * List which is used to buffer place ship instructions if the instruction
+     * came when it wasn't the player's turn.
+     */
     private final List<String[]> bufferedPlaceList;
+    /**
+     * Indicates if the first player of the corresponding {@link
+     * de.htwg.battleship.Battleship} has finished placing. So the {@link State}
+     * is after {@link State#FINALPLACE1}.
+     */
     private boolean placeOneFinished = false;
+    /**
+     * The 'Heart Beater' which is used to keep the connection alive. It sends a
+     * {@link AliveMessage} every {@link AliveSender#TIMERMILLIS}
+     * milli-seconds.
+     */
     private final AliveSender aliveSender;
 
     private final Semaphore addShip;
@@ -57,6 +95,12 @@ public class WuiController implements IObserver {
         }
     }
 
+    /**
+     * Utility-Method to send a {@link Message} with the {@link
+     * WuiController#socket} to the corresponding client.
+     *
+     * @param msg the message which should be sent
+     */
     private void send(Message msg) {
         if (msg != null) {
             Logger.debug("Sending message:\n" + msg.toJSON());
@@ -64,6 +108,12 @@ public class WuiController implements IObserver {
         }
     }
 
+    /**
+     * Method to analyze a message by the client.
+     *
+     * @param message 'x y orientation' - to place a ship on the field (x/y) 'x
+     *                y'             - to shoot on the field (x/y)
+     */
     public void analyzeMessage(String message) {
         Logger.info("Received message:\n" + message);
         String[] field = message.split(" ");
@@ -75,10 +125,16 @@ public class WuiController implements IObserver {
             shoot(field);
         } else {
             send(new InvalidMessage());
-            // TODO: evaluate maybe "getEntireUpdate"
         }
     }
 
+    /**
+     * Is used to process the saved instructions in the {@link
+     * WuiController#bufferedPlaceList}.
+     *
+     * @return true if a instruction was processed; false if the {@link
+     * WuiController#bufferedPlaceList} was empty
+     */
     private boolean processPlaceList() {
         if (bufferedPlaceList.isEmpty()) {
             return false;
@@ -89,9 +145,18 @@ public class WuiController implements IObserver {
         return true;
     }
 
+    /**
+     * To place a ship on the field (x/y) with the specified orientation. Only
+     * places a ship if it's the players turn. If it's not the players turn the
+     * instruction is buffered in the {@link WuiController#bufferedPlaceList}.
+     *
+     * @param field the instruction as string field: "['x', 'y',
+     *              'orientation']"
+     */
     private void placeShip(String[] field) {
         if (firstPlayer && masterController.getCurrentState() == State.PLACE1 ||
-            !firstPlayer && masterController.getCurrentState() == State.PLACE2) {
+            !firstPlayer &&
+            masterController.getCurrentState() == State.PLACE2) {
             try {
                 addShip.acquire();
                 masterController.placeShip(Integer.parseInt(field[0]),
@@ -107,9 +172,15 @@ public class WuiController implements IObserver {
         }
     }
 
+    /**
+     * Used to shoot on the field (x/y).
+     *
+     * @param field the instruction as string field: "['x', 'y']"
+     */
     private void shoot(String[] field) {
         if (firstPlayer && masterController.getCurrentState() == State.SHOOT1 ||
-            !firstPlayer && masterController.getCurrentState() == State.SHOOT2) {
+            !firstPlayer &&
+            masterController.getCurrentState() == State.SHOOT2) {
             masterController
                 .shoot(Integer.parseInt(field[0]), Integer.parseInt(field[1]));
         }
@@ -304,6 +375,10 @@ public class WuiController implements IObserver {
         aliveSender.setDone();
     }
 
+    /**
+     * If the other player has closed his socket this sends a {@link WinMessage}
+     * to the player, if it doesn't happened already.
+     */
     public void closedSocket() {
         this.aliveSender.setDone();
         if (masterController.getCurrentState() != State.END) {

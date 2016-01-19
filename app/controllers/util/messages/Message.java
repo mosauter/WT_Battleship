@@ -1,4 +1,4 @@
-package controllers.util;
+package controllers.util.messages;
 
 import com.google.gson.Gson;
 

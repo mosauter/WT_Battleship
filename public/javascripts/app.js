@@ -7,11 +7,11 @@ var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'assets/partials/index.html',
+            templateUrl: 'assets/partials/angular/index.html',
             controller: 'HomeCtrl'
         })
         .when('/battle', {
-            templateUrl: 'assets/partials/battle.html',
+            templateUrl: 'assets/partials/angular/battle.html',
             controller: 'BattleCtrl'
         })
         .otherwise({
