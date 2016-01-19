@@ -9,25 +9,28 @@
                 <h1> Google Sign in </h1>
                 <br>
                 <template id="awareness" is="dom-bind">
-
-                    <p>Test normal sign in and sign out with this button:</p>
-                    <google-signin brand="google-plus" client-id="188113288901-8frgm8jcejcq6t0imu2laingj161p9qv.apps.googleusercontent.com"></google-signin>
-                    </p>
-                    <p>Test sign in, sign out with disconnection with this button:</p>
-                    <google-signin on-click="disconnect"></google-signin>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>(Test normal sign in and sign out with this button:)</p>
+                            <google-signin brand="google-plus" client-id="188113288901-8frgm8jcejcq6t0imu2laingj161p9qv.apps.googleusercontent.com"></google-signin>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>(Test sign in, sign out with disconnection with this button:)</p>
+                            <google-signin on-click="disconnect"></google-signin>
+                        </div>
+                    </div>
+                    <br>
                     <br>
                     <br>
                     <google-signin-aware
                             scopes="{{scope}}"
                             signed-in="{{signedIn}}"
-                            offline="{{offline}}"
-                            is-authorized="{{isAuthorized}}"
-                            need-additional-auth="{{needAdditionalAuth}}"
                             on-google-signin-aware-success="handleSignIn"
                             on-google-signin-aware-signed-out="handleSignOut"></google-signin-aware>
                     <!--<p>User name: <span>{{userName}}</span></p>-->
-                    <h4><span>{{hello}}</span></h4>
                     <h4>Your current login status with google sign in is <span>{{status}}</span>.</h4>
+                    <h4 class="lightBlue"><span>{{hello}}</span></h4>
                     <p></p>
 
                 </template>
