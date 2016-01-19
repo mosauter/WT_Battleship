@@ -19,20 +19,7 @@
             <p>For example, here is a signin-aware scope. You can change its scopes via popup</p>
             <template id="awareness" is="dom-bind">
                 <div><code>&lt;google-signin-aware
-                    <div>scope=
-                        <select value="{{scope::change}}">
-                            <option value="">None</option>
-                            <option value="https://www.googleapis.com/auth/analytics">Google Analytics</option>
-                            <option value="https://www.googleapis.com/auth/plus.login">Google Plus view circles</option>
-                            <option value="https://www.googleapis.com/auth/youtube">YouTube</option>
-                            <option value="https://www.googleapis.com/auth/calendar">Calendar</option>
-                            <option value="profile">Profile info</option>
-                        </select>
-                    </div>
-                    <div>offline=<input type="checkbox" checked="{{offline::change}}"></div>
-                    <div>signedIn="<span>{{signedIn}}</span>"</div>
-                    <div>isAuthorized="<span>{{isAuthorized}}</span>"</div>
-                    <div>needAdditionalAuth:"<span>{{needAdditionalAuth}}</span>"&gt;</div>
+                    
                 </code></div>
                 <p>Every new scope you select will be added to requested scopes.</p>
                 <p>When you select a Google Plus scope, button will turn red.</p>
