@@ -8,22 +8,10 @@
         <div class="page-header">
             <h1> Google Sign in </h1>
 
-            <p><google-signin brand="google-plus" client-id="188113288901-8frgm8jcejcq6t0imu2laingj161p9qv.apps.googleusercontent.com"></google-signin>
+            <!--<p><google-signin ></google-signin>-->
 
-
-            <!-- Demo the ability to use the google-signin-aware element. -->
-            <p><code>&lt;google-signin-aware&gt;</code> is a companion element.</p>
-            <p>You can use it inside your components to request additional scopes.</p>
-            <p>Every signin button will request all the scopes present in the document,
-                and change its appearance to match</p>
-            <p>For example, here is a signin-aware scope. You can change its scopes via popup</p>
             <template id="awareness" is="dom-bind">
-                <div><code>&lt;google-signin-aware
-                    
-                </code></div>
-                <p>Every new scope you select will be added to requested scopes.</p>
-                <p>When you select a Google Plus scope, button will turn red.</p>
-                <google-signin></google-signin>
+                <google-signin brand="google-plus" client-id="188113288901-8frgm8jcejcq6t0imu2laingj161p9qv.apps.googleusercontent.com"></google-signin>
                 </p>
                 <google-signin-aware
                         scopes="{{scope}}"
@@ -34,32 +22,36 @@
                         on-google-signin-aware-success="handleSignIn"
                         on-google-signin-offline-success="handleOffline"
                         on-google-signin-aware-signed-out="handleSignOut"></google-signin-aware>
-                <p>User name:<span>{{userName}}</span></p>
-                <p>Testing <code>google-signin-aware</code> events: <span>{{status}}</span></p>
-                <p>Testing <code>google-signin-offline</code> events: <span>{{offlineCode}}</span></p>
-                <p><button on-click="disconnect">Disconnect to start over</button></p>
+                <p>User name: <span>{{userName}}</span></p>
+                <p><span>{{hello}}</span></p>
+                <p>Your login status with google sign in is <span>{{status}}</span> </p>
+                <p></p>
+                <!--<p><button on-click="disconnect">Disconnect to start over</button></p>-->
             </template>
             <script>
     var aware = document.querySelector('#awareness');
-    aware.status = 'Not granted';
+    aware.status = '"not granted"';
     aware.offlineCode = 'No offline login.';
-    aware.userName = 'N/A';
+    aware.userName = 'Please log in!';
     aware.handleSignIn = function(response) {
-      this.status = 'Signin granted';
+      this.status = '"signin granted"';
       // console.log('[Aware] Signin Response', response);
       this.userName = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
+      this.hello = "Hello " + gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName() +"! How are you doing?";
     };
     aware.handleOffline = function(response) {
       this.offlineCode = response.detail.code;
     };
     aware.handleSignOut = function(response) {
-      this.status = 'Signed out';
+      this.status = '"signed out"';
       // console.log('[Aware] Signout Response', response);
-      this.userName = 'N/A';
+      this.userName = 'Not logged in anymore!';
+      this.hello = '';
     };
     aware.disconnect = function() {
       var b = document.querySelector('google-signin');
       var currentUser = gapi.auth2.getAuthInstance().currentUser.get();
+
       if (currentUser) {
         currentUser.disconnect();
       }
