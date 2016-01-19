@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "google-map": "GoogleWebComponents/google-map#~1.1.8"
+    "google-map": "GoogleWebComponents/google-map#~1.1.8",
+    "google-hangout-button": "GoogleWebComponents/google-hangout-button#~1.0.1"
   }
 }
