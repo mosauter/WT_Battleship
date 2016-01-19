@@ -1,0 +1,41 @@
+<dom-module id="content-block">
+
+    <template>
+        <div class="col-sm-4">
+            <a href="{{link}}" class="thumbnail">
+                <img src="{{image}}" alt="{{imageAlt}}"/>
+            </a>
+
+            <h3>{{heading}}</h3>
+
+            <p>{{teaser}}</p>
+            <a href="{{link}}" class="btn btn-info">{{heading}}</a>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: "content-block",
+            properties: {
+                link: {
+                    type: String,
+                    value: "/home"
+                },
+                image: {
+                    type: String
+                },
+                imageAlt: {
+                    type: String
+                },
+                heading: {
+                    type: String
+                },
+                teaser: {
+                    type: String
+                }
+
+            }
+        });
+    </script>
+
+</dom-module>

@@ -1,103 +1,85 @@
 @(username: String)
 
-    @main("Battleship")(username) {
-        <script>
-                $(function () {
-                    $('.carousel').carousel({
-                        //interval: 5000 // for development needs...
-                        interval: 20000
-                    });
+@main("Battleship")(username) {
+    <script>
+            $(function () {
+                $('.carousel').carousel({
+                    //interval: 5000 // for development needs...
+                    interval: 20000
                 });
-        </script>
+            });
+    </script>
 
-        <div id="bg-fade-carousel" class="carousel slide carousel-fade" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="item active">
-                    <div class="slide1"></div>
-                </div>
-                <div class="item">
-                    <div class="slide2"></div>
-                </div>
-                <div class="item">
-                    <div class="slide3"></div>
-                </div>
+    <div id="bg-fade-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="slide1"></div>
+            </div>
+            <div class="item">
+                <div class="slide2"></div>
+            </div>
+            <div class="item">
+                <div class="slide3"></div>
             </div>
         </div>
+    </div>
 
-        <div class="container">
-            <br> <br> <br> <br>
+    <div class="container">
+        <br> <br> <br> <br>
 
-            <div class="jumbotron text-center">
-                <h1>Welcome to Battleship!</h1>
+        <div class="jumbotron text-center">
+            <h1>Welcome to Battleship!</h1>
 
-                <p>This is an awesome game!</p>
-                <a href="/home" class="btn btn-main">About us</a>
-                <a href="/game" class="btn btn-play">Play</a>
-                <a href="/game" class="btn btn-warning">Donate :)</a>
-            </div>
-
-            <div class="row" id="thumbnails">
-                <div class="col-sm-4 wh">
-                    <a href="/game" class="thumbnail">
-                        <img src="/assets/images/shipImage.jpg" alt="ship" />
-                    </a>
-
-                    <h3>About us.</h3>
-
-                    <p> We guys are awesome. Learn more about us.</p>
-                    <a href="/game" class="btn btn-info">About us</a>
-                </div>
-
-                <div class="col-sm-4">
-                    <a href="/game" class="thumbnail">
-                        <img src="/assets/images/shipImage2.jpg" alt="ship" />
-                    </a>
-
-                    <h3>Instructions/Play</h3>
-
-                    <p> How to play the game.</p>
-                    <a href="/game" class="btn btn-info">Instructions</a>
-                </div>
-
-                <div class="col-sm-4">
-                    <a href="/game" class="thumbnail">
-                        <img src="/assets/images/shipImage3.jpg" alt="ship" />
-                    </a>
-
-                    <h3>Preview</h3>
-
-                    <p> Do you want to know what the game is like?</p>
-                    <a href="/game" class="btn btn-info">Preview</a>
-                </div>
-            </div>
-
+            <p>This is an awesome game!</p>
+            <a href="/home" class="btn btn-main">About us</a>
+            <a href="/game" class="btn btn-play">Play</a>
+            <a href="/game" class="btn btn-warning">Donate :)</a>
         </div>
-        <div class="container well top-buffer">
-            <h3>About this site:</h3>
 
-            <p> This site is built with bootstrap and contains:</p>
-            <li class="dropup">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    Features <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">menu</a></li>
-                    <li><a href="#">footer</a></li>
-                    <li><a href="#">thumbnails</a></li>
-                    <li><a href="#">bootstrap grid layout</a></li>
-                    <li><a href="#">font awesome symbols</a></li>
-                    <li><a href="#">google fonts: open sans</a></li>
-                    <li><a href="#">google fonts: oswald</a></li>
-                    <li><a href="#">hovers</a></li>
-                    <li><a href="#">focus</a></li>
-                    <li><a href="#">image transition effects</a></li>
-                    <li><a href="#">linked pages</a></li>
-                    <li><a href="#">responsiveness</a></li>
-                    <li><a href="#">auto form highlight</a></li>
-                    <li><a href="#">auto form highlight</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">and much more!</a></li>
-                </ul>
-            </li>
+        <div class="row" id="thumbnails">
+            <content-block link="/about" image="/assets/images/shipImage.jpg"
+            imageAlt="ship" heading="About us"
+            teaser="Learn more about the game and its developers.">
+            </content-block>
+
+            <content-block link="/game" image="/assets/images/shipImage2.jpg"
+            imageAlt="ship" heading="Play"
+            teaser="Play the game.">
+            </content-block>
+
+            <content-block link="/instructions" image="/assets/images/shipImage3.jpg"
+            imageAlt="ship" heading="Instructions"
+            teaser="Learn how to play and the rules of our realisation of Battleship.">
+            </content-block>
         </div>
-    }
+
+    </div>
+    <div class="container well top-buffer">
+        <h3>About this site:</h3>
+
+        <p> This site is built with bootstrap and contains:</p>
+        <li class="dropup">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Features <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="#">menu</a></li>
+                <li><a href="#">footer</a></li>
+                <li><a href="#">thumbnails</a></li>
+                <li><a href="#">bootstrap grid layout</a></li>
+                <li><a href="#">font awesome symbols</a></li>
+                <li><a href="#">google fonts: open sans</a></li>
+                <li><a href="#">google fonts: oswald</a></li>
+                <li><a href="#">hovers</a></li>
+                <li><a href="#">focus</a></li>
+                <li><a href="#">image transition effects</a></li>
+                <li><a href="#">linked pages</a></li>
+                <li><a href="#">responsiveness</a></li>
+                <li><a href="#">auto form highlight</a></li>
+                <li><a href="#">auto form highlight</a></li>
+                <li class="divider"></li>
+                <li><a href="#">and much more!</a></li>
+            </ul>
+        </li>
+    </div>
+}
