@@ -24,6 +24,10 @@ public class Application extends Controller {
         return ok(home.render("Login"));
     }
 
+    public Result aboutWithoutLogin() {
+        return ok(about.render("Login"));
+    }
+
     public Result game(String username) {
         return ok(game.render(username));
     }

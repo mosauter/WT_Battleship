@@ -1,40 +1,19 @@
 @(username: String)
 
 @main("Battleship")(username) {
+
+
 <div id="game-body" ng-app="battleship">
     <div class="container">
         <div class="page-header">
             <h1> About us. </h1>
-        </div>
-        <div class="col-sm-12">
-            <p>
-                Instead of the following picture, you should see the Game Gui here later or at least a form for typing in
-                the name of the two players. and buttons to enter.
-            </p>
-        </div>
+            <google-map latitude="37.77493" longitude="-122.41942"></google-map>
 
-        <div class="col-sm-12 clearfix" ng-view></div>
-    </div>
-    <div class="modal fade" id="instructions-pop-up" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>Game instructions for battlefield</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Here is how you play the game:</p>
-                    <ul>
-                        <li>first type in the names</li>
-                        <li>place ship</li>
-                        <li>chose fields to shoot etc.</li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-default" data-dismiss="modal">
-                        Close</a>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>
 }
+
+
+
