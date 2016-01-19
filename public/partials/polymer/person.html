@@ -1,0 +1,51 @@
+<dom-module id="person">
+
+    <template>
+        <div class="jumbotron">
+            <div class="col-xs-3">
+                <img src="https://avatars0.githubusercontent.com/u/{{profileId}}?v=3&s=460" />
+            </div>
+            <div class="col-xs-9">
+                <div class="row">
+                    <label for="name">Name:</label>
+                    <p name="name">{{name}}</p>
+                </div>
+                <div class="row">
+                    <label for="github">Github:</label>
+                    <a href="https://www.github.com/{{profileName}}" name="github">{{profileName}}</a>
+                </div>
+                <div class="row">
+                    <label for="age">Age:</label>
+                    <p name="age">{{age}}</p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: "person",
+            properties: {
+                name: {
+                    type: String
+                },
+                profileId: {
+                    type: Number
+                },
+                profileName: {
+                    type: String
+                },
+                age: {
+                    type: Number
+                },
+                hobbys: {
+                    type: String
+                },
+                projects: {
+                    type: String
+                }
+            }
+        });
+    </script>
+
+</dom-module>
