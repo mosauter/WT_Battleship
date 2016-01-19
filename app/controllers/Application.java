@@ -8,6 +8,7 @@ import play.mvc.Result;
 import play.mvc.WebSocket;
 import views.html.game;
 import views.html.home;
+import views.html.about;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,10 @@ public class Application extends Controller {
 
     public Result game(String username) {
         return ok(game.render(username));
+    }
+
+    public Result about(String username) {
+        return ok(about.render(username));
     }
 
     public WebSocket<String> socket(String login) {

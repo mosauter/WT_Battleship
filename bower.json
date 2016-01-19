@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.0"
+    "polymer": "Polymer/polymer#^1.2.0",
+    "google-map": "GoogleWebComponents/google-map#~1.1.8"
   }
 }
