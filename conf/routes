@@ -8,7 +8,7 @@ GET         /                        @controllers.Application.home()
 GET         /home                    @controllers.Application.home()
 
 # About page
-GET         /about                   @controllers.Auth.about()
+GET         /about                   @controllers.Application.aboutWithoutLogin()
 
 # Page where the game takes place (first as single page app)
 GET         /game                    @controllers.Auth.game()
