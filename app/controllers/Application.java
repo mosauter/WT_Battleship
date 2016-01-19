@@ -9,6 +9,7 @@ import play.mvc.WebSocket;
 import views.html.game;
 import views.html.home;
 import views.html.about;
+import views.html.googlePage;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +35,11 @@ public class Application extends Controller {
 
     public Result about(String username) {
         return ok(about.render(username));
+    }
+
+    //no "Login" will appear in navbar
+    public Result googlePage() {
+        return ok(googlePage.render(" "));
     }
 
     public WebSocket<String> socket(String login) {

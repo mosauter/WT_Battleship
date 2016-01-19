@@ -10,6 +10,9 @@ GET         /home                    @controllers.Application.home()
 # About page
 GET         /about                   @controllers.Application.aboutWithoutLogin()
 
+#Google Demo page
+GET         /googlePage              @controllers.Application.googlePage()
+
 # Page where the game takes place (first as single page app)
 GET         /game                    @controllers.Auth.game()
 GET         /gol                     @controllers.Application.game(login: String = "DUMM 01")
