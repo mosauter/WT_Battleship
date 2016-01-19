@@ -5,14 +5,17 @@
     <div id="game-body" ng-app="battleship">
         <div class="container">
             <div class="page-header">
+
                 <h1> Google Sign in </h1>
                 <br>
                 <template id="awareness" is="dom-bind">
 
+                    <p>Test normal sign in and sign out with this button:</p>
                     <google-signin brand="google-plus" client-id="188113288901-8frgm8jcejcq6t0imu2laingj161p9qv.apps.googleusercontent.com"></google-signin>
                     </p>
                     <p>Test sign in, sign out with disconnection with this button:</p>
                     <google-signin on-click="disconnect"></google-signin>
+                    <br>
                     <br>
                     <google-signin-aware
                             scopes="{{scope}}"
@@ -23,11 +26,9 @@
                             on-google-signin-aware-success="handleSignIn"
                             on-google-signin-aware-signed-out="handleSignOut"></google-signin-aware>
                     <!--<p>User name: <span>{{userName}}</span></p>-->
-                    <p><span>{{hello}}</span></p>
-                    <p>Your current login status with google sign in is <span>{{status}}</span>.</p>
+                    <h4><span>{{hello}}</span></h4>
+                    <h4>Your current login status with google sign in is <span>{{status}}</span>.</h4>
                     <p></p>
-
-                    <img on-click="disconnect" class="thumbnail imagesizeLogin" src="/assets/images/google_icon.png" alt="google icon">
 
                 </template>
 
