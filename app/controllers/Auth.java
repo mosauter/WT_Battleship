@@ -10,7 +10,7 @@ import views.html.login;
 
 public class Auth extends UserProfileController<CommonProfile> {
 
-    public Result index() throws Exception {
+    public Result index() {
         return ok(login.render(getCurrentUsername()));
     }
 
