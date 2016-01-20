@@ -11,7 +11,7 @@ import views.html.login;
 public class Auth extends UserProfileController<CommonProfile> {
 
     public Result index() throws Exception {
-        return ok(login.render());
+        return ok(login.render(getCurrentUsername()));
     }
 
     public String getCurrentUsername() {
