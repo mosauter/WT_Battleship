@@ -6,10 +6,8 @@
 
 GET         /                        @controllers.Application.home()
 GET         /home                    @controllers.Application.home()
-GET         /about                   @controllers.Application.about()
-
 # About page
-GET         /about                   @controllers.Application.aboutWithoutLogin()
+GET         /about                   @controllers.Application.about()
 
 #Google Demo page
 GET         /googlePage              @controllers.Application.googlePage()
@@ -32,6 +30,4 @@ GET         /login                   controllers.Auth.index()
 
 GET         /callback                @org.pac4j.play.CallbackController.callback()
 POST        /callback                @org.pac4j.play.CallbackController.callback()
-GET         /casProxyCallback        @org.pac4j.play.CallbackController.callback()
-POST        /casProxyCallback        @org.pac4j.play.CallbackController.callback()
 GET         /logout                  @org.pac4j.play.ApplicationLogoutController.logout()
