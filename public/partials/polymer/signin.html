@@ -1,0 +1,63 @@
+<dom-module id="signin-button">
+
+    <style>
+        .signin-button-link {
+            text-decoration: none;
+            padding: 10px 15px;
+            color: #FFFFFF;
+            line-height: 20px;
+            position: relative;
+            display: block;
+            background-color: transparent;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .signin-button-link:hover {
+            color: #18BC9C;
+        }
+
+        @media (min-width: 768px) {
+            .signin-button-link {
+                padding: 15px 15px;
+            }
+        }
+    </style>
+    <template>
+        <a class="signin-button-link" href="{{link}}">{{text}}</a>
+    </template>
+
+    <script>
+        Polymer({
+            is: "signin-button",
+            properties: {
+                text: {
+                    type: String,
+                    computed: "calculateText(username)"
+                },
+                username: {
+                    type: String,
+                    value: ""
+                },
+                link: {
+                    type: String,
+                    computed: "calculateLink(text)"
+                }
+            },
+            calculateLink: function (text) {
+                if (text === "Login") {
+                    return "/auth" + window.location.pathname.replace("/logout", "");
+                }
+                return "/logout?url=" + window.location.pathname.replace("/auth", "");
+            },
+            calculateText: function (username) {
+                if (username === "") {
+                    return "Login";
+                }
+                return username;
+            }
+        });
+    </script>
+
+</dom-module>

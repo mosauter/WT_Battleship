@@ -4,30 +4,30 @@
 
 # Home page
 
-GET         /                        @controllers.Application.home()
-GET         /home                    @controllers.Application.home()
+GET         /                          @controllers.Auth.home()
+GET         /home                      @controllers.Auth.home()
 # About page
-GET         /about                   @controllers.Application.about()
+GET         /about                     @controllers.Auth.about()
 
-#Google Demo page
-GET         /googlePage              @controllers.Application.googlePage()
+# log in and redirect on a specified page
+GET         /auth/:redirectPage        @controllers.Auth.authenticate(redirectPage: String)
+
+# Google login Demo page
+GET         /googlePage                @controllers.Application.googlePage()
 
 # Page where the game takes place (first as single page app)
-GET         /game                    @controllers.Auth.game()
-GET         /gol                     @controllers.Application.game(login: String = "DUMM 01")
+GET         /game                      @controllers.Auth.game()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file            controllers.Assets.versioned(path="/public", file: Asset)
-GET         /bower/*file             controllers.Assets.versioned(path="/public/bower", file: Asset)
+GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
+GET         /bower/*file               controllers.Assets.versioned(path="/public/bower", file: Asset)
 
 # method to get a socket which is bound to a specific instance of a game, when you are authenticated
-GET         /socket                  controllers.Auth.socketAuth()
-# method for development needs if you want a socket without a login
-GET         /sol                     @controllers.Application.socket(login: String = "dummyName")
+GET         /socket                    controllers.Auth.socketAuth()
 
 # authentication methods
-GET         /login                   controllers.Auth.index()
+GET         /login                     controllers.Auth.index()
 
-GET         /callback                @org.pac4j.play.CallbackController.callback()
-POST        /callback                @org.pac4j.play.CallbackController.callback()
-GET         /logout                  @org.pac4j.play.ApplicationLogoutController.logout()
+GET         /callback                  @org.pac4j.play.CallbackController.callback()
+POST        /callback                  @org.pac4j.play.CallbackController.callback()
+GET         /logout                    @org.pac4j.play.ApplicationLogoutController.logout()

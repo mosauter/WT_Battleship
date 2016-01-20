@@ -1,6 +1,7 @@
 package controllers;
 
 import org.pac4j.core.profile.CommonProfile;
+import org.pac4j.play.ApplicationLogoutController;
 import org.pac4j.play.java.RequiresAuthentication;
 import org.pac4j.play.java.UserProfileController;
 import play.mvc.Result;
@@ -14,8 +15,13 @@ public class Auth extends UserProfileController<CommonProfile> {
     }
 
     public String getCurrentUsername() {
-        final CommonProfile profile = getUserProfile();
-        return (String) profile.getAttribute("name");
+        try {
+            final CommonProfile profile = getUserProfile();
+            return (String) profile.getAttribute("name");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @RequiresAuthentication(clientName = "OidcClient")
@@ -24,15 +30,32 @@ public class Auth extends UserProfileController<CommonProfile> {
         return app.game(this.getCurrentUsername());
     }
 
-
     public Result about() {
         Application app = new Application();
         return app.about(this.getCurrentUsername());
+    }
+
+    public Result home() {
+        Application app = new Application();
+        return app.home(this.getCurrentUsername());
+    }
+
+    @RequiresAuthentication(clientName = "OidcClient")
+    public Result authenticate(String redirectUrl) {
+        System.out.println("Redirecting to: " + redirectUrl);
+        return redirect("/" + redirectUrl);
     }
 
     @RequiresAuthentication(clientName = "OidcClient")
     public WebSocket<String> socketAuth() {
         Application app = new Application();
         return app.socket(this.getCurrentUsername());
+    }
+
+    @RequiresAuthentication(clientName = "OidcClient")
+    public Result logout(String redirectUrl) {
+        ApplicationLogoutController applicationLogoutController = new ApplicationLogoutController();
+        applicationLogoutController.logout();
+        return redirect("/" + redirectUrl);
     }
 }

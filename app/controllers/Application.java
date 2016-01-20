@@ -8,9 +8,8 @@ import play.mvc.Result;
 import play.mvc.WebSocket;
 import views.html.about;
 import views.html.game;
-import views.html.home;
-import views.html.about;
 import views.html.googlePage;
+import views.html.home;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +21,8 @@ public class Application extends Controller {
      */
     private static final List<GameInstance> onePlayer = new LinkedList<>();
 
-    public Result home() {
-        return ok(home.render("Login"));
-    }
-
-    public Result about() {
-        return ok(about.render("Login"));
+    public Result home(String username) {
+        return ok(home.render(username));
     }
 
     public Result game(String username) {
@@ -38,7 +33,6 @@ public class Application extends Controller {
         return ok(about.render(username));
     }
 
-    //no "Login" will appear in navbar
     public Result googlePage() {
         return ok(googlePage.render(" "));
     }
