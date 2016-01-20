@@ -24,6 +24,12 @@ public class Auth extends UserProfileController<CommonProfile> {
         return app.game(this.getCurrentUsername());
     }
 
+
+    public Result about() {
+        Application app = new Application();
+        return app.about(this.getCurrentUsername());
+    }
+
     @RequiresAuthentication(clientName = "OidcClient")
     public WebSocket<String> socketAuth() {
         Application app = new Application();
