@@ -13,6 +13,8 @@ GET         /instructions              @controllers.Auth.instructions()
 
 # log in and redirect on a specified page
 GET         /auth/:redirectPage        @controllers.Auth.authenticate(redirectPage: String)
+GET         /auth                      @controllers.Auth.authenticate(redirectPage: String = "home")
+GET         /auth/                     @controllers.Auth.authenticate(redirectPage: String = "home")
 
 # Google login Demo page
 GET         /googlePage                @controllers.Application.googlePage()

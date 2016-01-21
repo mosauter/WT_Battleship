@@ -27,11 +27,11 @@ public class ErrorHandler extends DefaultHttpErrorHandler {
 
     protected Promise<Result> onDevServerError(RequestHeader var1,
                                                UsefulException var2) {
-        return Promise.<Result>pure(Results.status(500, home.render("Login")));
+        return Promise.<Result>pure(Results.status(500, home.render("")));
     }
 
     protected Promise<Result> onProdServerError(RequestHeader var1,
                                                 UsefulException var2) {
-        return Promise.<Result>pure(Results.status(500, home.render("Login")));
+        return Promise.<Result>pure(Results.status(500, home.render("")));
     }
 }
