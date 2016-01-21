@@ -134,8 +134,8 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
             case messageType.PLACEERR:
                 $scope.sendNext = msg.errShipLength;
                 alert("You can't place ship with length " + msg.errShipLength +
-                    " on x:" + $scope.ships['' + msg.errShipLength]['x'] +
-                    " y:" + $scope.alphabet[$scope.ships['' + msg.errShipLength]['y']]);
+                    " on x: " + ($scope.ships['' + msg.errShipLength]['x'] + 1) +
+                    " y: " + $scope.alphabet[$scope.ships['' + msg.errShipLength]['y']]);
                 $scope.removeShip('' + msg.errShipLength);
                 var newShips = {};
                 for (var i = msg.errShipLength; i < 7; i++) {

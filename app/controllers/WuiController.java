@@ -242,7 +242,7 @@ public class WuiController implements IObserver {
     private void checkFirst() {
         Message msg = null;
         State currentState = masterController.getCurrentState();
-        switch (masterController.getCurrentState()) {
+        switch (currentState) {
             case GETNAME2:
                 msg = createWaitMessage();
                 // if this is the second player
@@ -255,7 +255,7 @@ public class WuiController implements IObserver {
                     return;
                 }
             case FINALPLACE1:
-                this.placeOneFinished = true;
+                this.placeOneFinished = currentState == State.FINALPLACE1;
                 Map<Integer, Set<Integer>> shipMap =
                     getShipMap(masterController.getPlayer1());
                 msg = new PlaceMessage(currentState, shipMap);
@@ -265,7 +265,8 @@ public class WuiController implements IObserver {
                 msg = createWaitMessage();
                 break;
             case PLACEERR:
-                System.out.println("Get Place error " + firstPlayer + " and  finished = " + placeOneFinished);
+                System.out.println("-- -- -- CHECK FIRST -- -- -- --> firstPlayer = true");
+                System.out.println("Get Place error firstPlayer " + firstPlayer + " and  finished = " + placeOneFinished);
                 if (!placeOneFinished) {
                     msg = new PlaceErrorMessage(
                         masterController.getPlayer1().getOwnBoard().getShips() +
@@ -311,6 +312,7 @@ public class WuiController implements IObserver {
             // PLACING SHIPS
             case PLACE1:
             case FINALPLACE1:
+                this.placeOneFinished = currentState == State.FINALPLACE1;
                 msg = createWaitMessage();
                 break;
             case PLACE2:
