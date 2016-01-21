@@ -1,7 +1,6 @@
 package controllers;
 
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.play.ApplicationLogoutController;
 import org.pac4j.play.java.RequiresAuthentication;
 import org.pac4j.play.java.UserProfileController;
 import play.mvc.Result;
@@ -55,12 +54,5 @@ public class Auth extends UserProfileController<CommonProfile> {
     public WebSocket<String> socketAuth() {
         Application app = new Application();
         return app.socket(this.getCurrentUsername());
-    }
-
-    @RequiresAuthentication(clientName = "OidcClient")
-    public Result logout(String redirectUrl) {
-        ApplicationLogoutController applicationLogoutController = new ApplicationLogoutController();
-        applicationLogoutController.logout();
-        return redirect("/" + redirectUrl);
     }
 }

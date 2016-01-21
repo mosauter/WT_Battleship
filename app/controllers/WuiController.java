@@ -265,6 +265,7 @@ public class WuiController implements IObserver {
                 msg = createWaitMessage();
                 break;
             case PLACEERR:
+                System.out.println("Get Place error " + firstPlayer + " and  finished = " + placeOneFinished);
                 if (!placeOneFinished) {
                     msg = new PlaceErrorMessage(
                         masterController.getPlayer1().getOwnBoard().getShips() +
@@ -322,6 +323,7 @@ public class WuiController implements IObserver {
                 msg = new PlaceMessage(currentState, shipMap);
                 break;
             case PLACEERR:
+                System.out.println("Get Place error " + firstPlayer + " and  finished = " + placeOneFinished);
                 if (placeOneFinished) {
                     // minimum in PLACE2
                     msg = new PlaceErrorMessage(
