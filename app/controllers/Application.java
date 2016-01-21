@@ -10,6 +10,7 @@ import views.html.about;
 import views.html.game;
 import views.html.googlePage;
 import views.html.home;
+import views.html.instructions;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +32,10 @@ public class Application extends Controller {
 
     public Result about(String username) {
         return ok(about.render(username));
+    }
+
+    public Result instructions(String username) {
+        return ok(instructions.render(username));
     }
 
     public Result googlePage() {

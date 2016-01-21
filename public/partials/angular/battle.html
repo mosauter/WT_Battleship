@@ -64,9 +64,7 @@
 				<td colspan="2">{{key}}</td>
 				<td colspan="2">{{value.isPlaced ? (value.orientation ? 'horizontal' : 'vertical') : 'not set'}}</td>
 				<td class="placeMenuPadding">
-					<button class="btn btn-warning" ng-click="switchOrientation(key)" ng-if="value.isPlaced">
-						{{value.orientation ? 'Change to vertical' : 'Change to horizontal'}}
-					</button>
+					<button class="btn btn-warning" ng-click="switchOrientation(key)" ng-if="value.isPlaced">Rotate</button>
 					<button class="btn btn-danger" ng-click="removeShip(key)" ng-if="value.isPlaced">Remove</button>
 					<button class="btn btn-primary" ng-click="placeShip(key)" ng-if="!value.isPlaced">Place</button>
 				</td>

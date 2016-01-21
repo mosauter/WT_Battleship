@@ -40,6 +40,11 @@ public class Auth extends UserProfileController<CommonProfile> {
         return app.home(this.getCurrentUsername());
     }
 
+    public Result instructions(){
+        Application app = new Application();
+        return app.instructions(this.getCurrentUsername());
+    }
+
     @RequiresAuthentication(clientName = "OidcClient")
     public Result authenticate(String redirectUrl) {
         System.out.println("Redirecting to: " + redirectUrl);
