@@ -340,4 +340,10 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
         }
     };
 
+    angular.element(window).on("beforeunload", function() {
+        if(!$scope.end){
+            return "If you leave this page now, you will loose this game!";
+        }
+    });
+
 }]);
