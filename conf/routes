@@ -35,3 +35,7 @@ GET         /login                     controllers.Auth.index()
 GET         /callback                  @org.pac4j.play.CallbackController.callback()
 POST        /callback                  @org.pac4j.play.CallbackController.callback()
 GET         /logout                    @org.pac4j.play.ApplicationLogoutController.logout()
+
+
+# Presentation slides
+GET         /presentation              @controllers.Application.presentation()
