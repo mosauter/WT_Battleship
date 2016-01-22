@@ -7,10 +7,6 @@ var app = angular.module('battleship', ['ngRoute', 'ngWebSocket']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'assets/partials/angular/index.html',
-            controller: 'HomeCtrl'
-        })
-        .when('/battle', {
             templateUrl: 'assets/partials/angular/battle.html',
             controller: 'BattleCtrl'
         })
@@ -28,12 +24,6 @@ app.filter('range', function () {
         return input;
     };
 });
-
-app.controller('HomeCtrl', ['$scope', '$location', function ($scope, $location) {
-    $scope.fight = function () {
-        $location.path('/battle');
-    };
-}]);
 
 function getSocketAddress() {
     var socketAddress = window.location.origin.replace("http", "ws");
@@ -76,24 +66,6 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
         '5': {'isPlaced': false},
         '6': {'isPlaced': false}
     };
-
-    // ALL SHIPS HORIZONTAL
-    /*$scope.ships = {
-     '2': {'x': 0, 'y': 0, 'orientation': true, 'isPlaced': true},
-     '3': {'x': 0, 'y': 1, 'orientation': true, 'isPlaced': true},
-     '4': {'x': 0, 'y': 2, 'orientation': true, 'isPlaced': true},
-     '5': {'x': 0, 'y': 3, 'orientation': true, 'isPlaced': true},
-     '6': {'x': 0, 'y': 4, 'orientation': true, 'isPlaced': true}
-     };*/
-
-    // ALL SHIPS VERTICAL
-    /*$scope.ships = {
-     '2': {'x': 0, 'y': 0, 'orientation': false, 'isPlaced': true},
-     '3': {'x': 1, 'y': 0, 'orientation': false, 'isPlaced': true},
-     '4': {'x': 2, 'y': 0, 'orientation': false, 'isPlaced': true},
-     '5': {'x': 3, 'y': 0, 'orientation': false, 'isPlaced': true},
-     '6': {'x': 4, 'y': 0, 'orientation': false, 'isPlaced': true}
-     };*/
 
     $scope.waiting = false;
     $scope.placing = true;
@@ -207,7 +179,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
     };
 
     $scope.goBack = function () {
-        $location.path('/');
+        window.location = window.location.origin;
     };
 
     $scope.initFields = function () {
