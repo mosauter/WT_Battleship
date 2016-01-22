@@ -1,0 +1,188 @@
+<dom-module id="instruction-modal">
+    <template>
+        <div class="modal fade" id="{{modalId}}" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>Instructions</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse"
+                                           data-parent="#accordion"
+                                           href="#collapse1">Placing Rules</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse1"
+                                     class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li>Place a ship by clicking the
+                                                place
+                                                button in the place menu.
+                                            </li>
+                                            <li>Type in your x value as number
+                                                between 1 and 10.
+                                            </li>
+                                            <li>Type in your y value as letter
+                                                between A and J.
+                                            </li>
+                                            <li>Your ship should be placed now.
+                                                If
+                                                not, your ship neither fits
+                                                horizontal nor vertical in your
+                                                coordinate system or ships are
+                                                overlapping.
+                                            </li>
+                                            <li>In this realization of
+                                                battleship,
+                                                ships can touch each other.
+                                            </li>
+                                            <li>After placing a ship you can
+                                                change
+                                                the rotation of a ship by
+                                                clicking
+                                                the rotate button. Of course you
+                                                can
+                                                just rotate if the ship doesn't
+                                                overlap another ship and if it
+                                                fits
+                                                in the coordinate system.
+                                            </li>
+                                            <li>If you want to you can click the
+                                                remove button to be able to set
+                                                the
+                                                ship again on a new position.
+                                            </li>
+                                            <li>When you're happy about your
+                                                placements, you have to click on
+                                                I
+                                                am Ready to continue.
+                                            </li>
+                                            <li>You will receive a message if
+                                                the
+                                                server rejects one of your
+                                                ships.
+                                                Then you have to place your ship
+                                                again. If one ship is missing in
+                                                the
+                                                place menu, it's already
+                                                confirmed
+                                                by the server and can't be
+                                                changed
+                                                anymore.
+                                            </li>
+                                        </ul>
+                                        <div class="col-sm-6">
+                                            <img src="/assets/images/placing_invalid.png"
+                                                 class="img-responsive"
+                                                 alt="Placing invalid"/>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <img src="/assets/images/placing_valid.png"
+                                                 class="img-responsive"
+                                                 alt="Placing valid"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse"
+                                           data-parent="#accordion"
+                                           href="#collapse2">Fighting Rules</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse2"
+                                     class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li>After both players are finished
+                                                with
+                                                placing their ships, the fight
+                                                will
+                                                start.
+                                            </li>
+                                            <li>You can shoot on your opponents
+                                                field by clicking an image in
+                                                your
+                                                coordinate system, on which you
+                                                didn't shoot before.
+                                            </li>
+                                            <li>If you hit a ship of your
+                                                opponent
+                                                you can shoot again.
+                                            </li>
+                                            <li>If you miss, you have to wait
+                                                until
+                                                your opponent miss your ships.
+                                            </li>
+                                        </ul>
+                                        <div class="col-sm-12">
+                                            <img src="/assets/images/fighting.png"
+                                                 class="img-responsive"
+                                                 alt="Fighting"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse"
+                                           data-parent="#accordion"
+                                           href="#collapse3">End of game</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse3"
+                                     class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li>If one player leaves the game,
+                                                before someone has won, the
+                                                other
+                                                player will win automatically.
+                                            </li>
+                                            <li>The game ends, if one player has
+                                                hit
+                                                all ships of his opponent.
+                                            </li>
+                                            <li>You will receive a message and
+                                                you
+                                                will see where your opponent
+                                                placed
+                                                his ships.
+                                            </li>
+                                        </ul>
+                                        <div class="col-sm-12">
+                                            <img src="/assets/images/end.png"
+                                                 class="img-responsive"
+                                                 alt="End of game"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-play" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "instruction-modal",
+            properties: {
+                modalId: {
+                    type: String
+                }
+            }
+        });
+    </script>
+</dom-module>
