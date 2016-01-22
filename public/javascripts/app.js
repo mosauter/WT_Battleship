@@ -227,6 +227,10 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
             alert("You can't switch the orientation at this position!");
             return;
         }
+        if(!$scope.isMovePossible(ship, !$scope.ships[ship]['orientation'], $scope.ships[ship]['x'], $scope.ships[ship]['y'], true)){
+            alert("Ships mustn't overlap each other!");
+            return;
+        }
         $scope.toggleShipOnField($scope.ships[ship]['x'], $scope.ships[ship]['y'], parseInt(ship), 'x');
         $scope.ships[ship]['orientation'] = $scope.ships[ship]['orientation'] ? false : true;
         $scope.toggleShipOnField($scope.ships[ship]['x'], $scope.ships[ship]['y'], parseInt(ship), 's');
@@ -254,6 +258,18 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
             alert("Ship can't be placed horizontal or vertical");
             return;
         }
+        if(!$scope.isMovePossible(ship, orientation, x, y, false)){
+            if(!$scope.isMovePossible(ship, !orientation, x, y, false)){
+                alert("Ships mustn't overlap each other!");
+                return;
+            } else {
+                orientation = !orientation;
+                if((orientation && x + parseInt(ship) - 1 > 9) || (!orientation && y + parseInt(ship) - 1 > 9)){
+                    alert("Ship can't be placed horizontal or vertical");
+                    return;
+                }
+            }
+        }
 
         $scope.ships[ship] = {
             'x': x,
@@ -262,6 +278,17 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
             'isPlaced': true
         };
         $scope.toggleShipOnField(x, y, parseInt(ship), 's');
+    };
+
+    $scope.isMovePossible = function(ship, orientation, x, y, isSet){
+        for(var i = 0; i < parseInt(ship); i++){
+            if(isSet && i == 0){
+                continue;
+            } else if((orientation && $scope.field[x + i][y] == 's') || (!orientation && $scope.field[x][y + i] == 's')) {
+                return false;
+            }
+        }
+        return true;
     };
 
     $scope.toggleShipOnField = function (x, y, length, value) {
