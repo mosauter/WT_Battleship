@@ -1,6 +1,11 @@
 @(username: String)
 
     @main("Battleship")(username) {
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-route.min.js"></script>
+        <script src="https://cdn.rawgit.com/gdi2290/angular-websocket/v1.0.9/angular-websocket.min.js"></script>
+        <script src="/assets/javascripts/app.js"></script>
+    }{
         <div id="game-body" ng-app="battleship">
             <div class="container">
                 <div class="page-header">

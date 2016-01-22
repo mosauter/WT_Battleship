@@ -1,7 +1,9 @@
 @(username: String)
 
 @main("Battleship")(username) {
-
+    <link rel="import" href="/bower/google-hangout-button/google-hangout-button.html">
+    <link rel="import" href="/bower/google-signin/google-signin.html">
+}{
     <div id="game-body" ng-app="battleship">
         <div class="container">
             <div class="page-header">
