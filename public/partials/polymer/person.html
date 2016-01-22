@@ -29,7 +29,19 @@
 
                     <div class="row">
                         <label>Projects:</label>
-                        <p>{{projects}}</p>
+                        <p>
+                            <template is="dom-repeat" items="{{projects}}" as="project"
+                                ><template is="dom-if" if="{{hasLink(project)}}"
+                                    ><a href="{{project.link}}">{{project.name}}</a
+                                ></template
+                                ><template is="dom-if" if="{{hasNoLink(project)}}"
+                                    ><span>{{project.name}}</span
+                                ></template
+                            ><template is="dom-if" if="{{isNotLast(index)}}"
+                                    ><span>, </span
+                                ></template
+                            ></template>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -56,8 +68,17 @@
                     type: String
                 },
                 projects: {
-                    type: String
+                    type: Array
                 }
+            },
+            hasLink: function(project) {
+                return typeof project.link !== 'undefined';
+            },
+            hasNoLink: function(project) {
+                return typeof project.link === 'undefined';
+            },
+            isNotLast: function(index) {
+                return this.projects.length - 1 !== index;
             }
         });
     </script>
