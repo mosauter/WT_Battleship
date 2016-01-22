@@ -1340,3 +1340,15 @@ html:-moz-full-screen-ancestor {
 .noBullet {
 list-style-type: none;
 }
+
+.frontPageSize {
+height: 200px;
+}
+
+.frontPageSize2 {
+height: 400px;
+}
+
+.pone {
+    padding-top: 50px !important;
+}
