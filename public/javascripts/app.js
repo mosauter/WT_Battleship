@@ -132,6 +132,9 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
                 break;
             case messageType.SHOOT1:
             case messageType.SHOOT2:
+                // condition means: if that true then it's your turn -> waiting is the negative term to "it's your turn"
+                $scope.waiting = !($scope.firstPlayer && msg.type === messageType.SHOOT1 ||
+                                  !$scope.firstPlayer && msg.type === messageType.SHOOT2);
                 $scope.fillHitMap($scope.opponent, msg.isShootMap, msg.isHitMap);
                 $scope.fillHitMap($scope.field, msg.opponentShootMap, 1);
                 break;
@@ -199,7 +202,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
             alert("You can't switch the orientation at this position!");
             return;
         }
-        if(!$scope.isMovePossible(ship, !$scope.ships[ship]['orientation'], $scope.ships[ship]['x'], $scope.ships[ship]['y'], true)){
+        if (!$scope.isMovePossible(ship, !$scope.ships[ship]['orientation'], $scope.ships[ship]['x'], $scope.ships[ship]['y'], true)) {
             alert("Ships mustn't overlap each other!");
             return;
         }
@@ -230,13 +233,13 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
             alert("Ship can't be placed horizontal or vertical");
             return;
         }
-        if(!$scope.isMovePossible(ship, orientation, x, y, false)){
-            if(!$scope.isMovePossible(ship, !orientation, x, y, false)){
+        if (!$scope.isMovePossible(ship, orientation, x, y, false)) {
+            if (!$scope.isMovePossible(ship, !orientation, x, y, false)) {
                 alert("Ships mustn't overlap each other!");
                 return;
             } else {
                 orientation = !orientation;
-                if((orientation && x + parseInt(ship) - 1 > 9) || (!orientation && y + parseInt(ship) - 1 > 9)){
+                if ((orientation && x + parseInt(ship) - 1 > 9) || (!orientation && y + parseInt(ship) - 1 > 9)) {
                     alert("Ship can't be placed horizontal or vertical");
                     return;
                 }
@@ -252,11 +255,11 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
         $scope.toggleShipOnField(x, y, parseInt(ship), 's');
     };
 
-    $scope.isMovePossible = function(ship, orientation, x, y, isSet){
-        for(var i = 0; i < parseInt(ship); i++){
-            if(isSet && i == 0){
+    $scope.isMovePossible = function (ship, orientation, x, y, isSet) {
+        for (var i = 0; i < parseInt(ship); i++) {
+            if (isSet && i == 0) {
                 continue;
-            } else if((orientation && $scope.field[x + i][y] == 's') || (!orientation && $scope.field[x][y + i] == 's')) {
+            } else if ((orientation && $scope.field[x + i][y] == 's') || (!orientation && $scope.field[x][y + i] == 's')) {
                 return false;
             }
         }
@@ -340,8 +343,8 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
         }
     };
 
-    angular.element(window).on("beforeunload", function() {
-        if(!$scope.end){
+    angular.element(window).on("beforeunload", function () {
+        if (!$scope.end) {
             return "If you leave this page now, you will loose this game!";
         }
     });
