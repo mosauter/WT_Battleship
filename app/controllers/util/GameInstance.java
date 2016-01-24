@@ -135,14 +135,14 @@ public class GameInstance {
         ChatMessage msgObject;
         if (firstPlayer) {
             // send by Player one -> name of IPlayer1
-            msgObject = new ChatMessage(message,
-                                        this.instance.getMasterController()
-                                                     .getPlayer1().getName());
+            msgObject = new ChatMessage(msg, this.instance.getMasterController()
+                                                          .getPlayer1()
+                                                          .getName());
         } else {
             // send by Player two -> name of IPlayer2
-            msgObject = new ChatMessage(message,
-                                        this.instance.getMasterController()
-                                                     .getPlayer2().getName());
+            msgObject = new ChatMessage(msg, this.instance.getMasterController()
+                                                          .getPlayer2()
+                                                          .getName());
         }
         this.getWuiControllerOne().chat(msgObject);
         this.getWuiControllerTwo().chat(msgObject);
