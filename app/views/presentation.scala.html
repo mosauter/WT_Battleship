@@ -6,6 +6,41 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
 } {
     <div class="container topContainer">
-        <presentation-page slides='[{"heading": "HEADING 1", "slideType": "TEXT", "load": "slide-1.html", "number": 0},{"slideType": "CODE", "load": "code.java", "number": 1, "heading": "Heading 2"}]' start="0"></presentation-page>
+        <presentation-page slides='[
+    {
+        "heading": "HEAD",
+        "number": 0,
+        "components": [
+            {
+                "type": "CODE",
+                "load": "codeother.java"
+            },
+            {
+                "type": "TEXT",
+                "load": "slide-1.html"
+            }
+        ]
+    },
+    {
+        "heading": "HEAD",
+        "number": 1,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "slide-1.html"
+            }
+        ]
+    },
+    {
+        "heading": "HEAD",
+        "number": 2,
+        "components": [
+            {
+                "type": "CODE",
+                "load": "code.java"
+            }
+        ]
+    }
+]' start="0"></presentation-page>
     </div>
 }

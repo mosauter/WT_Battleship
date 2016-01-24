@@ -1,0 +1,68 @@
+<dom-module id="slide-component">
+    <template>
+        <template is="dom-if" if="{{isText(slideType)}}">
+            <p id="text-slide-{{number}}" class="centerContent">
+                {{text}}
+            </p>
+        </template>
+        <template is="dom-if" if="{{isCode(slideType)}}">
+            <pre><code id="code-slide-{{number}}" class="java"></code></pre>
+        </template>
+    </template>
+
+    <script>
+        Polymer({
+            is: "slide-component",
+            properties: {
+                slideType: {
+                    type: String
+                },
+                load: {
+                    type: String
+                },
+                heading: {
+                    type: String
+                },
+                number: {
+                    type: Number
+                }
+            },
+            listeners: {
+                'change-slide': 'reload'
+            },
+            isText: function () {
+                return this.slideType === 'TEXT';
+            },
+            isCode: function () {
+                return this.slideType === 'CODE';
+            },
+            attached: function () {
+                this.reload();
+            },
+            reload: function (event) {
+                if (typeof event !== "undefined" && event.detail.target !== "slide-component") {
+                    return;
+                }
+                console.log("I'm " + this.slideType + " number " + this.number + " loading " + this.load + " challenged by event %o", event);
+                var selector;
+                if (this.isText()) {
+                    selector = "#text-slide-" + this.number;
+                    $(selector).load("/assets/presentation/slides/" + this.load);
+                } else if (this.isCode()) {
+                    selector = "#code-slide-" + this.number;
+                    $(selector).load("/assets/presentation/code/" + this.load, function () {
+                        $("pre code").each(function (i, block) {
+                            hljs.highlightBlock(block);
+                        });
+                    });
+                }
+                console.log("updated %o", selector);
+                if (typeof event !== "undefined") {
+                    event.detail.target = "NONE";
+                }
+
+            }
+        });
+    </script>
+
+</dom-module>

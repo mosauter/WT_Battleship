@@ -1,0 +1,50 @@
+<link rel="import" href="/assets/partials/polymer/slide-component.html">
+<link rel="import" href="/bower/paper-header-panel/paper-header-panel.html">
+<dom-module id="slide-site">
+    <style>
+        .slideBody {
+            height: 66vh;
+        }
+    </style>
+    <template>
+        <paper-header-panel class="flex">
+            <paper-toolbar class="blue">
+                <h2 class="centerContent">{{slide.heading}}</h2>
+            </paper-toolbar>
+        </paper-header-panel>
+        <div class="slideBody panel-body">
+            <template id="componentList" is="dom-repeat" items="{{slide.components}}"
+                      as="component">
+                <slide-component slide-type="{{component.type}}"
+                                 heading="{{component.heading}}"
+                                 load="{{component.load}}"
+                                 number="{{slide.number}}"></slide-component>
+            </template>
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: "slide-site",
+            properties: {
+                slide: {
+                    type: Object
+                }
+            },
+            listeners: {
+                "change-slide": "causeReload"
+            },
+            causeReload: function (event) {
+                if (event.detail.target === "slide-site") {
+                    this.$.componentList.render();
+                    var allComponents = Polymer.dom(this.root).querySelectorAll("slide-component");
+                    console.log(Polymer.dom(this.root).querySelectorAll("slide-component"));
+                    allComponents.forEach(function (single) {
+                        single.fire("change-slide", {target: "slide-component"});
+                    });
+                    event.detail.target = "NONE";
+                }
+            }
+        })
+    </script>
+</dom-module>

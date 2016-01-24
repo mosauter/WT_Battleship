@@ -1,4 +1,4 @@
-<link rel="import" href="/assets/partials/polymer/slide.html">
+<link rel="import" href="/assets/partials/polymer/slide-site.html">
 <link rel="import" href="/bower/iron-icons/iron-icons.html">
 <link rel="import" href="/bower/iron-icon/iron-icon.html">
 <link rel="import" href="/bower/paper-fab/paper-fab.html">
@@ -28,9 +28,7 @@
             <div class="slidePanel panel panel-default">
                 <template id="currentlist" is="dom-repeat" items="{{slides}}"
                           as="slide" filter="isCurrent">
-                    <slide-site slide-type="{{slide.slideType}}"
-                                load="{{slide.load}}"
-                                heading="{{slide.heading}}"></slide-site>
+                    <slide-site slide="{{slide}}"></slide-site>
                 </template>
                 <div class="slidesFooter">
                     <paper-fab icon="arrow-back" class="blue pull-left"
@@ -68,7 +66,9 @@
             refreshSlide: function () {
                 this.$.currentlist.render();
                 Polymer.dom(this.root).querySelector('slide-site')
-                        .fire("change-slide", {});
+                        .fire("change-slide", {
+                            target: "slide-site"
+                        });
             }
         });
     </script>
