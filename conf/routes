@@ -16,6 +16,8 @@ GET         /auth/:redirectPage        @controllers.Auth.authenticate(redirectPa
 GET         /auth                      @controllers.Auth.authenticate(redirectPage: String = "home")
 GET         /auth/                     @controllers.Auth.authenticate(redirectPage: String = "home")
 
+GET         /presentation              @controllers.Auth.presentation()
+
 # Google login Demo page
 GET         /googlePage                @controllers.Application.googlePage()
 

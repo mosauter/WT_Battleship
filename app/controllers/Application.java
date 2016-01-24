@@ -6,11 +6,7 @@ import de.htwg.battleship.Battleship;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
-import views.html.about;
-import views.html.game;
-import views.html.googlePage;
-import views.html.home;
-import views.html.instructions;
+import views.html.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,5 +82,9 @@ public class Application extends Controller {
                 });
             }
         };
+    }
+
+    public Result presentation(String currentUsername) {
+        return ok(presentation.render(currentUsername));
     }
 }

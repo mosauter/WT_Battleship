@@ -1,0 +1,75 @@
+<link rel="import" href="/assets/partials/polymer/slide.html">
+<link rel="import" href="/bower/iron-icons/iron-icons.html">
+<link rel="import" href="/bower/iron-icon/iron-icon.html">
+<link rel="import" href="/bower/paper-fab/paper-fab.html">
+<dom-module id="presentation-page">
+    <style>
+        .slide {
+            height: 85vh;
+            min-height: 400px;
+        }
+
+        .slidePanel {
+            /*height: 100%;*/
+        }
+
+        paper-fab.blue {
+            --paper-fab-background: #03a9f4;
+        }
+
+        .slidesFooter {
+            margin: 10px;
+            background-color: #FFFFFF;
+            height: 56px;
+        }
+    </style>
+    <template>
+        <div class="jumbotron small-padding slide">
+            <div class="slidePanel panel panel-default">
+                <template id="currentlist" is="dom-repeat" items="{{slides}}"
+                          as="slide" filter="isCurrent">
+                    <slide-site slide-type="{{slide.slideType}}"
+                                load="{{slide.load}}"
+                                heading="{{slide.heading}}"></slide-site>
+                </template>
+                <div class="slidesFooter">
+                    <paper-fab icon="arrow-back" class="blue pull-left"
+                               on-tap="previous"></paper-fab>
+                    <paper-fab icon="arrow-forward" class="blue pull-right"
+                               on-tap="next"></paper-fab>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "presentation-page",
+            properties: {
+                slides: {
+                    type: Array
+                },
+                currentSlide: {
+                    type: Number,
+                    value: 0,
+                    observer: 'refreshSlide'
+                }
+            },
+            previous: function (event) {
+                this.currentSlide = this.currentSlide === 0
+                        ? 0 : this.currentSlide - 1;
+            },
+            next: function (event) {
+                this.currentSlide = this.currentSlide === this.slides.length - 1
+                        ? this.slides.length - 1 : this.currentSlide + 1;
+            },
+            isCurrent: function (slide) {
+                return slide.number === this.currentSlide;
+            },
+            refreshSlide: function () {
+                this.$.currentlist.render();
+                Polymer.dom(this.root).querySelector('slide-site')
+                        .fire("change-slide", {});
+            }
+        });
+    </script>
+</dom-module>

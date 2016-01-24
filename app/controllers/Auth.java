@@ -46,6 +46,11 @@ public class Auth extends UserProfileController<CommonProfile> {
         return app.instructions(this.getCurrentUsername());
     }
 
+    public Result presentation() {
+        Application application = new Application();
+        return application.presentation(this.getCurrentUsername());
+    }
+
     @RequiresAuthentication(clientName = "OidcClient")
     public Result authenticate(String redirectUrl) {
         return redirect("/" + redirectUrl);

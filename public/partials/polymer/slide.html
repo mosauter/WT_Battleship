@@ -1,0 +1,67 @@
+<link rel="import" href="/bower/paper-header-panel/paper-header-panel.html">
+<dom-module id="slide-site">
+    <style>
+        .slideBody {
+            height: 66vh;
+        }
+    </style>
+    <template>
+        <paper-header-panel class="flex">
+            <paper-toolbar class="blue">
+                <h2 class="centerContent">{{heading}}</h2>
+            </paper-toolbar>
+        </paper-header-panel>
+        <div class="slideBody panel-body">
+            <template is="dom-if" if="{{isText(slideType)}}">
+                <p class="centerContent" id="text">
+                    {{text}}
+                </p>
+            </template>
+            <template is="dom-if" if="{{isCode(slideType)}}">
+                    <pre><code id="code" class="java">
+                    </code></pre>
+            </template>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: "slide-site",
+            properties: {
+                slideType: {
+                    type: String
+                },
+                load: {
+                    type: String
+                },
+                heading: {
+                    type: String
+                }
+            },
+            listeners: {
+                'change-slide': 'reload'
+            },
+            isText: function () {
+                return this.slideType === 'TEXT';
+            },
+            isCode: function () {
+                return this.slideType === 'CODE';
+            },
+            attached: function () {
+                this.reload();
+            },
+            reload: function () {
+                if (this.isText()) {
+                    $("#text").load("/assets/presentation/slides/" + this.load);
+                } else if (this.isCode()) {
+                    $("#code").load("/assets/presentation/code/" + this.load, function () {
+                        $("pre code").each(function (i, block) {
+                            hljs.highlightBlock(block);
+                        });
+                    });
+                }
+            }
+        });
+    </script>
+
+</dom-module>

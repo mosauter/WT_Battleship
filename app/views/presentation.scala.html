@@ -1,0 +1,11 @@
+@(username: String)
+
+@main("Battleship")(username) {
+    <link rel="import" href="/assets/partials/polymer/presentation.html">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+} {
+    <div class="container topContainer">
+        <presentation-page slides='[{"heading": "HEADING 1", "slideType": "TEXT", "load": "slide-1.html", "number": 0},{"slideType": "CODE", "load": "code.java", "number": 1, "heading": "Heading 2"}]' start="0"></presentation-page>
+    </div>
+}
