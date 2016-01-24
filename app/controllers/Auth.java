@@ -9,6 +9,8 @@ import views.html.login;
 
 public class Auth extends UserProfileController<CommonProfile> {
 
+    private static final String NAME_TAG = "name";
+
     public Result index() {
         return ok(login.render(getCurrentUsername()));
     }
@@ -16,7 +18,7 @@ public class Auth extends UserProfileController<CommonProfile> {
     public String getCurrentUsername() {
         try {
             final CommonProfile profile = getUserProfile();
-            return (String) profile.getAttribute("name");
+            return (String) profile.getAttribute(NAME_TAG);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,7 +48,6 @@ public class Auth extends UserProfileController<CommonProfile> {
 
     @RequiresAuthentication(clientName = "OidcClient")
     public Result authenticate(String redirectUrl) {
-        System.out.println("Redirecting to: " + redirectUrl);
         return redirect("/" + redirectUrl);
     }
 
