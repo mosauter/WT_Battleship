@@ -3,6 +3,7 @@
 package controllers.util;
 
 import controllers.WuiController;
+import controllers.util.messages.ChatMessage;
 import de.htwg.battleship.Battleship;
 import play.mvc.WebSocket.Out;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
  * @since 2015-12-05
  */
 public class GameInstance {
+    public static final String CHAT_PREFIX = "CHAT ";
     /**
      * Unique ID of each GameInstance.
      */
@@ -57,7 +59,8 @@ public class GameInstance {
         this.instance = instance;
         this.wuiControllerOne = wuiControllerOne;
         this.socketOne = socketOne;
-        closedSockets = false;
+        this.closedSockets = false;
+        this.wuiControllerOne.setGameInstance(this);
     }
 
     public Battleship getInstance() {
@@ -86,6 +89,7 @@ public class GameInstance {
 
     public void setWuiControllerTwo(final WuiController wuiControllerTwo) {
         this.wuiControllerTwo = wuiControllerTwo;
+        this.wuiControllerTwo.setGameInstance(this);
     }
 
     /**
@@ -113,6 +117,35 @@ public class GameInstance {
             }
             this.wuiControllerOne.closedSocket();
         }
+    }
+
+    /**
+     * This is a method which should enable the two {@link WuiController} to
+     * chat with each other. It will delegate a {@link ChatMessage} to the
+     * {@link WuiController#chat(ChatMessage)} of the both players. So the
+     * players receive also their own messages again.
+     *
+     * @param message     the chat message of the player to the other in the
+     *                    format: "CHAT [/w]"
+     * @param firstPlayer true if the origin of the ChatMessage was the first
+     *                    player, false if the second player was the origin
+     */
+    public void chat(String message, boolean firstPlayer) {
+        String msg = message.replace(GameInstance.CHAT_PREFIX, "");
+        ChatMessage msgObject;
+        if (firstPlayer) {
+            // send by Player one -> name of IPlayer1
+            msgObject = new ChatMessage(message,
+                                        this.instance.getMasterController()
+                                                     .getPlayer1().getName());
+        } else {
+            // send by Player two -> name of IPlayer2
+            msgObject = new ChatMessage(message,
+                                        this.instance.getMasterController()
+                                                     .getPlayer2().getName());
+        }
+        this.getWuiControllerOne().chat(msgObject);
+        this.getWuiControllerTwo().chat(msgObject);
     }
 
     @Override

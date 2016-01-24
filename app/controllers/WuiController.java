@@ -3,6 +3,7 @@
 package controllers;
 
 import controllers.util.AliveSender;
+import controllers.util.GameInstance;
 import controllers.util.messages.*;
 import de.htwg.battleship.controller.IMasterController;
 import de.htwg.battleship.model.IPlayer;
@@ -69,6 +70,7 @@ public class WuiController implements IObserver {
      * milli-seconds.
      */
     private final AliveSender aliveSender;
+    private GameInstance gameInstance;
 
     private final Semaphore addShip;
 
@@ -95,6 +97,14 @@ public class WuiController implements IObserver {
         }
     }
 
+    public void setGameInstance(GameInstance gameInstance) {
+        this.gameInstance = gameInstance;
+    }
+
+    public void chat(ChatMessage message) {
+        this.send(message);
+    }
+
     /**
      * Utility-Method to send a {@link Message} with the {@link
      * WuiController#socket} to the corresponding client.
@@ -111,11 +121,16 @@ public class WuiController implements IObserver {
     /**
      * Method to analyze a message by the client.
      *
-     * @param message 'x y orientation' - to place a ship on the field (x/y) 'x
-     *                y'             - to shoot on the field (x/y)
+     * @param message 'x y orientation' - to place a ship on the field (x/y)
+     *                'x y'             - to shoot on the field (x/y)
+     *                'CHAT message'    - to chat with each other
      */
     public void analyzeMessage(String message) {
         Logger.info("Received message:\n" + message);
+        if (message.startsWith(GameInstance.CHAT_PREFIX)) {
+            this.gameInstance.chat(message, firstPlayer);
+            return;
+        }
         String[] field = message.split(" ");
         if (field.length == 3) {
             // x y orientation -> which player
@@ -265,8 +280,6 @@ public class WuiController implements IObserver {
                 msg = createWaitMessage();
                 break;
             case PLACEERR:
-                System.out.println("-- -- -- CHECK FIRST -- -- -- --> firstPlayer = true");
-                System.out.println("Get Place error firstPlayer " + firstPlayer + " and  finished = " + placeOneFinished);
                 if (!placeOneFinished) {
                     msg = new PlaceErrorMessage(
                         masterController.getPlayer1().getOwnBoard().getShips() +
@@ -325,7 +338,6 @@ public class WuiController implements IObserver {
                 msg = new PlaceMessage(currentState, shipMap);
                 break;
             case PLACEERR:
-                System.out.println("Get Place error " + firstPlayer + " and  finished = " + placeOneFinished);
                 if (placeOneFinished) {
                     // minimum in PLACE2
                     msg = new PlaceErrorMessage(
