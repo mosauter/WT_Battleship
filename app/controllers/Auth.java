@@ -20,6 +20,7 @@ public class Auth extends UserProfileController<CommonProfile> {
             final CommonProfile profile = getUserProfile();
             return (String) profile.getAttribute(NAME_TAG);
         } catch (Exception e) {
+            // ignore
         }
         return null;
     }
