@@ -1,5 +1,6 @@
 <div class="col-sm-12 jumbotron row">
     <div ng-if="waiting" class="col-sm-12 waiting">Waiting for opponent</div>
+    <div ng-if="!waiting" class="col-sm-12 yourTurn">Your turn!</div>
     <div class="col-md-6" ng-if="!placing">
         <h3>{{enemy || 'Opponent'}}'s field:</h3>
         <table id="opponentView" class="playboard">
