@@ -5,15 +5,10 @@ import org.pac4j.play.java.RequiresAuthentication;
 import org.pac4j.play.java.UserProfileController;
 import play.mvc.Result;
 import play.mvc.WebSocket;
-import views.html.login;
 
 public class Auth extends UserProfileController<CommonProfile> {
 
     private static final String NAME_TAG = "name";
-
-    public Result index() {
-        return ok(login.render(getCurrentUsername()));
-    }
 
     public String getCurrentUsername() {
         try {
@@ -39,11 +34,6 @@ public class Auth extends UserProfileController<CommonProfile> {
     public Result home() {
         Application app = new Application();
         return app.home(this.getCurrentUsername());
-    }
-
-    public Result instructions(){
-        Application app = new Application();
-        return app.instructions(this.getCurrentUsername());
     }
 
     public Result presentation() {

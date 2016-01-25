@@ -30,10 +30,6 @@ public class Application extends Controller {
         return ok(about.render(username));
     }
 
-    public Result instructions(String username) {
-        return ok(instructions.render(username));
-    }
-
     public Result googlePage() {
         return ok(googlePage.render(" "));
     }
