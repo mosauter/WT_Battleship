@@ -20,6 +20,7 @@
     "google-hangout-button": "GoogleWebComponents/google-hangout-button#~1.0.1",
     "google-signin": "GoogleWebComponents/google-signin#~1.2.0",
     "iron-icon": "PolymerElements/iron-icon#~1.0.7",
-    "paper-elements": "PolymerElements/paper-elements#~1.0.7"
+    "paper-elements": "PolymerElements/paper-elements#~1.0.7",
+    "iron-ajax": "PolymerElements/iron-ajax#~1.1.1"
   }
 }

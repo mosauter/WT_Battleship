@@ -1,8 +1,11 @@
+<link rel="import" href="/bower/iron-ajax/iron-ajax.html">
 <dom-module id="slide-component">
     <template>
+        <iron-ajax auto handle-as="text"
+                   url="{{load}}"
+                   on-response="handleAjax"></iron-ajax>
         <template is="dom-if" if="{{isText(slideType)}}">
             <p id="text-slide-{{number}}" class="centerContent">
-                {{text}}
             </p>
         </template>
         <template is="dom-if" if="{{isCode(slideType)}}">
@@ -39,28 +42,41 @@
             attached: function () {
                 this.reload();
             },
+            handleAjax: function (data) {
+                var html = data.detail.response;
+                var element = this.selectCurrentElement();
+                if (element) {
+                    element.innerHTML = html;
+                    this.enableHightlight();
+                }
+            },
             reload: function (event) {
                 if (typeof event !== "undefined" && event.detail.target !== "slide-component") {
                     return;
                 }
-                console.log("I'm " + this.slideType + " number " + this.number + " loading " + this.load + " challenged by event %o", event);
-                var selector;
-                if (this.isText()) {
-                    selector = "#text-slide-" + this.number;
-                    $(selector).load("/assets/presentation/slides/" + this.load);
-                } else if (this.isCode()) {
-                    selector = "#code-slide-" + this.number;
-                    $(selector).load("/assets/presentation/code/" + this.load, function () {
-                        $("pre code").each(function (i, block) {
-                            hljs.highlightBlock(block);
-                        });
-                    });
+                var element = this.selectCurrentElement();
+                if (element) {
+                    element.innerHTML = "";
                 }
-                console.log("updated %o", selector);
                 if (typeof event !== "undefined") {
                     event.detail.target = "NONE";
                 }
-
+            },
+            selectCurrentElement: function () {
+                return Polymer.dom(this.root).querySelector(this.getSelector());
+            },
+            getSelector: function () {
+                if (this.isText()) {
+                    return "#text-slide-" + this.number;
+                }
+                if (this.isCode()) {
+                    return "#code-slide-" + this.number;
+                }
+            },
+            enableHightlight: function () {
+                if (this.isCode()) {
+                    hljs.highlightBlock(this.selectCurrentElement());
+                }
             }
         });
     </script>

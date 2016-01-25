@@ -5,15 +5,25 @@
         .slideBody {
             height: 66vh;
         }
+
+        .headingHeight {
+            height: 6.5vh;
+        }
     </style>
     <template>
-        <paper-header-panel class="flex">
-            <paper-toolbar class="blue">
-                <h2 class="centerContent">{{slide.heading}}</h2>
-            </paper-toolbar>
-        </paper-header-panel>
+        <template is="dom-if" if="{{isNotTitle(slide.type)}}">
+            <paper-header-panel class="flex">
+                <paper-toolbar class="blue">
+                    <h2 class="centerContent">{{slide.heading}}</h2>
+                </paper-toolbar>
+            </paper-header-panel>
+        </template>
+        <template is="dom-if" if="{{isTitle(slide.type)}}">
+            <div class="headingHeight"></div>
+        </template>
         <div class="slideBody panel-body">
-            <template id="componentList" is="dom-repeat" items="{{slide.components}}"
+            <template id="componentList" is="dom-repeat"
+                      items="{{slide.components}}"
                       as="component">
                 <slide-component slide-type="{{component.type}}"
                                  heading="{{component.heading}}"
@@ -21,7 +31,6 @@
                                  number="{{slide.number}}"></slide-component>
             </template>
         </div>
-
     </template>
     <script>
         Polymer({
@@ -38,12 +47,20 @@
                 if (event.detail.target === "slide-site") {
                     this.$.componentList.render();
                     var allComponents = Polymer.dom(this.root).querySelectorAll("slide-component");
-                    console.log(Polymer.dom(this.root).querySelectorAll("slide-component"));
                     allComponents.forEach(function (single) {
                         single.fire("change-slide", {target: "slide-component"});
                     });
                     event.detail.target = "NONE";
                 }
+            },
+            isNotTitle: function (type) {
+                if (typeof type === "undefined") {
+                    return true;
+                }
+                return type !== "TITLE";
+            },
+            isTitle: function (type) {
+                return !this.isNotTitle(type);
             }
         })
     </script>
