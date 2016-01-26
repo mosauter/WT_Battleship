@@ -1,0 +1,14 @@
+{
+  "heading": "6. Polymer",
+  "number": 11,
+  "components": [
+    {
+      "type": "TEXT",
+      "load": "/assets/presentation/slides/polymer-2.html"
+    },
+    {
+      "type": "CODE",
+      "load": "/assets/presentation/code/component.html"
+    }
+  ]
+}
