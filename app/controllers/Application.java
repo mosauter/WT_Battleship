@@ -19,7 +19,7 @@ public class Application extends Controller {
     private static final List<GameInstance> onePlayer = new LinkedList<>();
 
     public Result home(String username) {
-        return ok(home.render(username));
+        return ok(home.render(username, ""));
     }
 
     public Result game(String username) {

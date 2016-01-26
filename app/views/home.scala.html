@@ -1,12 +1,15 @@
-@(username: String)
+@(username: String)(forbidden: String)
 
     @main("Battleship")(username) {
         <link rel="import" href="/assets/partials/polymer/content-block.html">
     } {
         <script>
                 $(function () {
+                    if ("@forbidden" === "forbidden" || "@forbidden" === "unauthorized") {
+                        alert("You have to log in, in order to play the game.");
+                        window.location = window.location.origin;
+                    }
                     $('.carousel').carousel({
-                        //interval: 5000 // for development needs...
                         interval: 20000
                     });
                 });
