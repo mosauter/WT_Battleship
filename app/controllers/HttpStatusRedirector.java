@@ -13,11 +13,11 @@ public class HttpStatusRedirector extends DefaultHttpActionAdapter {
     @Override
     public Object adapt(int code, WebContext context) {
         if (code == HttpConstants.UNAUTHORIZED) {
-            return unauthorized(home.render(""))
-                .as((HttpConstants.HTML_CONTENT_TYPE));
+            return unauthorized(home.render("", "unauthorized"))
+                .as(HttpConstants.HTML_CONTENT_TYPE);
         } else if (code == HttpConstants.FORBIDDEN) {
-            return forbidden(home.render(""))
-                .as((HttpConstants.HTML_CONTENT_TYPE));
+            return forbidden(home.render("", "forbidden"))
+                .as(HttpConstants.HTML_CONTENT_TYPE);
         } else {
             return super.adapt(code, context);
         }

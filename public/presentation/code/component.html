@@ -1,0 +1,12 @@
+&lt;iron-ajax auto handle-as=&quot;text&quot;
+        url=&quot;{{load}}&quot;
+        on-response=&quot;handleAjax&quot;&gt;&lt;/iron-ajax&gt;
+
+handleAjax: function (data) {
+    var html = data.detail.response;
+    var element = this.selectCurrentElement();
+    if (element) {
+        element.innerHTML = html;
+        this.enableHightlight();
+    }
+}

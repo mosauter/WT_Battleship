@@ -1,0 +1,201 @@
+@(username: String)
+
+@main("Battleship")(username) {
+    <link rel="import" href="/assets/partials/polymer/presentation.html">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+} {
+    <div class="container topContainer">
+        <presentation-page slides='[
+    {
+        "heading": "",
+        "number": 0,
+        "type": "TITLE",
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/title.html"
+            }
+        ]
+    },
+    {
+        "heading": "Outline",
+        "number": 1,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/outline.html"
+            }
+        ]
+    },
+    {
+        "heading": "1. Rules",
+        "number": 2,
+        "type": "TITLE",
+        "components": [
+             {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/rules.html"
+            }
+        ]
+    },
+    {
+        "heading": "2. Backbones",
+        "number": 3,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/backbones-1.html"
+            }
+        ]
+    },
+    {
+        "heading": "3. Game Interface",
+        "number": 4,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/game/game-1.html"
+            }
+        ]
+    },
+    {
+        "heading": "3. Game Interface",
+        "number": 5,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/game/game-2.html"
+            }
+        ]
+    },
+    {
+        "heading": "3. Game Interface",
+        "number": 6,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/game/game-3.html"
+            }
+        ]
+    },
+    {
+        "heading": "4. Communication",
+        "number": 7,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/communication/communication-1.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/aliveSender.java"
+            }
+        ]
+    },
+    {
+        "heading": "4. Communication",
+        "number": 8,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/communication/communication-2.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/waitMessage.java"
+            }
+        ]
+    },
+    {
+        "heading": "4. Communication",
+        "number": 9,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/communication/communication-3.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/clientMessage.js"
+            }
+        ]
+    },
+    {
+        "heading": "5. Authentication",
+        "number": 10,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/authentication/authentication-1.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/guiceModule.java"
+            },
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/authentication/authentication-2.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/authGame.java"
+            }
+        ]
+    },
+    {
+        "heading": "6. Polymer",
+        "number": 11,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/polymer/polymer-1.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/presentationTemplate.html"
+            }
+        ]
+    },
+    {
+        "heading": "6. Polymer",
+        "number": 12,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/polymer/polymer-2.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/component.html"
+            }
+        ]
+    },
+    {
+        "heading": "6. Polymer",
+        "number": 13,
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/polymer/polymer-3.html"
+            },
+            {
+                "type": "CODE",
+                "load": "/assets/presentation/code/slideProvision.json"
+            }
+        ]
+    },
+    {
+        "heading": "Finish",
+        "number": 14,
+        "type": "TITLE",
+        "components": [
+            {
+                "type": "TEXT",
+                "load": "/assets/presentation/slides/finish.html"
+            }
+        ]
+    }
+]'></presentation-page>
+    </div>
+}

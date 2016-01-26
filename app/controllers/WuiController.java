@@ -10,7 +10,6 @@ import de.htwg.battleship.model.IPlayer;
 import de.htwg.battleship.observer.IObserver;
 import de.htwg.battleship.util.StatCollection;
 import de.htwg.battleship.util.State;
-import play.Logger;
 import play.mvc.WebSocket;
 
 import java.util.LinkedList;
@@ -88,8 +87,6 @@ public class WuiController implements IObserver {
 
     @Override
     public void update() {
-        Logger.debug(
-            "On update getting State -> " + masterController.getCurrentState());
         if (firstPlayer) {
             checkFirst();
         } else {
@@ -113,7 +110,6 @@ public class WuiController implements IObserver {
      */
     private void send(Message msg) {
         if (msg != null) {
-            Logger.debug("Sending message:\n" + msg.toJSON());
             socket.write(msg.toJSON());
         }
     }
@@ -126,7 +122,6 @@ public class WuiController implements IObserver {
      *                'CHAT message'    - to chat with each other
      */
     public void analyzeMessage(String message) {
-        Logger.info("Received message:\n" + message);
         if (message.startsWith(GameInstance.CHAT_PREFIX)) {
             this.gameInstance.chat(message, firstPlayer);
             return;

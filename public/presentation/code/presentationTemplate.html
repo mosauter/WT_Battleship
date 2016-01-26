@@ -1,0 +1,10 @@
+&lt;template id=&quot;currentlist&quot; is=&quot;dom-repeat&quot; items=&quot;{{slides}}&quot;
+        as=&quot;slide&quot; filter=&quot;isCurrent&quot;&gt;
+    &lt;slide-site slide=&quot;{{slide}}&quot;&gt;&lt;/slide-site&gt;
+&lt;/template&gt;
+&lt;div class=&quot;slidesFooter&quot;&gt;
+    &lt;paper-fab icon=&quot;arrow-back&quot; class=&quot;blue pull-left&quot;
+        on-tap=&quot;previous&quot;&gt;&lt;/paper-fab&gt;
+    &lt;paper-fab icon=&quot;arrow-forward&quot; class=&quot;blue pull-right&quot;
+        on-tap=&quot;next&quot;&gt;&lt;/paper-fab&gt;
+&lt;/div&gt;

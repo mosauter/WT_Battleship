@@ -21,24 +21,24 @@ public class SecurityModule extends AbstractModule {
     /**
      * Client ID from google for localhost.
      */
-    //    private static final String GOOGLE_CLIENT_ID =
-    //        "188113288901-3b17lnh2t56toiknn3nj7hk4icafvkl7" +
-    //        ".apps.googleusercontent.com";
+//    private static final String GOOGLE_CLIENT_ID =
+//        "188113288901-3b17lnh2t56toiknn3nj7hk4icafvkl7" +
+//        ".apps.googleusercontent.com";
     /**
      * Client ID from google for heroku.
      */
-    private static final String GOOGLE_CLIENT_ID =
-        "188113288901-vpm2o01esoepnfc05nf9dmr7vn1rc8rd.apps.googleusercontent.com";
+        private static final String GOOGLE_CLIENT_ID =
+            "188113288901-vpm2o01esoepnfc05nf9dmr7vn1rc8rd.apps.googleusercontent.com";
     /**
      * Client Secret from google for localhost.
      */
-    //    private static final String GOOGLE_CLIENT_SECRET =
-    //        "nRSM_56nUdPzd201SOJZffA9";
+//    private static final String GOOGLE_CLIENT_SECRET =
+//        "nRSM_56nUdPzd201SOJZffA9";
     /**
      * Client Secret from google for heroku.
      */
     private static final String GOOGLE_CLIENT_SECRET =
-        "OvwKn9wJDWujGHdH1-bsIruT";
+            "OvwKn9wJDWujGHdH1-bsIruT";
     public static final String GOOGLE_DISCOVERY_URI =
         "https://accounts.google.com/.well-known/openid-configuration";
 
