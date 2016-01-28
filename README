@@ -1,4 +1,13 @@
-This is your new Play application
-=================================
+# Battleship #
 
-This file will be packaged with your application, when using `activator dist`.
+This is the repository to bring the [Battleship Project]() to the Web.
+It uses several technologies including:
+
+* play framework
+* pac4j
+* AngularJS
+* Bootstrap
+* WebSockets
+* Polymer
+* Less
+
