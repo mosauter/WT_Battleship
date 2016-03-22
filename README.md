@@ -1,6 +1,6 @@
 # Battleship #
 
-This is the repository to bring the (Battleship Project)[https://github.com/mosauter/Battleship] to the Web.
+This is the repository to bring the [Battleship Project](https://github.com/mosauter/Battleship) to the Web.
 It uses several technologies including:
 
 * play framework
@@ -10,4 +10,3 @@ It uses several technologies including:
 * WebSockets
 * Polymer
 * Less
-
