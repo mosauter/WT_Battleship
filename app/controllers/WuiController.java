@@ -198,8 +198,8 @@ public class WuiController implements IObserver {
         // instruction is omitted
     }
 
-    public void setName(String name) {
-        this.masterController.setPlayerName(name);
+    public void setProfile(String name, String id) {
+        this.masterController.setPlayerProfile(name, (int) id);
     }
 
     public void startGame() {

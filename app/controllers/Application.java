@@ -34,7 +34,7 @@ public class Application extends Controller {
         return ok(googlePage.render(" "));
     }
 
-    public WebSocket<String> socket(String login) {
+    public WebSocket<String> socket(String login, String id) {
         return new WebSocket<String>() {
             private boolean firstPlayer;
             private GameInstance instance;
@@ -62,7 +62,7 @@ public class Application extends Controller {
                     this.instance.setWuiControllerTwo(this.wuiController);
                     firstPlayer = false;
                 }
-                this.wuiController.setName(login);
+                this.wuiController.setProfile(login, id);
 
                 in.onMessage((String message) -> this.wuiController
                     .analyzeMessage(message));
