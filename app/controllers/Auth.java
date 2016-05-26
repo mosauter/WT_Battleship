@@ -14,10 +14,11 @@ public class Auth extends UserProfileController<CommonProfile> {
     public String getProfileAttribute(String attribute) {
         try {
             final CommonProfile profile = getUserProfile();
-            return profile.getAttribute(attribute);
+            return profile.getAttribute(attribute).toString();
         } catch (Exception e) {
             // ignore
         }
+        return "";
     }
 
     @RequiresAuthentication(clientName = "OidcClient")

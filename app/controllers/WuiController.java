@@ -199,7 +199,7 @@ public class WuiController implements IObserver {
     }
 
     public void setProfile(String name, String id) {
-        this.masterController.setPlayerProfile(name, (int) id);
+        this.masterController.setPlayerProfile(name, Integer.parseInt(id));
     }
 
     public void startGame() {
