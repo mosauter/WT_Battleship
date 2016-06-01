@@ -117,9 +117,9 @@ public class WuiController implements IObserver {
     /**
      * Method to analyze a message by the client.
      *
-     * @param message 'x y orientation' - to place a ship on the field (x/y)
-     *                'x y'             - to shoot on the field (x/y)
-     *                'CHAT message'    - to chat with each other
+     * @param message 'x y orientation' - to place a ship on the field (x/y) 'x
+     *                y'             - to shoot on the field (x/y) 'CHAT
+     *                message'    - to chat with each other
      */
     public void analyzeMessage(String message) {
         if (message.startsWith(GameInstance.CHAT_PREFIX)) {
@@ -208,7 +208,8 @@ public class WuiController implements IObserver {
 
     private boolean[][] getShootMap(boolean[][] shootMap, IPlayer player) {
         boolean[][] hitMap =
-            new boolean[StatCollection.heightLenght][StatCollection.heightLenght];
+            new boolean[masterController.getBoardSize()][masterController
+                .getBoardSize()];
         Map<Integer, Set<Integer>> shipMap = getShipMap(player);
         for (Integer y : shipMap.keySet()) {
             for (Integer x : shipMap.get(y)) {
@@ -243,7 +244,8 @@ public class WuiController implements IObserver {
     }
 
     private Map<Integer, Set<Integer>> getShipMap(IPlayer player) {
-        Map<Integer, Set<Integer>> shipMap = StatCollection.createMap();
+        Map<Integer, Set<Integer>> shipMap =
+            StatCollection.createMap(masterController.getBoardSize());
         masterController.fillMap(player.getOwnBoard().getShipList(), shipMap,
                                  player.getOwnBoard().getShips());
         return shipMap;
