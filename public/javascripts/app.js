@@ -50,7 +50,8 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
         SHOOT2: "SHOOT2",
         // WIN
         WIN1: "WIN1",
-        WIN2: "WIN2"
+        WIN2: "WIN2",
+        SAVEGAMES: "SAVEGAMES"
     };
 
     $scope.alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
@@ -142,10 +143,613 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
             case messageType.WIN2:
                 $scope.endOfGame(msg);
                 break;
+            case messageType.SAVEGAMES:
+                $scope.savegames = msg.saveGames;
+                $scope.me = msg.player.name;
+                $scope.wins = 0;
+                for(var i = 0; i < $scope.savegames.length; i++){
+                    if($scope.me == $scope.savegames[i].player1Name && $scope.savegames[i].currentState == 'WIN1' ||
+                        $scope.me == $scope.savegames[i].player2Name && $scope.savegames[i].currentState == 'WIN2'){
+                        $scope.wins++;
+                    }
+                }
+                break;
             default:
                 break;
         }
     });
+
+    $scope.hideSavegame = function(){
+        $scope.savegame.show = false;
+    };
+
+    $scope.showSavegame = function(index){
+        var firstPlayer = $scope.me == $scope.savegames[index].player1Name;
+        var state = 0;
+        if(firstPlayer && $scope.savegames[index].currentState == 'WIN1' ||
+            !firstPlayer && $scope.savegames[index].currentState == 'WIN2'){
+            state = 1;
+        }
+
+        var self = $scope.initFields();
+        $scope.fillField(self, firstPlayer ? $scope.savegames[index].shipList1 : $scope.savegames[index].shipList2, 's');
+        $scope.fillHitMap(self, firstPlayer ? $scope.savegames[index].field1 : $scope.savegames[index].field2, 1);
+
+        var opponent = $scope.initFields();
+        $scope.fillField(opponent, !firstPlayer ? $scope.savegames[index].shipList1 : $scope.savegames[index].shipList2, 's');
+        $scope.fillHitMap(opponent, !firstPlayer ? $scope.savegames[index].field1 : $scope.savegames[index].field2, 1);
+
+        $scope.savegame = {
+            'show': true,
+            'state': state,
+            'self': self,
+            'opponent': opponent
+        }
+    };
+
+    /* Dummy Data*/
+    $scope.savegames = [
+        {
+            "_id": "c968e689b3499f8d2ea4652c2103eb02",
+            "_rev": "1-d18ffe4185956d58f9d3d2d009bc1f54",
+            "player1Name": "test123",
+            "player1ID": 27,
+            "player2Name": "egzfuhwj",
+            "player2ID": 5367,
+            "gameMode": "NORMAL",
+            "currentState": "WIN1",
+            "field1": [
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "field2": [
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "shipList1": {
+                0: [0, 1],
+                1: [4],
+                2: [],
+                3: [],
+                4: [],
+                5: [],
+                6: [],
+                7: [],
+                8: [],
+                9: []
+            },
+            "shipList2": {
+                0: [0, 1],
+                1: [4],
+                2: [],
+                3: [],
+                4: [],
+                5: [],
+                6: [],
+                7: [],
+                8: [],
+                9: []
+            },
+            "heightLength": 10,
+            "maxShipNumber": 5
+        },
+        {
+            "_id": "c968e689b3499f8d2ea4652c2102f838",
+            "_rev": "1-d18ffe4185956d58f9d3d2d009bc1f54",
+            "player1Name": "test123",
+            "player1ID": 27,
+            "player2Name": "567",
+            "player2ID": 6789,
+            "gameMode": "NORMAL",
+            "currentState": "WIN2",
+            "field1": [
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "field2": [
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "shipList1": {
+                0: [0, 1],
+                1: [4],
+                2: [],
+                3: [],
+                4: [],
+                5: [],
+                6: [],
+                7: [],
+                8: [],
+                9: []
+            },
+            "shipList2": {
+                0: [0, 1],
+                1: [4],
+                2: [],
+                3: [],
+                4: [],
+                5: [],
+                6: [],
+                7: [],
+                8: [],
+                9: []
+            },
+            "heightLength": 10,
+            "maxShipNumber": 5
+        }
+    ];
 
     $scope.endOfGame = function (msg) {
         if ($scope.end) {
