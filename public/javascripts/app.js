@@ -150,6 +150,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
                 for(var i = 0; i < $scope.savegames.length; i++){
                     if($scope.me == $scope.savegames[i].player1Name && $scope.savegames[i].currentState == 'WIN1' ||
                         $scope.me == $scope.savegames[i].player2Name && $scope.savegames[i].currentState == 'WIN2'){
+                        $scope.savegames[i]['hasWon'] = true;
                         $scope.wins++;
                     }
                 }
@@ -165,11 +166,7 @@ app.controller('BattleCtrl', ['$scope', '$websocket', '$location', function ($sc
 
     $scope.showSavegame = function(index){
         var firstPlayer = $scope.me == $scope.savegames[index].player1Name;
-        var state = 0;
-        if(firstPlayer && $scope.savegames[index].currentState == 'WIN1' ||
-            !firstPlayer && $scope.savegames[index].currentState == 'WIN2'){
-            state = 1;
-        }
+        var state = $scope.savegames[index].hasWon ? 1 : 0;
 
         var self = $scope.initFields();
         $scope.fillField(self, firstPlayer ? $scope.savegames[index].shipList1 : $scope.savegames[index].shipList2, 's');

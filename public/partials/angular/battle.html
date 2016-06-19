@@ -92,7 +92,7 @@
             </button>
         </div>
         <div>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#highscores">Highscores</button>
+            <button type="button" class="btn btn-primary margin-top-10" data-toggle="modal" data-target="#highscores">Highscores</button>
         </div>
     </div>
 </div>
@@ -107,7 +107,12 @@
                 <div ng-if="!savegame.show">
                     <div>Wins: {{wins ? wins : 0}} - Losses: {{savegames.length - wins}}</div>
                     <div class="list-group">
-                        <button type="button" class="list-group-item" ng-click="showSavegame($index)" ng-repeat="savegame in savegames">{{$index}} - {{firstPlayer ? savegame.player2Name : savegame.player1Name}}</button>
+                        <button type="button" class="list-group-item" ng-click="showSavegame($index)" ng-repeat="savegame in savegames">
+                            {{$index}} - {{me == savegame.player1Name ? savegame.player2Name : savegame.player1Name}}
+                            <span ng-class="{'label label-danger': !savegame.hasWon,'label label-success': savegame.hasWon}">
+                                {{savegame.hasWon ? 'WON' : 'LOST'}}
+                            </span>
+                        </button>
                     </div>
                 </div>
                 <div ng-if="savegame.show">
