@@ -6,10 +6,7 @@ import de.htwg.battleship.Battleship;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
-import views.html.about;
-import views.html.game;
-import views.html.home;
-import views.html.presentation;
+import views.html.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,19 +18,19 @@ public class Application extends Controller {
      */
     private static final List<GameInstance> onePlayer = new LinkedList<>();
 
-    public Result home(String username) {
+    public Result home(final String username) {
         return ok(home.render(username, ""));
     }
 
-    public Result game(String username) {
+    public Result game(final String username) {
         return ok(game.render(username));
     }
 
-    public Result about(String username) {
+    public Result about(final String username) {
         return ok(about.render(username));
     }
 
-    public WebSocket<String> socket(String login, String id) {
+    public WebSocket<String> socket(final String login, final String id) {
         return new WebSocket<String>() {
             private boolean firstPlayer;
             private GameInstance instance;
@@ -75,7 +72,11 @@ public class Application extends Controller {
         };
     }
 
-    public Result presentation(String currentUsername) {
-        return ok(presentation.render(currentUsername));
+    public Result presentationWeb(final String currentUsername) {
+        return ok(presentationwebtech.render(currentUsername));
+    }
+
+    public Result presentationArch(final String currentUsername) {
+        return ok(presentationarchitecture.render(currentUsername));
     }
 }

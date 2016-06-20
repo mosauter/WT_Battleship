@@ -1,0 +1,44 @@
+@(username: String)
+
+@main("Battleship")(username) {
+    <link rel="import" href="/assets/partials/polymer/presentation.html">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+} {
+    <div class="container topContainer">
+        <presentation-page slides='[
+  {
+    "heading": "",
+    "number": 0,
+    "type": "TITLE",
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "/assets/presentation/architecture/slides/title.html"
+      }
+    ]
+  },
+  {
+    "heading": "Outline",
+    "number": 1,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "/assets/presentation/architecture/slides/outline.html"
+      }
+    ]
+  },
+  {
+    "heading": "Finish",
+    "number": 2,
+    "type": "TITLE",
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "/assets/presentation/architecture/slides/finish.html"
+      }
+    ]
+  }
+]'></presentation-page>
+    </div>
+}

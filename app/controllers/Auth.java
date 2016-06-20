@@ -37,9 +37,14 @@ public class Auth extends UserProfileController<CommonProfile> {
         return app.home(this.getProfileAttribute(NAME_TAG));
     }
 
-    public Result presentation() {
+    public Result presentationWeb() {
         Application application = new Application();
-        return application.presentation(this.getProfileAttribute(NAME_TAG));
+        return application.presentationWeb(this.getProfileAttribute(NAME_TAG));
+    }
+
+    public Result presentationArch() {
+        Application application = new Application();
+        return application.presentationArch(this.getProfileAttribute(NAME_TAG));
     }
 
     @RequiresAuthentication(clientName = "OidcClient")
@@ -50,7 +55,6 @@ public class Auth extends UserProfileController<CommonProfile> {
     @RequiresAuthentication(clientName = "OidcClient")
     public WebSocket<String> socketAuth() {
         Application app = new Application();
-        return app.socket(this.getProfileAttribute(NAME_TAG),
-                          this.getProfileAttribute(ID_TAG));
+        return app.socket(this.getProfileAttribute(NAME_TAG), this.getProfileAttribute(ID_TAG));
     }
 }

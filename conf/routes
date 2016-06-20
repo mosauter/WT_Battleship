@@ -14,7 +14,8 @@ GET         /auth                      @controllers.Auth.authenticate(redirectPa
 GET         /auth/                     @controllers.Auth.authenticate(redirectPage: String = "home")
 GET         /auth/:redirectPage        @controllers.Auth.authenticate(redirectPage: String)
 
-GET         /presentation              @controllers.Auth.presentation()
+GET         /presentation/web          @controllers.Auth.presentationWeb()
+GET         /presentation/arch         @controllers.Auth.presentationArch()
 
 # Page where the game takes place (first as single page app)
 GET         /game                      @controllers.Auth.game()
