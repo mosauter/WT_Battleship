@@ -10,14 +10,11 @@ GET         /home                      @controllers.Auth.home()
 GET         /about                     @controllers.Auth.about()
 
 # log in and redirect on a specified page
-GET         /auth/:redirectPage        @controllers.Auth.authenticate(redirectPage: String)
 GET         /auth                      @controllers.Auth.authenticate(redirectPage: String = "home")
 GET         /auth/                     @controllers.Auth.authenticate(redirectPage: String = "home")
+GET         /auth/:redirectPage        @controllers.Auth.authenticate(redirectPage: String)
 
 GET         /presentation              @controllers.Auth.presentation()
-
-# Google login Demo page
-GET         /googlePage                @controllers.Application.googlePage()
 
 # Page where the game takes place (first as single page app)
 GET         /game                      @controllers.Auth.game()

@@ -6,7 +6,10 @@ import de.htwg.battleship.Battleship;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
-import views.html.*;
+import views.html.about;
+import views.html.game;
+import views.html.home;
+import views.html.presentation;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,26 +33,18 @@ public class Application extends Controller {
         return ok(about.render(username));
     }
 
-    public Result googlePage() {
-        return ok(googlePage.render(" "));
-    }
-
     public WebSocket<String> socket(String login, String id) {
         return new WebSocket<String>() {
             private boolean firstPlayer;
             private GameInstance instance;
             private WuiController wuiController;
 
-            public void onReady(WebSocket.In<String> in,
-                                WebSocket.Out<String> out) {
+            public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
                 if (onePlayer.isEmpty()) {
                     // first player
                     Battleship battleship = Battleship.getInstance(true);
-                    this.wuiController =
-                        new WuiController(battleship.getMasterController(), out,
-                                          true);
-                    this.instance =
-                        new GameInstance(battleship, out, this.wuiController);
+                    this.wuiController = new WuiController(battleship.getMasterController(), out, true);
+                    this.instance = new GameInstance(battleship, out, this.wuiController);
                     onePlayer.add(this.instance);
                     this.wuiController.startGame();
                     firstPlayer = true;
@@ -58,17 +53,14 @@ public class Application extends Controller {
                     this.instance = onePlayer.get(0);
                     onePlayer.remove(0);
                     this.instance.setSocketTwo(out);
-                    this.wuiController = new WuiController(
-                        this.instance.getInstance().getMasterController(), out,
-                        false);
+                    this.wuiController =
+                        new WuiController(this.instance.getInstance().getMasterController(), out, false);
                     this.instance.setWuiControllerTwo(this.wuiController);
                     firstPlayer = false;
-                    this.instance.sendGameLists();
                 }
                 this.wuiController.setProfile(login, id);
 
-                in.onMessage((String message) -> this.wuiController
-                    .analyzeMessage(message));
+                in.onMessage((String message) -> this.wuiController.analyzeMessage(message));
 
                 in.onClose(() -> {
                     try {
