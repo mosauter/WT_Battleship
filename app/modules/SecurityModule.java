@@ -13,40 +13,36 @@ import play.Configuration;
 import play.Environment;
 
 /**
- * Security module will process the credentials for google and facebook
- * platforms. Redirect url's must be defined in respective platforms.
+ * Security module will process the credentials for google and facebook platforms. Redirect url's must be defined in
+ * respective platforms.
  */
 public class SecurityModule extends AbstractModule {
 
     /**
      * Client ID from google for localhost.
      */
-//    private static final String GOOGLE_CLIENT_ID =
-//        "188113288901-3b17lnh2t56toiknn3nj7hk4icafvkl7" +
-//        ".apps.googleusercontent.com";
+    private static final String GOOGLE_CLIENT_ID =
+        "188113288901-3b17lnh2t56toiknn3nj7hk4icafvkl7" + ".apps.googleusercontent.com";
     /**
      * Client ID from google for heroku.
      */
-        private static final String GOOGLE_CLIENT_ID =
-            "188113288901-vpm2o01esoepnfc05nf9dmr7vn1rc8rd.apps.googleusercontent.com";
+    //        private static final String GOOGLE_CLIENT_ID =
+    //            "188113288901-vpm2o01esoepnfc05nf9dmr7vn1rc8rd.apps.googleusercontent.com";
     /**
      * Client Secret from google for localhost.
      */
-//    private static final String GOOGLE_CLIENT_SECRET =
-//        "nRSM_56nUdPzd201SOJZffA9";
+    private static final String GOOGLE_CLIENT_SECRET = "nRSM_56nUdPzd201SOJZffA9";
     /**
      * Client Secret from google for heroku.
      */
-    private static final String GOOGLE_CLIENT_SECRET =
-            "OvwKn9wJDWujGHdH1-bsIruT";
-    public static final String GOOGLE_DISCOVERY_URI =
-        "https://accounts.google.com/.well-known/openid-configuration";
+    //    private static final String GOOGLE_CLIENT_SECRET =
+    //            "OvwKn9wJDWujGHdH1-bsIruT";
+    public static final String GOOGLE_DISCOVERY_URI = "https://accounts.google.com/.well-known/openid-configuration";
 
     private final Environment environment;
     private final Configuration configuration;
 
-    public SecurityModule(Environment environment,
-                          Configuration configuration) {
+    public SecurityModule(Environment environment, Configuration configuration) {
         this.environment = environment;
         this.configuration = configuration;
     }
@@ -60,13 +56,10 @@ public class SecurityModule extends AbstractModule {
         oidcClient.setDiscoveryURI(GOOGLE_DISCOVERY_URI);
         oidcClient.addCustomParam("prompt", "consent");
 
-        final Clients clients =
-            new Clients(configuration.getString("baseUrl") + "/callback",
-                        oidcClient);
+        final Clients clients = new Clients(configuration.getString("baseUrl") + "/callback", oidcClient);
 
         final Config config = new Config(clients);
-        config
-            .addAuthorizer("admin", new RequireAnyRoleAuthorizer("ROLE_ADMIN"));
+        config.addAuthorizer("admin", new RequireAnyRoleAuthorizer("ROLE_ADMIN"));
         config.addAuthorizer("custom", new CustomAuthorizer());
         config.setHttpActionAdapter(new HttpStatusRedirector());
         bind(Config.class).toInstance(config);
@@ -76,8 +69,7 @@ public class SecurityModule extends AbstractModule {
         callbackController.setDefaultUrl("/");
         bind(CallbackController.class).toInstance(callbackController);
         // logout
-        final ApplicationLogoutController logoutController =
-            new ApplicationLogoutController();
+        final ApplicationLogoutController logoutController = new ApplicationLogoutController();
         logoutController.setDefaultUrl("/");
         bind(ApplicationLogoutController.class).toInstance(logoutController);
     }
