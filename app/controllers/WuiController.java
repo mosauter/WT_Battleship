@@ -3,16 +3,14 @@
 package controllers;
 
 import akka.actor.ActorRef;
-import controllers.util.AliveSender;
-import controllers.util.GameInstance;
+import controllers.util.*;
 import controllers.util.messages.*;
 import de.htwg.battleship.actor.ActorFactory;
 import de.htwg.battleship.actor.messages.SaveMessage;
 import de.htwg.battleship.controller.IMasterController;
+import de.htwg.battleship.model.IBoard;
 import de.htwg.battleship.model.IPlayer;
-import de.htwg.battleship.model.persistence.IGameSave;
 import de.htwg.battleship.observer.IObserver;
-import de.htwg.battleship.util.StatCollection;
 import de.htwg.battleship.util.State;
 import play.mvc.WebSocket;
 
@@ -45,7 +43,7 @@ public class WuiController implements IObserver {
     /**
      * The {@link play.mvc.WebSocket.Out<String>} which is used to communicate with the client.
      */
-    private final WebSocket.Out<String> socket;
+    private WebSocket.Out<String> socket;
     /**
      * Indicates if this {@link WuiController} is assigned to the first or the second player.
      */
@@ -67,6 +65,7 @@ public class WuiController implements IObserver {
     private GameInstance gameInstance;
 
     private final Semaphore addShip;
+    private boolean gamesSent = false;
 
     public WuiController(IMasterController masterController, WebSocket.Out<String> socket, boolean first) {
         this.masterController = masterController;
@@ -102,7 +101,7 @@ public class WuiController implements IObserver {
      * @param msg the message which should be sent
      */
     private void send(Message msg) {
-        if (msg != null) {
+        if (msg != null && socket != null) {
             socket.write(msg.toJSON());
         }
     }
@@ -191,8 +190,10 @@ public class WuiController implements IObserver {
     }
 
     private boolean[][] getShootMap(boolean[][] shootMap, IPlayer player) {
-        boolean[][] hitMap = new boolean[masterController.getBoardSize()][masterController.getBoardSize()];
-        Map<Integer, Set<Integer>> shipMap = getShipMap(player);
+        int boardSize = masterController.getBoardSize();
+        boolean[][] hitMap = new boolean[boardSize][boardSize];
+        Map<Integer, Set<Integer>> shipMap =
+            ShipMapper.translateShipMap(player.getOwnBoard().getShipList(), player.getOwnBoard().getShips(), boardSize);
         for (Integer y : shipMap.keySet()) {
             for (Integer x : shipMap.get(y)) {
                 hitMap[x][y] = shootMap[x][y];
@@ -204,8 +205,12 @@ public class WuiController implements IObserver {
     private WinMessage createWinMessage(State state) {
         IPlayer winner = state == State.WIN1 ? masterController.getPlayer1() : masterController.getPlayer2();
         IPlayer looser = state == State.WIN1 ? masterController.getPlayer2() : masterController.getPlayer1();
-        Map<Integer, Set<Integer>> winnerShips = getShipMap(winner);
-        Map<Integer, Set<Integer>> looserShips = getShipMap(looser);
+        Map<Integer, Set<Integer>> winnerShips = ShipMapper
+            .translateShipMap(winner.getOwnBoard().getShipList(), winner.getOwnBoard().getShips(),
+                              masterController.getBoardSize());
+        Map<Integer, Set<Integer>> looserShips = ShipMapper
+            .translateShipMap(looser.getOwnBoard().getShipList(), looser.getOwnBoard().getShips(),
+                              masterController.getBoardSize());
 
         // shoot map -> winner shoots at looser
         boolean[][] looserShootMap = winner.getOwnBoard().getHitMap();
@@ -221,12 +226,6 @@ public class WuiController implements IObserver {
         return new ShootMessage(state, shootMap, hitMap, opponentShootMap);
     }
 
-    private Map<Integer, Set<Integer>> getShipMap(IPlayer player) {
-        Map<Integer, Set<Integer>> shipMap = StatCollection.createMap(masterController.getBoardSize());
-        masterController.fillMap(player.getOwnBoard().getShipList(), shipMap, player.getOwnBoard().getShips());
-        return shipMap;
-    }
-
     private void checkFirst() {
         Message msg = null;
         State currentState = masterController.getCurrentState();
@@ -239,12 +238,15 @@ public class WuiController implements IObserver {
 
             // PLACING SHIPS
             case PLACE1:
+                sendGameLists(masterController.getPlayer1());
                 if (processPlaceList()) {
                     return;
                 }
             case FINALPLACE1:
                 this.placeOneFinished = currentState == State.FINALPLACE1;
-                Map<Integer, Set<Integer>> shipMap = getShipMap(masterController.getPlayer1());
+                IBoard ownBoard = masterController.getPlayer1().getOwnBoard();
+                Map<Integer, Set<Integer>> shipMap = ShipMapper
+                    .translateShipMap(ownBoard.getShipList(), ownBoard.getShips(), masterController.getBoardSize());
                 msg = new PlaceMessage(currentState, shipMap);
                 break;
             case PLACE2:
@@ -286,12 +288,24 @@ public class WuiController implements IObserver {
         this.send(msg);
     }
 
+    private void sendGameLists(IPlayer player) {
+        if (!gamesSent) {
+            gamesSent = true;
+            List<WebGameSave> saveList = DBAccessor.getGames(player);
+            Message msg = new SaveGameMessage(saveList.toArray(new WebGameSave[saveList.size()]), player);
+
+            this.send(msg);
+        }
+
+    }
+
     private void checkSecond() {
         Message msg = null;
         State currentState = masterController.getCurrentState();
         switch (currentState) {
             // PLACING SHIPS
             case PLACE1:
+                sendGameLists(masterController.getPlayer2());
             case FINALPLACE1:
                 this.placeOneFinished = currentState == State.FINALPLACE1;
                 msg = createWaitMessage();
@@ -301,7 +315,9 @@ public class WuiController implements IObserver {
                     return;
                 }
             case FINALPLACE2:
-                Map<Integer, Set<Integer>> shipMap = getShipMap(masterController.getPlayer2());
+                IBoard board = masterController.getPlayer2().getOwnBoard();
+                Map<Integer, Set<Integer>> shipMap =
+                    ShipMapper.translateShipMap(board.getShipList(), board.getShips(), masterController.getBoardSize());
                 msg = new PlaceMessage(currentState, shipMap);
                 break;
             case PLACEERR:
@@ -361,13 +377,16 @@ public class WuiController implements IObserver {
         if (masterController.getCurrentState() != State.END) {
             // sending Win message -> other player left game / killed his socket before ending the game
             masterController.setCurrentState(firstPlayer ? State.WIN1 : State.WIN2);
-            ActorFactory.getMasterRef().tell(new SaveMessage(
-                this.gameInstance.getInstance().getInjector().getInstance(IGameSave.class)
-                                 .saveGame(this.masterController)), ActorRef.noSender());
+            ActorFactory.getMasterRef().tell(new SaveMessage(masterController), ActorRef.noSender());
         }
     }
 
     public IPlayer getPlayer() {
         return firstPlayer ? masterController.getPlayer1() : masterController.getPlayer2();
+    }
+
+    public void closeSocket() {
+        socket.close();
+        socket = null;
     }
 }
