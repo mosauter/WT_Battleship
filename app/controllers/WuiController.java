@@ -2,11 +2,15 @@
 
 package controllers;
 
+import akka.actor.ActorRef;
 import controllers.util.AliveSender;
 import controllers.util.GameInstance;
 import controllers.util.messages.*;
+import de.htwg.battleship.actor.ActorFactory;
+import de.htwg.battleship.actor.messages.SaveMessage;
 import de.htwg.battleship.controller.IMasterController;
 import de.htwg.battleship.model.IPlayer;
+import de.htwg.battleship.model.persistence.IGameSave;
 import de.htwg.battleship.observer.IObserver;
 import de.htwg.battleship.util.StatCollection;
 import de.htwg.battleship.util.State;
@@ -355,8 +359,11 @@ public class WuiController implements IObserver {
     public void closedSocket() {
         this.aliveSender.setDone();
         if (masterController.getCurrentState() != State.END) {
-            // sending Winn message -> other player left game / killed his socket before ending the game
-            this.send(createWinMessage(firstPlayer ? State.WIN1 : State.WIN2));
+            // sending Win message -> other player left game / killed his socket before ending the game
+            masterController.setCurrentState(firstPlayer ? State.WIN1 : State.WIN2);
+            ActorFactory.getMasterRef().tell(new SaveMessage(
+                this.gameInstance.getInstance().getInjector().getInstance(IGameSave.class)
+                                 .saveGame(this.masterController)), ActorRef.noSender());
         }
     }
 
