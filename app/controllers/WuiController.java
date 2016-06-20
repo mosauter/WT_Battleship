@@ -19,9 +19,8 @@ import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 /**
- * WuiController is the controller which is used to communicate between the
- * Web-Interface and the {@link IMasterController}. It sends {@link Message} to
- * the client and analyzes instructions by the client in the {@link
+ * WuiController is the controller which is used to communicate between the Web-Interface and the {@link
+ * IMasterController}. It sends {@link Message} to the client and analyzes instructions by the client in the {@link
  * WuiController#analyzeMessage(String)}-Method.
  *
  * @author ms
@@ -30,51 +29,42 @@ import java.util.concurrent.Semaphore;
 public class WuiController implements IObserver {
 
     /**
-     * The String which is used to determine if the ship in the place
-     * instruction by the client is set with horizontal orientation. If the
-     * String doesn't matches this means the ship is placed with vertical
-     * orientation.
+     * The String which is used to determine if the ship in the place instruction by the client is set with horizontal
+     * orientation. If the String doesn't matches this means the ship is placed with vertical orientation.
      */
     private static final String HORIZONTAL_ORIENTATION = "true";
 
     /**
-     * The {@link IMasterController} of the corresponding game instance {@link
-     * de.htwg.battleship.Battleship}.
+     * The {@link IMasterController} of the corresponding game instance {@link de.htwg.battleship.Battleship}.
      */
     private final IMasterController masterController;
     /**
-     * The {@link play.mvc.WebSocket.Out<String>} which is used to communicate
-     * with the client.
+     * The {@link play.mvc.WebSocket.Out<String>} which is used to communicate with the client.
      */
     private final WebSocket.Out<String> socket;
     /**
-     * Indicates if this {@link WuiController} is assigned to the first or the
-     * second player.
+     * Indicates if this {@link WuiController} is assigned to the first or the second player.
      */
     private final boolean firstPlayer;
     /**
-     * List which is used to buffer place ship instructions if the instruction
-     * came when it wasn't the player's turn.
+     * List which is used to buffer place ship instructions if the instruction came when it wasn't the player's turn.
      */
     private final List<String[]> bufferedPlaceList;
     /**
-     * Indicates if the first player of the corresponding {@link
-     * de.htwg.battleship.Battleship} has finished placing. So the {@link State}
-     * is after {@link State#FINALPLACE1}.
+     * Indicates if the first player of the corresponding {@link de.htwg.battleship.Battleship} has finished placing. So
+     * the {@link State} is after {@link State#FINALPLACE1}.
      */
     private boolean placeOneFinished = false;
     /**
-     * The 'Heart Beater' which is used to keep the connection alive. It sends a
-     * {@link AliveMessage} every {@link AliveSender#TIMERMILLIS}
-     * milli-seconds.
+     * The 'Heart Beater' which is used to keep the connection alive. It sends a {@link AliveMessage} every {@link
+     * AliveSender#TIMERMILLIS} milli-seconds.
      */
     private final AliveSender aliveSender;
     private GameInstance gameInstance;
 
     private final Semaphore addShip;
 
-    public WuiController(IMasterController masterController,
-                         WebSocket.Out<String> socket, boolean first) {
+    public WuiController(IMasterController masterController, WebSocket.Out<String> socket, boolean first) {
         this.masterController = masterController;
         this.socket = socket;
         this.firstPlayer = first;
@@ -103,8 +93,7 @@ public class WuiController implements IObserver {
     }
 
     /**
-     * Utility-Method to send a {@link Message} with the {@link
-     * WuiController#socket} to the corresponding client.
+     * Utility-Method to send a {@link Message} with the {@link WuiController#socket} to the corresponding client.
      *
      * @param msg the message which should be sent
      */
@@ -117,9 +106,8 @@ public class WuiController implements IObserver {
     /**
      * Method to analyze a message by the client.
      *
-     * @param message 'x y orientation' - to place a ship on the field (x/y) 'x
-     *                y'             - to shoot on the field (x/y) 'CHAT
-     *                message'    - to chat with each other
+     * @param message 'x y orientation' - to place a ship on the field (x/y) 'x y'             - to shoot on the field
+     *                (x/y) 'CHAT message'    - to chat with each other
      */
     public void analyzeMessage(String message) {
         if (message.startsWith(GameInstance.CHAT_PREFIX)) {
@@ -139,11 +127,9 @@ public class WuiController implements IObserver {
     }
 
     /**
-     * Is used to process the saved instructions in the {@link
-     * WuiController#bufferedPlaceList}.
+     * Is used to process the saved instructions in the {@link WuiController#bufferedPlaceList}.
      *
-     * @return true if a instruction was processed; false if the {@link
-     * WuiController#bufferedPlaceList} was empty
+     * @return true if a instruction was processed; false if the {@link WuiController#bufferedPlaceList} was empty
      */
     private boolean processPlaceList() {
         if (bufferedPlaceList.isEmpty()) {
@@ -156,22 +142,18 @@ public class WuiController implements IObserver {
     }
 
     /**
-     * To place a ship on the field (x/y) with the specified orientation. Only
-     * places a ship if it's the players turn. If it's not the players turn the
-     * instruction is buffered in the {@link WuiController#bufferedPlaceList}.
+     * To place a ship on the field (x/y) with the specified orientation. Only places a ship if it's the players turn.
+     * If it's not the players turn the instruction is buffered in the {@link WuiController#bufferedPlaceList}.
      *
-     * @param field the instruction as string field: "['x', 'y',
-     *              'orientation']"
+     * @param field the instruction as string field: "['x', 'y', 'orientation']"
      */
     private void placeShip(String[] field) {
         if (firstPlayer && masterController.getCurrentState() == State.PLACE1 ||
-            !firstPlayer &&
-            masterController.getCurrentState() == State.PLACE2) {
+            !firstPlayer && masterController.getCurrentState() == State.PLACE2) {
             try {
                 addShip.acquire();
-                masterController.placeShip(Integer.parseInt(field[0]),
-                                           Integer.parseInt(field[1]), field[2]
-                                               .equals(HORIZONTAL_ORIENTATION));
+                masterController.placeShip(Integer.parseInt(field[0]), Integer.parseInt(field[1]),
+                                           field[2].equals(HORIZONTAL_ORIENTATION));
                 addShip.release();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -189,10 +171,8 @@ public class WuiController implements IObserver {
      */
     private void shoot(String[] field) {
         if (firstPlayer && masterController.getCurrentState() == State.SHOOT1 ||
-            !firstPlayer &&
-            masterController.getCurrentState() == State.SHOOT2) {
-            masterController
-                .shoot(Integer.parseInt(field[0]), Integer.parseInt(field[1]));
+            !firstPlayer && masterController.getCurrentState() == State.SHOOT2) {
+            masterController.shoot(Integer.parseInt(field[0]), Integer.parseInt(field[1]));
         }
         // else -> the player isn't allowed to shoot in this state
         // instruction is omitted
@@ -207,9 +187,7 @@ public class WuiController implements IObserver {
     }
 
     private boolean[][] getShootMap(boolean[][] shootMap, IPlayer player) {
-        boolean[][] hitMap =
-            new boolean[masterController.getBoardSize()][masterController
-                .getBoardSize()];
+        boolean[][] hitMap = new boolean[masterController.getBoardSize()][masterController.getBoardSize()];
         Map<Integer, Set<Integer>> shipMap = getShipMap(player);
         for (Integer y : shipMap.keySet()) {
             for (Integer x : shipMap.get(y)) {
@@ -220,10 +198,8 @@ public class WuiController implements IObserver {
     }
 
     private WinMessage createWinMessage(State state) {
-        IPlayer winner = state == State.WIN1 ? masterController
-            .getPlayer1() : masterController.getPlayer2();
-        IPlayer looser = state == State.WIN1 ? masterController
-            .getPlayer2() : masterController.getPlayer1();
+        IPlayer winner = state == State.WIN1 ? masterController.getPlayer1() : masterController.getPlayer2();
+        IPlayer looser = state == State.WIN1 ? masterController.getPlayer2() : masterController.getPlayer1();
         Map<Integer, Set<Integer>> winnerShips = getShipMap(winner);
         Map<Integer, Set<Integer>> looserShips = getShipMap(looser);
 
@@ -231,12 +207,10 @@ public class WuiController implements IObserver {
         boolean[][] looserShootMap = winner.getOwnBoard().getHitMap();
         boolean[][] winnerShootMap = looser.getOwnBoard().getHitMap();
 
-        return new WinMessage(state, winner, winnerShips, winnerShootMap,
-                              looser, looserShips, looserShootMap);
+        return new WinMessage(state, winner, winnerShips, winnerShootMap, looser, looserShips, looserShootMap);
     }
 
-    private ShootMessage createShootMessage(State state, IPlayer self,
-                                            IPlayer opponent) {
+    private ShootMessage createShootMessage(State state, IPlayer self, IPlayer opponent) {
         boolean[][] shootMap = opponent.getOwnBoard().getHitMap();
         boolean[][] hitMap = getShootMap(shootMap, opponent);
         boolean[][] opponentShootMap = self.getOwnBoard().getHitMap();
@@ -244,10 +218,8 @@ public class WuiController implements IObserver {
     }
 
     private Map<Integer, Set<Integer>> getShipMap(IPlayer player) {
-        Map<Integer, Set<Integer>> shipMap =
-            StatCollection.createMap(masterController.getBoardSize());
-        masterController.fillMap(player.getOwnBoard().getShipList(), shipMap,
-                                 player.getOwnBoard().getShips());
+        Map<Integer, Set<Integer>> shipMap = StatCollection.createMap(masterController.getBoardSize());
+        masterController.fillMap(player.getOwnBoard().getShipList(), shipMap, player.getOwnBoard().getShips());
         return shipMap;
     }
 
@@ -268,8 +240,7 @@ public class WuiController implements IObserver {
                 }
             case FINALPLACE1:
                 this.placeOneFinished = currentState == State.FINALPLACE1;
-                Map<Integer, Set<Integer>> shipMap =
-                    getShipMap(masterController.getPlayer1());
+                Map<Integer, Set<Integer>> shipMap = getShipMap(masterController.getPlayer1());
                 msg = new PlaceMessage(currentState, shipMap);
                 break;
             case PLACE2:
@@ -278,9 +249,7 @@ public class WuiController implements IObserver {
                 break;
             case PLACEERR:
                 if (!placeOneFinished) {
-                    msg = new PlaceErrorMessage(
-                        masterController.getPlayer1().getOwnBoard().getShips() +
-                        2);
+                    msg = new PlaceErrorMessage(masterController.getPlayer1().getOwnBoard().getShips() + 2);
                 }
                 break;
 
@@ -288,9 +257,7 @@ public class WuiController implements IObserver {
             case SHOOT1:
             case SHOOT2:
                 // opponent = player 2
-                msg = createShootMessage(currentState,
-                                         masterController.getPlayer1(),
-                                         masterController.getPlayer2());
+                msg = createShootMessage(currentState, masterController.getPlayer1(), masterController.getPlayer2());
                 break;
 
             case HIT:
@@ -330,16 +297,13 @@ public class WuiController implements IObserver {
                     return;
                 }
             case FINALPLACE2:
-                Map<Integer, Set<Integer>> shipMap =
-                    getShipMap(masterController.getPlayer2());
+                Map<Integer, Set<Integer>> shipMap = getShipMap(masterController.getPlayer2());
                 msg = new PlaceMessage(currentState, shipMap);
                 break;
             case PLACEERR:
                 if (placeOneFinished) {
                     // minimum in PLACE2
-                    msg = new PlaceErrorMessage(
-                        masterController.getPlayer2().getOwnBoard().getShips() +
-                        2);
+                    msg = new PlaceErrorMessage(masterController.getPlayer2().getOwnBoard().getShips() + 2);
                 }
                 break;
 
@@ -347,9 +311,7 @@ public class WuiController implements IObserver {
             case SHOOT1:
             case SHOOT2:
                 // opponent = player 1
-                msg = createShootMessage(currentState,
-                                         masterController.getPlayer2(),
-                                         masterController.getPlayer1());
+                msg = createShootMessage(currentState, masterController.getPlayer2(), masterController.getPlayer1());
                 break;
             case HIT:
                 msg = new HitMessage(true);
@@ -377,11 +339,9 @@ public class WuiController implements IObserver {
 
     private WaitMessage createWaitMessage() {
         if (firstPlayer) {
-            return new WaitMessage(masterController.getPlayer1().getName(),
-                                   masterController.getPlayer2().getName());
+            return new WaitMessage(masterController.getPlayer1().getName(), masterController.getPlayer2().getName());
         }
-        return new WaitMessage(masterController.getPlayer2().getName(),
-                               masterController.getPlayer1().getName());
+        return new WaitMessage(masterController.getPlayer2().getName(), masterController.getPlayer1().getName());
     }
 
     public void setAliveDone() {
@@ -389,8 +349,8 @@ public class WuiController implements IObserver {
     }
 
     /**
-     * If the other player has closed his socket this sends a {@link WinMessage}
-     * to the player, if it doesn't happened already.
+     * If the other player has closed his socket this sends a {@link WinMessage} to the player, if it doesn't happened
+     * already.
      */
     public void closedSocket() {
         this.aliveSender.setDone();
@@ -398,5 +358,9 @@ public class WuiController implements IObserver {
             // sending Winn message -> other player left game / killed his socket before ending the game
             this.send(createWinMessage(firstPlayer ? State.WIN1 : State.WIN2));
         }
+    }
+
+    public IPlayer getPlayer() {
+        return firstPlayer ? masterController.getPlayer1() : masterController.getPlayer2();
     }
 }

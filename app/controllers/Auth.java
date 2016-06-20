@@ -50,6 +50,7 @@ public class Auth extends UserProfileController<CommonProfile> {
     @RequiresAuthentication(clientName = "OidcClient")
     public WebSocket<String> socketAuth() {
         Application app = new Application();
-        return app.socket(this.getProfileAttribute(NAME_TAG), this.getProfileAttribute(ID_TAG));
+        return app.socket(this.getProfileAttribute(NAME_TAG),
+                          this.getProfileAttribute(ID_TAG));
     }
 }

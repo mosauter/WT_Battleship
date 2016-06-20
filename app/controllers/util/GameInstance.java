@@ -5,17 +5,16 @@ package controllers.util;
 import controllers.WuiController;
 import controllers.util.messages.ChatMessage;
 import de.htwg.battleship.Battleship;
+import de.htwg.battleship.model.IPlayer;
 import play.mvc.WebSocket.Out;
 
 import java.util.UUID;
 
 /**
- * GameInstance is a wrapper for a single instance of a {@link
- * de.htwg.battleship.Battleship} game. So for that it contains both sockets to
- * communicate with the players.
+ * GameInstance is a wrapper for a single instance of a {@link de.htwg.battleship.Battleship} game. So for that it
+ * contains both sockets to communicate with the players.
  * <p>
- * To initialize an instance you need the first socket for this player. Via a
- * setter you can later add a second socket.
+ * To initialize an instance you need the first socket for this player. Via a setter you can later add a second socket.
  *
  * @author ms
  * @since 2015-12-05
@@ -47,14 +46,12 @@ public class GameInstance {
      */
     private Out socketTwo;
     /**
-     * This boolean indicates if one of the two players has closed his socket.
-     * So this keeps the sockets from sending again and preventing {@link
-     * java.nio.channels.ClosedChannelException}
+     * This boolean indicates if one of the two players has closed his socket. So this keeps the sockets from sending
+     * again and preventing {@link java.nio.channels.ClosedChannelException}
      */
     private boolean closedSockets;
 
-    public GameInstance(final Battleship instance, final Out socketOne,
-                        final WuiController wuiControllerOne) {
+    public GameInstance(final Battleship instance, final Out socketOne, final WuiController wuiControllerOne) {
         this.uuid = UUID.randomUUID();
         this.instance = instance;
         this.wuiControllerOne = wuiControllerOne;
@@ -93,13 +90,11 @@ public class GameInstance {
     }
 
     /**
-     * Is called when one player closes his socket. So this ends the 'Heart
-     * Beater' {@link AliveSender} and delegates the event to the {@link
-     * WuiController}.
+     * Is called when one player closes his socket. So this ends the 'Heart Beater' {@link AliveSender} and delegates
+     * the event to the {@link WuiController}.
      *
-     * @param playerOne indicates which player closed his socket and caused this
-     *                  event true    indicates that this was the first player
-     *                  false   indicates that this was the second player
+     * @param playerOne indicates which player closed his socket and caused this event true    indicates that this was
+     *                  the first player false   indicates that this was the second player
      */
     public void closedSocket(boolean playerOne) {
         if (closedSockets) {
@@ -120,29 +115,23 @@ public class GameInstance {
     }
 
     /**
-     * This is a method which should enable the two {@link WuiController} to
-     * chat with each other. It will delegate a {@link ChatMessage} to the
-     * {@link WuiController#chat(ChatMessage)} of the both players. So the
-     * players receive also their own messages again.
+     * This is a method which should enable the two {@link WuiController} to chat with each other. It will delegate a
+     * {@link ChatMessage} to the {@link WuiController#chat(ChatMessage)} of the both players. So the players receive
+     * also their own messages again.
      *
-     * @param message     the chat message of the player to the other in the
-     *                    format: "CHAT [/w]"
-     * @param firstPlayer true if the origin of the ChatMessage was the first
-     *                    player, false if the second player was the origin
+     * @param message     the chat message of the player to the other in the format: "CHAT [/w]"
+     * @param firstPlayer true if the origin of the ChatMessage was the first player, false if the second player was the
+     *                    origin
      */
     public void chat(String message, boolean firstPlayer) {
         String msg = message.replace(GameInstance.CHAT_PREFIX, "");
         ChatMessage msgObject;
         if (firstPlayer) {
             // send by Player one -> name of IPlayer1
-            msgObject = new ChatMessage(msg, this.instance.getMasterController()
-                                                          .getPlayer1()
-                                                          .getName());
+            msgObject = new ChatMessage(msg, this.instance.getMasterController().getPlayer1().getName());
         } else {
             // send by Player two -> name of IPlayer2
-            msgObject = new ChatMessage(msg, this.instance.getMasterController()
-                                                          .getPlayer2()
-                                                          .getName());
+            msgObject = new ChatMessage(msg, this.instance.getMasterController().getPlayer2().getName());
         }
         this.getWuiControllerOne().chat(msgObject);
         this.getWuiControllerTwo().chat(msgObject);
@@ -161,5 +150,16 @@ public class GameInstance {
     @Override
     public int hashCode() {
         return uuid.hashCode();
+    }
+
+    public void sendGameLists() {
+        // first player results -> second player
+        sendListPlayer(this.getWuiControllerOne().getPlayer(), this.getSocketTwo());
+        // second player results -> first player
+        sendListPlayer(this.getWuiControllerTwo().getPlayer(), this.getSocketOne());
+    }
+
+    private void sendListPlayer(IPlayer player, Out socketTwo) {
+
     }
 }

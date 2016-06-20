@@ -43,6 +43,7 @@ public class Application extends Controller {
             public void onReady(WebSocket.In<String> in,
                                 WebSocket.Out<String> out) {
                 if (onePlayer.isEmpty()) {
+                    // first player
                     Battleship battleship = Battleship.getInstance(true);
                     this.wuiController =
                         new WuiController(battleship.getMasterController(), out,
@@ -53,6 +54,7 @@ public class Application extends Controller {
                     this.wuiController.startGame();
                     firstPlayer = true;
                 } else {
+                    // second player
                     this.instance = onePlayer.get(0);
                     onePlayer.remove(0);
                     this.instance.setSocketTwo(out);
@@ -61,6 +63,7 @@ public class Application extends Controller {
                         false);
                     this.instance.setWuiControllerTwo(this.wuiController);
                     firstPlayer = false;
+                    this.instance.sendGameLists();
                 }
                 this.wuiController.setProfile(login, id);
 
