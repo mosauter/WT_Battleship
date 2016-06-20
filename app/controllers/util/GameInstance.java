@@ -5,7 +5,6 @@ package controllers.util;
 import controllers.WuiController;
 import controllers.util.messages.ChatMessage;
 import de.htwg.battleship.Battleship;
-import de.htwg.battleship.model.IPlayer;
 import play.mvc.WebSocket.Out;
 
 import java.util.UUID;
@@ -104,11 +103,13 @@ public class GameInstance {
         if (playerOne && wuiControllerTwo != null) {
             // player one closed the socket
             this.wuiControllerOne.setAliveDone();
+            this.wuiControllerOne.closeSocket();
             this.wuiControllerTwo.closedSocket();
         } else {
             // player two closed the socket
             if (this.wuiControllerTwo != null) {
                 this.wuiControllerTwo.setAliveDone();
+                this.wuiControllerTwo.closeSocket();
             }
             this.wuiControllerOne.closedSocket();
         }
@@ -150,16 +151,5 @@ public class GameInstance {
     @Override
     public int hashCode() {
         return uuid.hashCode();
-    }
-
-    public void sendGameLists() {
-        // first player results -> second player
-        sendListPlayer(this.getWuiControllerOne().getPlayer(), this.getSocketTwo());
-        // second player results -> first player
-        sendListPlayer(this.getWuiControllerTwo().getPlayer(), this.getSocketOne());
-    }
-
-    private void sendListPlayer(IPlayer player, Out socketTwo) {
-
     }
 }
