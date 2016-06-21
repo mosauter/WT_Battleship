@@ -87,9 +87,9 @@
             </button>
         </div>
     </div>
-    <div class="margin-top-10">
+    <div class="margin-top-10 col-sm-12">
         <button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#highscores" ng-if="savegames">Highscores</button>
-        <button class="btn btn-play pull-right" style="margin-top:10px;" ng-click="goBack();" ng-if="end">Go back!</button>
+        <button class="btn btn-play pull-right" ng-click="goBack();" ng-if="end">Go back!</button>
     </div>
 </div>
 
@@ -99,8 +99,8 @@
             <div class="modal-header">
                 <h4>Highscores {{me}}</h4>
             </div>
-            <div class="modal-body">
-                <div ng-if="!savegame.show">
+            <div class="modal-body row">
+                <div ng-if="!savegame.show" class="col-sm-12">
                     <div>Wins: {{wins ? wins : 0}} - Losses: {{savegames.length - wins}}</div>
                     <div class="list-group">
                         <button type="button" class="list-group-item" ng-click="showSavegame($index)" ng-repeat="savegame in savegames">
@@ -111,7 +111,7 @@
                         </button>
                     </div>
                 </div>
-                <div ng-if="savegame.show">
+                <div ng-if="savegame.show" class="col-sm-12">
                     <div ng-if="savegame.state" class="col-sm-12 yourTurn">You have won this battle</div>
                     <div ng-if="!savegame.state" class="col-sm-12 waiting">You have lost this battle</div>
                     <div class="col-md-6">
@@ -168,9 +168,11 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer margin-top-10">
-                <button class="btn btn-primary pull-left" ng-if="savegame.show" ng-click="hideSavegame()">Back</button>
-                <a class="btn btn-play" data-dismiss="modal">Close</a>
+            <div class="modal-footer">
+                <div class="margin-top-10 col-sm-12">
+                    <button class="btn btn-primary pull-left" ng-if="savegame.show" ng-click="hideSavegame()">Back</button>
+                    <a class="btn btn-play" data-dismiss="modal">Close</a>
+                </div>
             </div>
         </div>
     </div>
