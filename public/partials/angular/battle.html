@@ -52,10 +52,9 @@
                 </td>
             </tr>
         </table>
-        <div ng-if="end">
-            <button class="btn btn-play" style="margin-top:10px;"
-                    ng-click="goBack();">Go back!
-            </button>
+        <div>
+            <button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#highscores" ng-if="savegames">Highscores</button>
+            <button class="btn btn-play pull-right" style="margin-top:10px;" ng-click="goBack();" ng-if="end">Go back!</button>
         </div>
     </div>
     <div class="col-md-6" ng-if="placing">
@@ -90,9 +89,6 @@
         <div ng-if="!waiting">
             <button class="btn btn-play" ng-click="submitShips()">I am ready!
             </button>
-        </div>
-        <div>
-            <button type="button" class="btn btn-primary margin-top-10" data-toggle="modal" data-target="#highscores">Highscores</button>
         </div>
     </div>
 </div>
@@ -136,7 +132,7 @@
                                          ng-class="{
                                             'water': savegame.self[i][$parent.$index] == 'x',
                                             'hit': savegame.self[i][$parent.$index] == 'h',
-                                            'miss': savegame.self[$parent.$index] == 'm',
+                                            'miss': savegame.self[i][$parent.$index] == 'm',
                                             'ship': savegame.self[i][$parent.$index] == 's'
                                          }">
                                     </div>
@@ -145,7 +141,7 @@
                         </table>
                     </div>
                     <div class="col-md-6">
-                        <h3>Opponent's field:</h3>
+                        <h3>{{savegame.opponentName || 'Opponent'}}'s field:</h3>
                         <table>
                             <thead>
                             <tr>
@@ -162,7 +158,7 @@
                                          ng-class="{
                                             'water': savegame.opponent[i][$parent.$index] == 'x',
                                             'hit': savegame.opponent[i][$parent.$index] == 'h',
-                                            'miss': savegame.opponent[$parent.$index] == 'm',
+                                            'miss': savegame.opponent[i][$parent.$index] == 'm',
                                             'ship': savegame.opponent[i][$parent.$index] == 's'
                                          }">
                                     </div>
@@ -172,7 +168,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer margin-top-10">
                 <button class="btn btn-primary pull-left" ng-if="savegame.show" ng-click="hideSavegame()">Back</button>
                 <a class="btn btn-play" data-dismiss="modal">Close</a>
             </div>
