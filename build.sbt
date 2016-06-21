@@ -7,9 +7,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayJava)
 scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
-    "org.pac4j" % "play-pac4j" % "2.1.0",
-    "org.pac4j" % "pac4j-http" % "1.8.3",
-    "org.pac4j" % "pac4j-oidc" % "1.8.3",
+    "org.pac4j" % "play-pac4j" % "2.3.0",
+    "org.pac4j" % "pac4j-http" % "1.9.0",
+    "org.pac4j" % "pac4j-oidc" % "1.9.0",
     "com.typesafe.play" % "play-cache_2.11" % "2.4.0",
     "de.htwg.Battleship" % "Battleship" % "1.2-SNAPSHOT",
     javaJdbc,
