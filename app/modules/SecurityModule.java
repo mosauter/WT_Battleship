@@ -3,7 +3,7 @@ package modules;
 import com.google.inject.AbstractModule;
 import controllers.CustomAuthorizer;
 import controllers.HttpStatusRedirector;
-import org.pac4j.core.authorization.RequireAnyRoleAuthorizer;
+import org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.oidc.client.OidcClient;

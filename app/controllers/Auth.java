@@ -1,19 +1,29 @@
 package controllers;
 
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.play.java.RequiresAuthentication;
-import org.pac4j.play.java.UserProfileController;
+import org.pac4j.core.profile.ProfileManager;
+import org.pac4j.play.PlayWebContext;
+import org.pac4j.play.java.Secure;
+import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
 
-public class Auth extends UserProfileController<CommonProfile> {
+import java.util.List;
+
+public class Auth extends Controller {
 
     private static final String NAME_TAG = "name";
     private static final String ID_TAG = "sub";
 
     public String getProfileAttribute(String attribute) {
+        final PlayWebContext context = new PlayWebContext(ctx());
+        final ProfileManager<CommonProfile> profileManager = new ProfileManager<>(context);
+        List<CommonProfile> profiles = profileManager.getAll(true);
+        if (profiles.isEmpty()) {
+            return "";
+        }
+        CommonProfile profile = profiles.get(0);
         try {
-            final CommonProfile profile = getUserProfile();
             return profile.getAttribute(attribute).toString();
         } catch (Exception e) {
             // ignore
@@ -21,7 +31,7 @@ public class Auth extends UserProfileController<CommonProfile> {
         return "";
     }
 
-    @RequiresAuthentication(clientName = "OidcClient")
+    @Secure(clients = "OidcClient")
     public Result game() {
         Application app = new Application();
         return app.game(this.getProfileAttribute(NAME_TAG));
@@ -47,12 +57,12 @@ public class Auth extends UserProfileController<CommonProfile> {
         return application.presentationArch(this.getProfileAttribute(NAME_TAG));
     }
 
-    @RequiresAuthentication(clientName = "OidcClient")
+    @Secure(clients = "OidcClient")
     public Result authenticate(String redirectUrl) {
         return redirect("/" + redirectUrl);
     }
 
-    @RequiresAuthentication(clientName = "OidcClient")
+    @Secure(clients = "OidcClient")
     public WebSocket<String> socketAuth() {
         Application app = new Application();
         return app.socket(this.getProfileAttribute(NAME_TAG), this.getProfileAttribute(ID_TAG));
