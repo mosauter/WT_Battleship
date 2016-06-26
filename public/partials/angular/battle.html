@@ -1,9 +1,9 @@
 <div class="col-sm-12 jumbotron row">
     <div ng-if="waiting && !end" class="col-sm-12 waiting">Waiting for opponent</div>
     <div ng-if="!waiting && !end" class="col-sm-12 yourTurn">Your turn!</div>
-    <div class="col-md-6" ng-if="!placing">
+    <div class="col-md-6 centerContent" ng-if="!placing">
         <h3>{{enemy || 'Opponent'}}'s field:</h3>
-        <table id="opponentView" class="playboard">
+        <table id="opponentView" class="playboard center">
             <thead>
             <tr>
                 <th>&nbsp;&nbsp;</th>
@@ -27,9 +27,9 @@
             </tr>
         </table>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 centerContent">
         <h3>Your field:</h3>
-        <table id="thisPlayerView">
+        <table id="thisPlayerView" class="center">
             <thead>
             <tr>
                 <th>&nbsp;&nbsp;</th>
@@ -53,9 +53,9 @@
             </tr>
         </table>
     </div>
-    <div class="col-md-6" ng-if="placing">
+    <div class="col-md-6 centerContent" ng-if="placing">
         <h3>Place Menu:</h3>
-        <table>
+        <table class="center">
             <thead>
             <th>Ship length</th>
             <th>&nbsp;|&nbsp;</th>
@@ -87,9 +87,9 @@
             </button>
         </div>
     </div>
-    <div class="margin-top-10">
+    <div class="margin-top-10 col-sm-12">
         <button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#highscores" ng-if="savegames">Highscores</button>
-        <button class="btn btn-play pull-right" style="margin-top:10px;" ng-click="goBack();" ng-if="end">Go back!</button>
+        <button class="btn btn-play pull-right" ng-click="goBack();" ng-if="end">Go back!</button>
     </div>
 </div>
 
@@ -99,8 +99,8 @@
             <div class="modal-header">
                 <h4>Highscores {{me}}</h4>
             </div>
-            <div class="modal-body">
-                <div ng-if="!savegame.show">
+            <div class="modal-body row">
+                <div ng-if="!savegame.show" class="col-sm-12">
                     <div>Wins: {{wins ? wins : 0}} - Losses: {{savegames.length - wins}}</div>
                     <div class="list-group">
                         <button type="button" class="list-group-item" ng-click="showSavegame($index)" ng-repeat="savegame in savegames">
@@ -111,12 +111,12 @@
                         </button>
                     </div>
                 </div>
-                <div ng-if="savegame.show">
+                <div ng-if="savegame.show" class="col-sm-12">
                     <div ng-if="savegame.state" class="col-sm-12 yourTurn">You have won this battle</div>
                     <div ng-if="!savegame.state" class="col-sm-12 waiting">You have lost this battle</div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 centerContent">
                         <h3>Your field:</h3>
-                        <table>
+                        <table class="center">
                             <thead>
                             <tr>
                                 <th>&nbsp;&nbsp;</th>
@@ -140,9 +140,9 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 centerContent">
                         <h3>{{savegame.opponentName || 'Opponent'}}'s field:</h3>
-                        <table>
+                        <table class="center">
                             <thead>
                             <tr>
                                 <th>&nbsp;&nbsp;</th>
@@ -168,9 +168,11 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer margin-top-10">
-                <button class="btn btn-primary pull-left" ng-if="savegame.show" ng-click="hideSavegame()">Back</button>
-                <a class="btn btn-play" data-dismiss="modal">Close</a>
+            <div class="modal-footer">
+                <div class="margin-top-10 col-sm-12">
+                    <button class="btn btn-primary pull-left" ng-if="savegame.show" ng-click="hideSavegame()">Back</button>
+                    <a class="btn btn-play" data-dismiss="modal">Close</a>
+                </div>
             </div>
         </div>
     </div>
