@@ -1,0 +1,55 @@
+<link rel="import" href="/assets/partials/polymer/slide-site.html">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<dom-module id="slide-helper">
+    <template>
+        <slide-site slide="{{modifySlide(slide, baseLink)}}"></slide-site>
+    </template>
+    <script>
+        Polymer({
+            is: "slide-helper",
+            properties: {
+                slide: {
+                    type: Object
+                },
+                baseLink: {
+                    type: String
+                },
+                modSlide: {
+                    type: Object
+                }
+            },
+            listeners: {
+                "change-slide": "causeReload"
+            },
+            causeReload: function (event) {
+                if (event.detail.target == "slide-helper") {
+                    this.$.componentList.render();
+                    var allComponents = Polymer.dom(this.root).querySelectorAll("slide-site");
+                    allComponents.forEach(function (single) {
+                        single.fire("change-slide", {target: "slide-site"});
+                    });
+                    event.detail.target = "NONE";
+                }
+            },
+            modifySlide: function (slide, baseLink) {
+                if (typeof baseLink === "undefined"
+                        || typeof slide.components === "undefined") {
+                    console.log("undefined baseLink, returning unmodified slide");
+                    return slide;
+                }
+                let deepCopy = $.extend(true, {}, slide);
+                let newComponents = [];
+                for (let i = 0; i < deepCopy.components.length; i++) {
+                    let component = deepCopy.components[i];
+                    component.load = this.prepareLink(component.load, baseLink);
+                    newComponents.push(component);
+                }
+                deepCopy.components = newComponents;
+                return deepCopy;
+            },
+            prepareLink: function (loadLink, baseLink) {
+                return "" + baseLink + loadLink;
+            }
+        });
+    </script>
+</dom-module>
