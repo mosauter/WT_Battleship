@@ -6,7 +6,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
 } {
     <div class="container topContainer">
-        <presentation-page slides='[
+        <presentation-page base-link="/assets/presentation/architecture/" slides='[
   {
     "heading": "",
     "number": 0,
@@ -14,7 +14,7 @@
     "components": [
       {
         "type": "TEXT",
-        "load": "/assets/presentation/architecture/slides/title.html"
+        "load": "slides/title.html"
       }
     ]
   },
@@ -24,18 +24,124 @@
     "components": [
       {
         "type": "TEXT",
-        "load": "/assets/presentation/architecture/slides/outline.html"
+        "load": "slides/outline.html"
+      }
+    ]
+  },
+  {
+    "heading": "Hibernate",
+    "number": 2,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "slides/hiber/hiber_1.html"
+      },
+      {
+        "type": "CODE",
+        "load": "code/hibernateImpl.java"
+      }
+    ]
+  },
+  {
+    "heading": "Hibernate",
+    "number": 3,
+    "components": [
+      {
+        "type": "CODE",
+        "load": "code/hibernateSave.java"
+      }
+    ]
+  },
+  {
+    "heading": "Actor System",
+    "number": 4,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "slides/actor/actor_1.html"
+      }
+    ]
+  },
+  {
+    "heading": "Actor System",
+    "number": 5,
+    "components": [
+      {
+        "type": "CODE",
+        "load": "code/winner.scala"
+      }
+    ]
+  },
+  {
+    "heading": "Actor System",
+    "number": 6,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "slides/actor/actor_2.html"
+      },
+      {
+        "type": "CODE",
+        "load": "code/staticConfig.scala"
+      }
+    ]
+  },
+  {
+    "heading": "Actor System",
+    "number": 7,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "slides/actor/actor_3.html"
+      },
+      {
+        "type": "CODE",
+        "load": "code/aggrFutures.scala"
+      }
+    ]
+  },
+  {
+    "heading": "Actor System",
+    "number": 8,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "slides/actor/messages.html"
+      },
+      {
+        "type": "CODE",
+        "load": "code/messages.scala"
+      }
+    ]
+  },
+  {
+    "heading": "Visual VM",
+    "number": 9,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "slides/visual/visual_1.html"
+      }
+    ]
+  },
+  {
+    "heading": "Visual VM",
+    "number": 10,
+    "components": [
+      {
+        "type": "TEXT",
+        "load": "slides/visual/visual_2.html"
       }
     ]
   },
   {
     "heading": "Finish",
-    "number": 2,
+    "number": 11,
     "type": "TITLE",
     "components": [
       {
         "type": "TEXT",
-        "load": "/assets/presentation/architecture/slides/finish.html"
+        "load": "slides/finish.html"
       }
     ]
   }
